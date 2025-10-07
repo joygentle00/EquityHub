@@ -1,0 +1,920 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #0d1a2e;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* Container & Background */
+.container {
+    background: radial-gradient(circle at top right, rgba(29, 78, 216, 0.4), transparent 40%), 
+                radial-gradient(circle at center left, rgba(17, 24, 39, 0.573), transparent 60%),
+                #0d1a2e;
+    min-height: 100vh;
+    padding: 0 8%;
+    position: relative;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+    font-size: 1rem;
+}
+
+/* Header & Navigation *//* --- Base Navigation Styles (Desktop) --- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 8%; 
+    position: relative;
+    z-index: 100;
+}
+
+/* Hide mobile-specific elements on desktop */
+.nav-left-mobile, .flag-selector, .chat-icon-mobile {
+    display: none;
+}
+
+/* Desktop Navigation Links (Default) */
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+/* Ensure desktop logo is visible */
+.logo-desktop-only {
+    display: block; 
+}
+
+/* The original nav-right buttons (now .nav-right-buttons) */
+.nav-right-buttons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* General Button Styling (Re-used) */
+.login-btn, .register-btn {
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-btn {
+    background-color: transparent;
+    border: none; /* Login is just text on the image */
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.register-btn {
+    background-color: transparent; /* No fill */
+    border: 1px solid #3b82f6; /* Blue border */
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 25px; /* Pill shape */
+    border-color: #3b82f6;
+}
+
+.register-btn i {
+    margin-left: 8px;
+    font-size: 0.9em;
+}
+
+
+/* ------------------------------------------- */
+/* MOBILE STYLES (Matching image_468b3d.png) */
+/* ------------------------------------------- */
+
+@media (max-width: 992px) {
+    nav {
+        /* Mobile layout: Left group, Right buttons. Logo is hidden or minimal */
+        justify-content: space-between;
+        padding: 15px 5%; /* Reduced padding */
+    }
+
+    /* 1. Show the compact left group */
+    .nav-left-mobile {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    /* Hide desktop logo and original chat link */
+    .logo-desktop-only, .online-chat {
+        display: none;
+    }
+
+    /* Hamburger Menu Icon Styling */
+    #menu-toggle {
+        display: block;
+        cursor: pointer;
+        padding: 5px;
+    }
+    .hamburger-lines {
+        width: 25px;
+        height: 3px;
+        background-color: #fff;
+        margin: 4px 0;
+    }
+
+    /* Flag and Chat Icons */
+    .flag-selector .flag-icon {
+        width: 28px;
+        height: 20px;
+        border-radius: 4px;
+    }
+    
+    .chat-icon-mobile {
+        color: #3b82f6; /* Blue for the chat icon */
+        font-size: 1.6rem;
+        position: relative;
+    }
+
+    /* 2. Style Login/Register Buttons for Mobile */
+    .nav-right-buttons {
+        gap: 10px;
+    }
+    
+    .login-btn {
+        padding: 0;
+    }
+    
+    .register-btn {
+        padding: 8px 15px;
+        font-size: 1rem;
+    }
+
+
+    /* 3. Hide full navigation menu and style the dropdown */
+    .nav-links {
+        display: none; /* Hidden by default */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #1a2a47; /* Slightly lighter background for menu */
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px 5%;
+        z-index: 99;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    .nav-links a {
+        padding: 12px 0;
+        width: 100%;
+        color: #fff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-links.active {
+        display: flex; /* Show menu when active class is applied by JS */
+    }
+}
+/* ------------------------------------------- */
+/* HERO SECTION MODIFICATIONS */
+/* ------------------------------------------- */
+
+/* Replaced .hero-with-video with .hero-section */
+.hero-section {
+  position: relative;
+  min-height: calc(100vh - 90px); /* Adjusted to fit content below header */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* Removed background-video and its overlay styles */
+
+/* Hero Main Content */
+.hero-section main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 50px 0; /* Adjusted padding from 0 8% */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 80vh; /* Ensure content stretches */
+}
+
+.hero-content {
+    max-width: 500px;
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #4CAF50; /* Changed color to stand out */
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    color: #a0aec0;
+    margin-bottom: 30px;
+}
+
+/* Asset Icons */
+.asset-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.asset-icons img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #fff;
+    padding: 5px;
+    object-fit: contain;
+}
+
+.asset-icons span {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+/* Right Section (MOCKUP + Buttons) */
+.hero-image-section {
+    position: relative;
+    flex-shrink: 0;
+    /* Removed the phone-mockup styles */
+}
+
+/* Added style for the new mockup container */
+.trading-mockup {
+    width: 450px; /* Adjust size */
+    max-width: 100%;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    margin: 50px auto 0;
+}
+
+.category-buttons {
+    position: absolute;
+    top: 50%;
+    left: -150px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 3;
+}
+
+/* Remaining Category Button Styles... */
+
+/* ------------------------------------------- */
+/* BINARY MOCKUP SPECIFIC STYLES */
+/* ------------------------------------------- */
+
+/* Asset Header */
+.mockup-asset-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 15px;
+}
+
+.mockup-asset-name {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.mockup-current-price {
+    font-size: 1.6em;
+    color: #4CAF50; /* Green for current price */
+    font-weight: 700;
+}
+
+/* Chart Area (Simplified) */
+.mockup-chart-container {
+    height: 200px;
+    background-color: #0d0d0d;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden; 
+}
+
+/* Controls */
+.mockup-controls-panel {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mockup-control-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.mockup-control-group input, .mockup-control-group select {
+    background-color: #333;
+    color: #f0f0f0;
+    border: 1px solid #555;
+    padding: 8px;
+    border-radius: 4px;
+    width: 100px;
+    box-sizing: border-box;
+}
+
+/* Trade Buttons */
+.mockup-trade-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.mockup-trade-button {
+    flex-grow: 1;
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.mockup-call {
+    background-color: #4CAF50; /* Green */
+}
+
+.mockup-call:hover {
+    background-color: #45a049;
+}
+
+.mockup-put {
+    background-color: #F44336; /* Red */
+}
+
+.mockup-put:hover {
+    background-color: #d32f2f;
+}
+
+/* Trade Log */
+.mockup-results-log {
+    background-color: #0d0d0d;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    border: 1px solid #333;
+    max-height: 80px;
+    overflow-y: auto;
+}
+.mockup-results-log p {
+    margin: 5px 0;
+}
+
+/* JavaScript Chart Simulation (Simplified Line) */
+.entry-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: yellow;
+    z-index: 100;
+}
+
+
+/* ------------------------------------------- */
+/* Responsive Design */
+/* ------------------------------------------- */
+@media (max-width: 992px) {
+    /* Adjusted breakpoint for the large mockup */
+    .hero-section main {
+        flex-direction: column;
+        text-align: center;
+        min-height: auto;
+    }
+
+    .hero-image-section {
+        flex-grow: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .trading-mockup {
+        width: 90%;
+        margin-top: 30px;
+    }
+    
+    .category-buttons {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+}
+
+/* ... (Existing standard CSS for header/container) ... */
+
+/* ------------------------------------------- */
+/* HERO SECTION & CANDLE CHART STYLES (Kept) */
+/* ------------------------------------------- */
+
+/* ... (Styles for .hero-section, .hero-background-chart, .candle, .entry-line, etc. are retained) ... */
+
+
+/* ------------------------------------------- */
+/* HERO CONTENT STYLES (Cleaned up) */
+/* ------------------------------------------- */
+
+.hero-content {
+    max-width: 500px;
+    animation: fadeInUp 1s ease forwards; /* Keep the fade-in effect */
+    opacity: 0;
+    text-align: left; 
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #4CAF50; /* Base color for H1s */
+    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    /* Removed all typing/cursor overrides */
+}
+
+/* Ensure the white span is correctly applied */
+.hero-content h1 span {
+    color: white !important;
+}
+
+/* ... (Remaining styles for p, asset-icons, and .hero-controls-bar are retained) ... */
+
+
+/* ... (Keep all previous CSS styles) ... */
+
+/* ------------------------------------------- */
+/* HOW IT WORKS SECTION STYLES */
+/* ------------------------------------------- */
+
+.how-it-works-section {
+    position: relative;
+    z-index: 10; /* Keep it above the background chart if the chart extends */
+    padding: 80px 8% 120px;
+    background-color: #0d1a2e; /* Ensure the section has a solid dark background */
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 60px;
+    color: #fff;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.card {
+    background-color: #1a2a47; /* Dark blue background for cards */
+    padding: 30px;
+    border-radius: 12px;
+    width: 300px;
+    max-width: 30%;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-icon {
+    font-size: 3rem;
+    color: #3b82f6; /* Blue icon color */
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.card p {
+    color: #a0aec0;
+}
+
+/* ------------------------------------------- */
+/* TRUSTED SECTION STYLES */
+/* ------------------------------------------- */
+
+.trusted-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.trusted-card {
+    background: radial-gradient(circle at top left, #1a2a47, #0d1a2e 70%); /* Subtle gradient for the main trusted box */
+    padding: 40px;
+    border-radius: 12px;
+    width: 60%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.trusted-icon {
+    font-size: 2.5rem;
+    color: #3b82f6;
+    margin-bottom: 10px;
+}
+
+.trusted-card h2 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+.trusted-card p {
+    color: #a0aec0;
+    margin-bottom: 25px;
+}
+
+.see-more-btn {
+    background-color: #3b82f6;
+    color: #fff;
+    padding: 12px 30px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.see-more-btn:hover {
+    background-color: #2563eb;
+}
+
+.platform-award-card {
+    background-color: #1a2a47;
+    padding: 30px;
+    border-radius: 12px;
+    width: 35%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.award-icon {
+    font-size: 1.5rem;
+    color: gold;
+    margin-bottom: 10px;
+}
+
+.platform-award-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.platform-award-card p {
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+
+/* ------------------------------------------- */
+/* RESPONSIVE ADJUSTMENTS FOR NEW SECTION */
+/* ------------------------------------------- */
+@media (max-width: 992px) {
+    .cards-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .card {
+        max-width: 90%;
+        width: 100%;
+    }
+    
+    .trusted-container {
+        flex-direction: column;
+    }
+    
+    .trusted-card, .platform-award-card {
+        width: 100%;
+    }
+}
+
+/* ... (Keep all previous CSS styles for hero and how-it-works) ... */
+
+/* ------------------------------------------- */
+/* GLOBAL PLATFORM SECTION STYLES */
+/* ------------------------------------------- */
+
+.global-platform-section {
+    position: relative;
+    padding: 80px 8% 0; /* Less bottom padding to place the map at the bottom */
+    background-color: #0d1a2e;
+    text-align: center;
+}
+
+.section-title-global {
+    font-size: 2rem;
+    font-weight: 400; /* Lighter font weight than main titles */
+    text-align: center;
+    margin-bottom: 50px;
+    color: #fff;
+}
+
+.metrics-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.metric-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3b82f6; /* Blue color for values */
+    margin-bottom: 5px;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: #a0aec0; /* Lighter color for labels */
+}
+
+.global-caption {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 50px;
+}
+
+.world-map-placeholder {
+    /* Simulating the dotted world map image from the reference */
+    width: 100%;
+    height: 300px; /* Adjust height as needed */
+    background-color: #0d1a2e; 
+    /* Placeholder for a complex image, simulating the look with repeating dots */
+    background-image: radial-gradient(circle, #a0aec0 1px, transparent 1px);
+    background-size: 10px 10px;
+    opacity: 0.4;
+    filter: invert(1);
+    /* Ensure the map section fits the screen and pushes down */
+    margin-left: -8%; 
+    margin-right: -8%;
+    width: 116%; /* Extends to the full width of the screen, overcoming the padding */
+}
+
+
+/* ------------------------------------------- */
+/* RESPONSIVE ADJUSTMENTS FOR GLOBAL SECTION */
+/* ------------------------------------------- */
+@media (max-width: 768px) {
+    .metrics-container {
+        flex-wrap: wrap;
+        gap: 20px 40px;
+    }
+    
+    .metric-box {
+        flex-basis: 40%; /* Two metrics per row */
+    }
+}
+
+/* ... (Keep all previous CSS styles) ... */
+
+/* ------------------------------------------- */
+/* FOOTER SECTION STYLES (Adjusted for 4 Columns) */
+/* ------------------------------------------- */
+
+footer {
+    background-color: #1a2a47; 
+    color: #a0aec0;
+    padding: 60px 8% 40px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.footer-col {
+    padding: 10px;
+    min-width: 150px; 
+}
+
+/* 1. Disclaimer Column (Takes about 1/3 of the space) */
+.disclaimer-col {
+    flex-basis: 30%; 
+    min-width: 280px;
+}
+/* (Keep .footer-logo and .disclaimer-text styles as they were) */
+
+
+/* 2-4. Link Columns (Each takes about 1/6 of the space) */
+.link-group {
+    /* 100% - 30% (Disclaimer) = 70% left for 3 columns */
+    /* 70% / 3 = ~23.33% per column */
+    flex-basis: calc(23% - 15px); 
+    min-width: 150px;
+}
+
+.footer-col h4 {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-top: 20px; 
+}
+
+/* ... (Keep all previous CSS styles) ... */
+
+/* ------------------------------------------- */
+/* TESTIMONIAL CAROUSEL STYLES */
+/* ------------------------------------------- */
+
+.testimonial-section {
+    padding: 100px 8%;
+    background-color: #0d1a2e;
+    text-align: center;
+}
+
+.carousel-container {
+    max-width: 800px; /* Limits the width of the visible testimonial area */
+    margin: 0 auto;
+    overflow: hidden; /* CRITICAL: Hides slides that are off-screen */
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    background-color: #1a2a47;
+}
+
+.testimonials-wrapper {
+    display: flex;
+    /* CRITICAL: Allows for smooth sliding animation */
+    transition: transform 0.8s ease-in-out; 
+}
+
+.testimonial-slide {
+    flex: 0 0 100%; /* CRITICAL: Each slide takes up exactly 100% of the container width */
+    padding: 40px;
+    text-align: center;
+}
+
+.quote-icon {
+    font-size: 3rem;
+    color: #3b82f6;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.quote-text {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #fff;
+    margin-bottom: 25px;
+    min-height: 80px; /* Ensures consistent height across quotes */
+}
+
+.client-info {
+    font-weight: bold;
+    color: #a0aec0;
+}
+
+.client-name {
+    color: #fff;
+    margin-right: 5px;
+}
+
+/* Dots for Navigation */
+.carousel-dots {
+    margin-top: 30px;
+}
+
+.dot {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: #4a5568;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dot.active {
+    background-color: #3b82f6; /* Active dot color */
+}
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 600px) {
+    .testimonial-slide {
+        padding: 30px 15px;
+    }
+    .quote-text {
+        font-size: 1rem;
+    }
+}
+
+/* ... (Keep the rest of the link styles for ul/li/a) ... */
+
+
+/* ------------------------------------------- */
+/* RESPONSIVE FOOTER ADJUSTMENTS (Adjusted for 4 columns) */
+/* ------------------------------------------- */
+@media (max-width: 992px) {
+    .footer-content {
+        justify-content: flex-start;
+        gap: 20px;
+    }
+    
+    .disclaimer-col {
+        flex-basis: 100%; 
+        order: 5; /* Pushes disclaimer to the bottom */
+    }
+
+    /* Link columns flow 2 per row */
+    .link-group {
+        flex-basis: calc(50% - 10px); 
+        min-width: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Stack all columns vertically on very small screens */
+    .link-group {
+        flex-basis: 100%;
+    }
+}
+
