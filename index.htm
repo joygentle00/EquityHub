@@ -332,5 +332,35 @@
         </footer>
     </div>
     <script src="index.js"></script>
+    <script>
+        // Google Translate Initialization
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        }
+
+        // Language Selector Logic
+        function changeLanguage() {
+            var selectDesktop = document.getElementById('language-select-desktop');
+            var selectMobile = document.getElementById('language-select-mobile');
+            var selectedLang = selectDesktop.value || selectMobile.value;
+            var translateElement = document.querySelector('.goog-te-combo');
+
+            if (translateElement) {
+                translateElement.value = selectedLang;
+                translateElement.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // Sync both dropdowns
+        document.getElementById('language-select-desktop').addEventListener('change', function() {
+            document.getElementById('language-select-mobile').value = this.value;
+            changeLanguage();
+        });
+
+        document.getElementById('language-select-mobile').addEventListener('change', function() {
+            document.getElementById('language-select-desktop').value = this.value;
+            changeLanguage();
+        });
+    </script>
 </body>
 </html>
