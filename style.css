@@ -16,19 +16,49 @@ body {
 /* Container & Background */
 .container {
     background: radial-gradient(circle at top right, rgba(29, 78, 216, 0.4), transparent 40%), 
-                radial-gradient(circle at center left, rgba(17, 24, 39, 0.573), transparent 60%),
+                radial-gradient(circle at center left, rgba(17, 24, 39, 0.712), transparent 60%),
                 #0d1a2e;
     min-height: 100vh;
     padding: 0 8%;
     position: relative;
 }
-a{
+a {
     text-decoration: none;
     color: inherit;
     font-size: 1rem;
 }
 
-/* Header & Navigation *//* --- Base Navigation Styles (Desktop) --- */
+/* Language Selector Styles */
+.language-selector {
+    display: flex;
+    align-items: center;
+}
+
+.language-selector select {
+    background-color: #1a2a47;
+    color: #fff;
+    border: 1px solid #3b82f6;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 30px;
+}
+
+.language-selector select:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.language-selector-desktop {
+    margin-left: 25px;
+}
+
+/* Header & Navigation */
 nav {
     display: flex;
     justify-content: space-between;
@@ -47,6 +77,7 @@ nav {
 .nav-links {
     display: flex;
     gap: 25px;
+    align-items: center;
 }
 
 /* Ensure desktop logo is visible */
@@ -75,18 +106,18 @@ nav {
 
 .login-btn {
     background-color: transparent;
-    border: none; /* Login is just text on the image */
+    border: none;
     color: #fff;
     font-size: 1.1rem;
 }
 
 .register-btn {
-    background-color: transparent; /* No fill */
-    border: 1px solid #3b82f6; /* Blue border */
+    background-color: transparent;
+    border: 1px solid #3b82f6;
     color: #fff;
     font-size: 1.1rem;
     padding: 10px 20px;
-    border-radius: 25px; /* Pill shape */
+    border-radius: 25px;
     border-color: #3b82f6;
 }
 
@@ -95,31 +126,23 @@ nav {
     font-size: 0.9em;
 }
 
-
-/* ------------------------------------------- */
-/* MOBILE STYLES (Matching image_468b3d.png) */
-/* ------------------------------------------- */
-
+/* Mobile Styles */
 @media (max-width: 992px) {
     nav {
-        /* Mobile layout: Left group, Right buttons. Logo is hidden or minimal */
         justify-content: space-between;
-        padding: 15px 5%; /* Reduced padding */
+        padding: 15px 5%;
     }
 
-    /* 1. Show the compact left group */
     .nav-left-mobile {
         display: flex;
         align-items: center;
         gap: 20px;
     }
     
-    /* Hide desktop logo and original chat link */
     .logo-desktop-only, .online-chat {
         display: none;
     }
 
-    /* Hamburger Menu Icon Styling */
     #menu-toggle {
         display: block;
         cursor: pointer;
@@ -132,20 +155,12 @@ nav {
         margin: 4px 0;
     }
 
-    /* Flag and Chat Icons */
-    .flag-selector .flag-icon {
-        width: 28px;
-        height: 20px;
-        border-radius: 4px;
-    }
-    
     .chat-icon-mobile {
-        color: #3b82f6; /* Blue for the chat icon */
+        color: #3b82f6;
         font-size: 1.6rem;
         position: relative;
     }
 
-    /* 2. Style Login/Register Buttons for Mobile */
     .nav-right-buttons {
         gap: 10px;
     }
@@ -159,15 +174,13 @@ nav {
         font-size: 1rem;
     }
 
-
-    /* 3. Hide full navigation menu and style the dropdown */
     .nav-links {
-        display: none; /* Hidden by default */
+        display: none;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: #1a2a47; /* Slightly lighter background for menu */
+        background-color: #1a2a47;
         flex-direction: column;
         align-items: flex-start;
         padding: 20px 5%;
@@ -184,36 +197,34 @@ nav {
     }
     
     .nav-links.active {
-        display: flex; /* Show menu when active class is applied by JS */
+        display: flex;
+    }
+
+    .language-selector-desktop {
+        display: none;
     }
 }
-/* ------------------------------------------- */
-/* HERO SECTION MODIFICATIONS */
-/* ------------------------------------------- */
 
-/* Replaced .hero-with-video with .hero-section */
+/* Hero Section */
 .hero-section {
-  position: relative;
-  min-height: calc(100vh - 90px); /* Adjusted to fit content below header */
-  width: 100%;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  color: #fff;
+    position: relative;
+    min-height: calc(100vh - 90px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    color: #fff;
 }
 
-/* Removed background-video and its overlay styles */
-
-/* Hero Main Content */
 .hero-section main {
     position: relative;
     z-index: 1;
     width: 100%;
-    padding: 50px 0; /* Adjusted padding from 0 8% */
+    padding: 50px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 80vh; /* Ensure content stretches */
+    min-height: 80vh;
 }
 
 .hero-content {
@@ -238,7 +249,7 @@ nav {
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 20px;
-    color: #4CAF50; /* Changed color to stand out */
+    color: #4CAF50;
 }
 
 .hero-content p {
@@ -247,7 +258,6 @@ nav {
     margin-bottom: 30px;
 }
 
-/* Asset Icons */
 .asset-icons {
     display: flex;
     align-items: center;
@@ -270,16 +280,13 @@ nav {
     font-size: 0.9rem;
 }
 
-/* Right Section (MOCKUP + Buttons) */
 .hero-image-section {
     position: relative;
     flex-shrink: 0;
-    /* Removed the phone-mockup styles */
 }
 
-/* Added style for the new mockup container */
 .trading-mockup {
-    width: 450px; /* Adjust size */
+    width: 450px;
     max-width: 100%;
     background-color: #1e1e1e;
     border-radius: 8px;
@@ -299,13 +306,6 @@ nav {
     z-index: 3;
 }
 
-/* Remaining Category Button Styles... */
-
-/* ------------------------------------------- */
-/* BINARY MOCKUP SPECIFIC STYLES */
-/* ------------------------------------------- */
-
-/* Asset Header */
 .mockup-asset-info {
     display: flex;
     justify-content: space-between;
@@ -322,21 +322,19 @@ nav {
 
 .mockup-current-price {
     font-size: 1.6em;
-    color: #4CAF50; /* Green for current price */
+    color: #4CAF50;
     font-weight: 700;
 }
 
-/* Chart Area (Simplified) */
 .mockup-chart-container {
     height: 200px;
     background-color: #0d0d0d;
     border: 1px solid #333;
     margin-bottom: 20px;
     position: relative;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
-/* Controls */
 .mockup-controls-panel {
     display: flex;
     justify-content: space-around;
@@ -361,7 +359,6 @@ nav {
     box-sizing: border-box;
 }
 
-/* Trade Buttons */
 .mockup-trade-buttons {
     display: flex;
     gap: 15px;
@@ -380,7 +377,7 @@ nav {
 }
 
 .mockup-call {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
 }
 
 .mockup-call:hover {
@@ -388,14 +385,13 @@ nav {
 }
 
 .mockup-put {
-    background-color: #F44336; /* Red */
+    background-color: #F44336;
 }
 
 .mockup-put:hover {
     background-color: #d32f2f;
 }
 
-/* Trade Log */
 .mockup-results-log {
     background-color: #0d0d0d;
     padding: 10px;
@@ -405,11 +401,11 @@ nav {
     max-height: 80px;
     overflow-y: auto;
 }
+
 .mockup-results-log p {
     margin: 5px 0;
 }
 
-/* JavaScript Chart Simulation (Simplified Line) */
 .entry-line {
     position: absolute;
     left: 0;
@@ -419,12 +415,7 @@ nav {
     z-index: 100;
 }
 
-
-/* ------------------------------------------- */
-/* Responsive Design */
-/* ------------------------------------------- */
 @media (max-width: 992px) {
-    /* Adjusted breakpoint for the large mockup */
     .hero-section main {
         flex-direction: column;
         text-align: center;
@@ -461,66 +452,11 @@ nav {
     }
 }
 
-/* ... (Existing standard CSS for header/container) ... */
-
-/* ------------------------------------------- */
-/* HERO SECTION & CANDLE CHART STYLES (Kept) */
-/* ------------------------------------------- */
-
-/* ... (Styles for .hero-section, .hero-background-chart, .candle, .entry-line, etc. are retained) ... */
-
-
-/* ------------------------------------------- */
-/* HERO CONTENT STYLES (Cleaned up) */
-/* ------------------------------------------- */
-
-.hero-content {
-    max-width: 500px;
-    animation: fadeInUp 1s ease forwards; /* Keep the fade-in effect */
-    opacity: 0;
-    text-align: left; 
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hero-content h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 20px;
-    color: #4CAF50; /* Base color for H1s */
-    text-shadow: 0 0 10px rgba(0,0,0,0.8);
-    /* Removed all typing/cursor overrides */
-}
-
-/* Ensure the white span is correctly applied */
-.hero-content h1 span {
-    color: white !important;
-}
-
-/* ... (Remaining styles for p, asset-icons, and .hero-controls-bar are retained) ... */
-
-
-/* ... (Keep all previous CSS styles) ... */
-
-/* ------------------------------------------- */
-/* HOW IT WORKS SECTION STYLES */
-/* ------------------------------------------- */
-
 .how-it-works-section {
     position: relative;
-    z-index: 10; /* Keep it above the background chart if the chart extends */
+    z-index: 10;
     padding: 80px 8% 120px;
-    background-color: #0d1a2e; /* Ensure the section has a solid dark background */
+    background-color: #0d1a2e;
 }
 
 .section-title {
@@ -539,7 +475,7 @@ nav {
 }
 
 .card {
-    background-color: #1a2a47; /* Dark blue background for cards */
+    background-color: #1a2a47;
     padding: 30px;
     border-radius: 12px;
     width: 300px;
@@ -555,7 +491,7 @@ nav {
 
 .card-icon {
     font-size: 3rem;
-    color: #3b82f6; /* Blue icon color */
+    color: #3b82f6;
     margin-bottom: 15px;
 }
 
@@ -569,10 +505,6 @@ nav {
     color: #a0aec0;
 }
 
-/* ------------------------------------------- */
-/* TRUSTED SECTION STYLES */
-/* ------------------------------------------- */
-
 .trusted-container {
     display: flex;
     justify-content: space-between;
@@ -581,7 +513,7 @@ nav {
 }
 
 .trusted-card {
-    background: radial-gradient(circle at top left, #1a2a47, #0d1a2e 70%); /* Subtle gradient for the main trusted box */
+    background: radial-gradient(circle at top left, #1a2a47, #0d1a2e 70%);
     padding: 40px;
     border-radius: 12px;
     width: 60%;
@@ -643,10 +575,6 @@ nav {
     color: #a0aec0;
 }
 
-
-/* ------------------------------------------- */
-/* RESPONSIVE ADJUSTMENTS FOR NEW SECTION */
-/* ------------------------------------------- */
 @media (max-width: 992px) {
     .cards-container {
         flex-direction: column;
@@ -666,22 +594,16 @@ nav {
     }
 }
 
-/* ... (Keep all previous CSS styles for hero and how-it-works) ... */
-
-/* ------------------------------------------- */
-/* GLOBAL PLATFORM SECTION STYLES */
-/* ------------------------------------------- */
-
 .global-platform-section {
     position: relative;
-    padding: 80px 8% 0; /* Less bottom padding to place the map at the bottom */
+    padding: 80px 8% 0;
     background-color: #0d1a2e;
     text-align: center;
 }
 
 .section-title-global {
     font-size: 2rem;
-    font-weight: 400; /* Lighter font weight than main titles */
+    font-weight: 400;
     text-align: center;
     margin-bottom: 50px;
     color: #fff;
@@ -703,13 +625,13 @@ nav {
 .metric-value {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #3b82f6; /* Blue color for values */
+    color: #3b82f6;
     margin-bottom: 5px;
 }
 
 .metric-label {
     font-size: 0.9rem;
-    color: #a0aec0; /* Lighter color for labels */
+    color: #a0aec0;
 }
 
 .global-caption {
@@ -719,25 +641,18 @@ nav {
 }
 
 .world-map-placeholder {
-    /* Simulating the dotted world map image from the reference */
     width: 100%;
-    height: 300px; /* Adjust height as needed */
-    background-color: #0d1a2e; 
-    /* Placeholder for a complex image, simulating the look with repeating dots */
+    height: 300px;
+    background-color: #0d1a2e;
     background-image: radial-gradient(circle, #a0aec0 1px, transparent 1px);
     background-size: 10px 10px;
     opacity: 0.4;
     filter: invert(1);
-    /* Ensure the map section fits the screen and pushes down */
-    margin-left: -8%; 
+    margin-left: -8%;
     margin-right: -8%;
-    width: 116%; /* Extends to the full width of the screen, overcoming the padding */
+    width: 116%;
 }
 
-
-/* ------------------------------------------- */
-/* RESPONSIVE ADJUSTMENTS FOR GLOBAL SECTION */
-/* ------------------------------------------- */
 @media (max-width: 768px) {
     .metrics-container {
         flex-wrap: wrap;
@@ -745,18 +660,12 @@ nav {
     }
     
     .metric-box {
-        flex-basis: 40%; /* Two metrics per row */
+        flex-basis: 40%;
     }
 }
 
-/* ... (Keep all previous CSS styles) ... */
-
-/* ------------------------------------------- */
-/* FOOTER SECTION STYLES (Adjusted for 4 Columns) */
-/* ------------------------------------------- */
-
 footer {
-    background-color: #1a2a47; 
+    background-color: #1a2a47;
     color: #a0aec0;
     padding: 60px 8% 40px;
     font-size: 0.9rem;
@@ -772,22 +681,16 @@ footer {
 
 .footer-col {
     padding: 10px;
-    min-width: 150px; 
+    min-width: 150px;
 }
 
-/* 1. Disclaimer Column (Takes about 1/3 of the space) */
 .disclaimer-col {
-    flex-basis: 30%; 
+    flex-basis: 30%;
     min-width: 280px;
 }
-/* (Keep .footer-logo and .disclaimer-text styles as they were) */
 
-
-/* 2-4. Link Columns (Each takes about 1/6 of the space) */
 .link-group {
-    /* 100% - 30% (Disclaimer) = 70% left for 3 columns */
-    /* 70% / 3 = ~23.33% per column */
-    flex-basis: calc(23% - 15px); 
+    flex-basis: calc(23% - 15px);
     min-width: 150px;
 }
 
@@ -796,14 +699,8 @@ footer {
     font-size: 1rem;
     font-weight: bold;
     margin-bottom: 15px;
-    margin-top: 20px; 
+    margin-top: 20px;
 }
-
-/* ... (Keep all previous CSS styles) ... */
-
-/* ------------------------------------------- */
-/* TESTIMONIAL CAROUSEL STYLES */
-/* ------------------------------------------- */
 
 .testimonial-section {
     padding: 100px 8%;
@@ -812,9 +709,9 @@ footer {
 }
 
 .carousel-container {
-    max-width: 800px; /* Limits the width of the visible testimonial area */
+    max-width: 800px;
     margin: 0 auto;
-    overflow: hidden; /* CRITICAL: Hides slides that are off-screen */
+    overflow: hidden;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
     background-color: #1a2a47;
@@ -822,12 +719,11 @@ footer {
 
 .testimonials-wrapper {
     display: flex;
-    /* CRITICAL: Allows for smooth sliding animation */
-    transition: transform 0.8s ease-in-out; 
+    transition: transform 0.8s ease-in-out;
 }
 
 .testimonial-slide {
-    flex: 0 0 100%; /* CRITICAL: Each slide takes up exactly 100% of the container width */
+    flex: 0 0 100%;
     padding: 40px;
     text-align: center;
 }
@@ -844,7 +740,7 @@ footer {
     font-style: italic;
     color: #fff;
     margin-bottom: 25px;
-    min-height: 80px; /* Ensures consistent height across quotes */
+    min-height: 80px;
 }
 
 .client-info {
@@ -857,7 +753,6 @@ footer {
     margin-right: 5px;
 }
 
-/* Dots for Navigation */
 .carousel-dots {
     margin-top: 30px;
 }
@@ -874,10 +769,9 @@ footer {
 }
 
 .dot.active {
-    background-color: #3b82f6; /* Active dot color */
+    background-color: #3b82f6;
 }
 
-/* Responsive adjustment for smaller screens */
 @media (max-width: 600px) {
     .testimonial-slide {
         padding: 30px 15px;
@@ -887,12 +781,6 @@ footer {
     }
 }
 
-/* ... (Keep the rest of the link styles for ul/li/a) ... */
-
-
-/* ------------------------------------------- */
-/* RESPONSIVE FOOTER ADJUSTMENTS (Adjusted for 4 columns) */
-/* ------------------------------------------- */
 @media (max-width: 992px) {
     .footer-content {
         justify-content: flex-start;
@@ -900,21 +788,119 @@ footer {
     }
     
     .disclaimer-col {
-        flex-basis: 100%; 
-        order: 5; /* Pushes disclaimer to the bottom */
+        flex-basis: 100%;
+        order: 5;
     }
 
-    /* Link columns flow 2 per row */
     .link-group {
-        flex-basis: calc(50% - 10px); 
+        flex-basis: calc(50% - 10px);
         min-width: auto;
     }
 }
 
 @media (max-width: 600px) {
-    /* Stack all columns vertically on very small screens */
     .link-group {
         flex-basis: 100%;
     }
 }
 
+.alert-ticker-container {
+    background-color: #0d1a2e;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 90;
+}
+
+.ticker-content {
+    white-space: nowrap;
+    padding: 8px 0;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    animation: marquee 60s linear infinite;
+    display: inline-block;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-33.33%);
+    }
+}
+
+/* ------------------------------------------- */
+/* FEATURES SECTION STYLES (Light Background) */
+/* ------------------------------------------- */
+
+.features-section {
+    /* The light background from the image */
+    background-color: #0d1a2e;
+    padding: 80px 8%;
+    color: white; /* Darker text for light background */
+}
+
+.features-section h3 {
+    color: white; /* Use your established blue color */
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.features-section p {
+    font-size: 0.95rem;
+    color: white; /* Slightly lighter body text */
+}
+
+.features-grid {
+    display: grid;
+    /* 4 columns for desktop */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 40px 30px; /* Vertical and horizontal gap */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Optional: padding/border to define the card area if needed, 
+       but the image suggests just the content is centered. */
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: #3b82f6; /* Blue icon color */
+    margin-bottom: 20px;
+    
+    /* Styles to match the subtle circle/shield outline in the image */
+    background: #e3f2ff; /* Very light blue background for the icon circle */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #c7e1ff; /* Light blue border */
+}
+
+/* Responsive adjustments for the grid */
+@media (max-width: 992px) {
+    .features-grid {
+        /* Change to 2 columns on medium screens */
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 600px) {
+    .features-grid {
+        /* Change to 1 column on small screens */
+        grid-template-columns: 1fr; 
+    }
+}

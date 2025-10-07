@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equity Hubs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Translate API -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        /* Additional styles for the about page */
+        .about-section {
+            padding: 40px 20px;
+    background-color: #0d1a2e;
+        }
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        .about-content h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        .about-content p {
+            color: white;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .about-content ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: white;
+        }
+        .about-content ul li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="alert-ticker-container">
+                <p class="ticker-content">
+                    ⚠️ BE AWARE OF FRAUD: Equityhubs will **NEVER** ask you to send money to a personal account. Always deposit funds through the secure, verified platform channels. Protect your investment. ⚠️ BE AWARE OF FRAUD: Equityhubs will **NEVER** ask you to send money to a personal account. Always deposit funds through the secure, verified platform channels. Protect your investment. ⚠️ BE AWARE OF FRAUD: Equityhubs will **NEVER** ask you to send money to a personal account. Always deposit funds through the secure, verified platform channels. Protect your investment.
+                </p>
+            </div>
+            <nav>
+                <div class="nav-left-mobile"> 
+                    <div class="menu-icon" id="menu-toggle">
+                        <div class="hamburger-lines"></div>
+                        <div class="hamburger-lines"></div>
+                        <div class="hamburger-lines"></div>
+                    </div>
+                    <!-- Language Selector for Mobile -->
+                    <div class="language-selector">
+                        <select id="language-select-mobile" onchange="changeLanguage()">
+                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
+                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
+                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
+                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
+                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
+                        </select>
+                    </div>
+                    <a href="#" class="chat-icon-mobile">
+                        <i class="fa-solid fa-comment-dots"></i>
+                    </a>
+                </div>
+                <div class="logo-desktop-only">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 4H8V20H4V4ZM10 4H14V20H10V4ZM16 4H20V20H16V4Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="nav-links" id="nav-links-menu">
+                    <a href="index.htm">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contacts</a>
+                    <a href="investment.html">Investment</a>
+                    <!-- Language Selector for Desktop -->
+                    <div class="language-selector language-selector-desktop">
+                        <select id="language-select-desktop" onchange="changeLanguage()">
+                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
+                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
+                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
+                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
+                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="nav-right-buttons">
+                    <a href="#" class="login-btn">Login</a>
+                    <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
+                </div>
+            </nav>
+            <!-- Hidden div for Google Translate widget -->
+            <div id="google_translate_element" style="display: none;"></div>
+        </header>
+        <!--- THIS IS HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>About Equity Hubs</h1>
+                <p>Your Trusted Partner in Global Trading</p>
+            </div>
+            
+        </section>
+        <section class="about-section">
+            <div class="about-content">
+                <h2>Who We Are</h2>
+                <p>Equity Hubs is a leading online trading platform dedicated to providing traders worldwide with access to a wide range of financial markets. Our mission is to empower individuals and institutions to achieve their financial goals through innovative technology, comprehensive educational resources, and exceptional customer support.</p>
+                
+                <h2>Our Mission</h2>
+                <p>At Equity Hubs, our mission is to democratize access to global financial markets. We strive to create a transparent, secure, and user-friendly trading environment where traders of all experience levels can thrive. Our commitment to innovation and excellence drives us to continuously enhance our platform and services.</p>
+                
+                <h2>What We Offer</h2>
+                <ul>
+                    <li><strong>Diverse Asset Classes:</strong> Trade a variety of assets including stocks, forex, commodities, indices, and cryptocurrencies.</li>
+                    <li><strong>Advanced Trading Platform:</strong> Our state-of-the-art platform offers powerful tools, real-time data, and customizable features to enhance your trading experience.</li>
+                    <li><strong>Educational Resources:</strong> Access a wealth of educational materials including webinars, tutorials, articles, and market analysis to help you make informed trading decisions.</li>
+                    <li><strong>24/7 Customer Support:</strong> Our dedicated support team is available around the clock to assist you with any questions or issues you may encounter.</li>
+                    <li><strong>Secure Transactions:</strong> We prioritize the security of your funds and personal information with advanced encryption and regulatory compliance.</li>
+                </ul>
+                
+                <h2>Our Values</h2>
+                <p>Integrity, transparency, and customer-centricity are at the core of everything we do. We believe in building long-term relationships with our clients based on trust and mutual success. Our team is passionate about helping traders achieve their financial aspirations while adhering to the highest ethical standards.</p>
+                
+                <h2>Join Us Today</h2>
+                <p>Whether you're a seasoned trader or just starting your trading journey, Equity Hubs is here to support you every step of the way. Join our community of traders today and experience the difference that a trusted partner can make in your trading success.</p>
+            </div>
+        </section>
+
+
+        <!--- THIS IS FOOTER SECTION -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-col disclaimer-col">
+                    <div class="footer-logo">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 4H8V20H4V4ZM10 4H14V20H10V4ZM16 4H20V20H16V4Z" fill="white"/>
+                        </svg>
+                        Equity Hubs
+                    </div>
+                    <p class="disclaimer-text">
+                        The Company does not provide services to citizens and/or residents of Australia, Austria, Belarus, Belgium, Bulgaria, Canada, Croatia, Republic of Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Iran, Ireland, Israel, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Myanmar, Netherlands, New Zealand, North Korea, Norway, Poland, Portugal, Puerto Rico, Romania, Russia, Singapore, Slovakia, Slovenia, South Sudan, Spain, Sudan, Sweden, Switzerland, UK, Ukraine, the USA, Yemen.
+                    </p>
+                </div>
+                <div class="footer-col link-group">
+                    <h4>Home</h4>
+                    <ul>
+                        <li><a href="index.htm">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contacts</a></li>
+                        <li><a href="investment.html">Investment</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col link-group">
+                    <h4>Contacts</h4>
+                    <p>Email: support@equityhub.org</p>
+                    <p>Phone: +16066020676</p>
+                    <p>Address: 123 Finance St, New York, NY</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <p style="justify-content: center; text-align: center;">&copy; 2024 Equity Hubs. All rights reserved.</p>
+
+        </footer>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>

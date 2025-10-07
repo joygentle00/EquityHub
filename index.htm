@@ -4,77 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equity Hubs</title>
-
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Translate API -->
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
     <div class="container">
-<header>
-    <nav>
-        <div class="nav-left-mobile"> 
-            <div class="menu-icon" id="menu-toggle">
-                <div class="hamburger-lines"></div>
-                <div class="hamburger-lines"></div>
-                <div class="hamburger-lines"></div>
+        <header>
+            <div class="alert-ticker-container">
+                <p class="ticker-content">
+                    ⚠️ BE AWARE OF FRAUD: Equityhubs will **NEVER** ask you to send money to a personal account. Always deposit funds through the secure, verified platform channels. Protect your investment. ⚠️ BE AWARE OF FRAUD: Equityhubs will **NEVER** ask you to send money to a personal account. Always deposit funds through the secure, verified platform channels. Protect your investment. ⚠️ BE AWARE OF FRAUD: Equityhubs will **NEVER** ask you to send money to a personal account. Always deposit funds through the secure, verified platform channels. Protect your investment.
+                </p>
             </div>
-            
-            <a href="#" class="flag-selector">
-                <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg" alt="English Flag" class="flag-icon">
-            </a>
-            
-            <a href="#" class="chat-icon-mobile">
-                <i class="fa-solid fa-comment-dots"></i>
-            </a>
-        </div>
-
-        <div class="logo-desktop-only">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 4H8V20H4V4ZM10 4H14V20H10V4ZM16 4H20V20H16V4Z" fill="white"/>
-            </svg>
-        </div>
-        
-        <div class="nav-links" id="nav-links-menu">
-            <a href="index.htm">Home</a>
-            <a href="about.html">About Us</a>
-            <a href="contact.html">Contacts</a>
-            <a href="investment.html">Investment</a>
-            </div>
-
-        <div class="nav-right-buttons">
-            <a href="#" class="login-btn">Login</a>
-            <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
-        </div>
-    </nav>
-</header>
-
+            <nav>
+                <div class="nav-left-mobile"> 
+                    <div class="menu-icon" id="menu-toggle">
+                        <div class="hamburger-lines"></div>
+                        <div class="hamburger-lines"></div>
+                        <div class="hamburger-lines"></div>
+                    </div>
+                    <!-- Language Selector for Mobile -->
+                    <div class="language-selector">
+                        <select id="language-select-mobile" onchange="changeLanguage()">
+                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
+                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
+                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
+                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
+                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
+                        </select>
+                    </div>
+                    <a href="#" class="chat-icon-mobile">
+                        <i class="fa-solid fa-comment-dots"></i>
+                    </a>
+                </div>
+                <div class="logo-desktop-only">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 4H8V20H4V4ZM10 4H14V20H10V4ZM16 4H20V20H16V4Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="nav-links" id="nav-links-menu">
+                    <a href="index.htm">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contacts</a>
+                    <a href="investment.html">Investment</a>
+                    <!-- Language Selector for Desktop -->
+                    <div class="language-selector language-selector-desktop">
+                        <select id="language-select-desktop" onchange="changeLanguage()">
+                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
+                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
+                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
+                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
+                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="nav-right-buttons">
+                    <a href="#" class="login-btn">Login</a>
+                    <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
+                </div>
+            </nav>
+            <!-- Hidden div for Google Translate widget -->
+            <div id="google_translate_element" style="display: none;"></div>
+        </header>
+        <!--- THIS IS HERO SECTION -->
         <section class="hero-section">
             <main>
                 <div class="hero-content">
                     <h1>Welcome to</h1>
-                    
                     <h1><span style="color: white;">Equity Hub:</span> Trade in Seconds</h1> 
-                    
                     <p>Providing you with the opportunity to invest<br>in more than 100 assets for continuous income</p>
-
                     <div class="asset-icons">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bitcoin_Logo.png/640px-Bitcoin_Logo.png" alt="McDonald's">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ethereum_Logo.png/640px-Ethereum_Logo.png" alt="Google">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Binance-coin-bnb-logo.png/640px-Binance-coin-bnb-logo.png" alt="Apple">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/USDC_Logo.png/640px-USDC_Logo.png" alt="Amazon">                        <span>+100 assets</span>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/USDC_Logo.png/640px-USDC_Logo.png" alt="Amazon">
+                        <span>+100 assets</span>
                     </div>
                 </div>
                 <div class="hero-image-section">
                     <div class="trading-mockup">
-                        
                         <header class="mockup-asset-info">
                             <span class="mockup-asset-name">EUR/USD</span>
                             <span id="current-price" class="mockup-current-price">1.09540</span>
                         </header>
-
-                        <div id="chart-container" class="mockup-chart-container">
-                            </div>
-
+                        <div id="chart-container" class="mockup-chart-container"></div>
                         <div class="mockup-controls-panel">
                             <div class="mockup-control-group">
                                 <label for="expiry-time">Time</label>
@@ -89,47 +103,37 @@
                                 <input type="number" id="investment-amount" value="100" min="10">
                             </div>
                         </div>
-
                         <div class="mockup-trade-buttons">
-                            <button id="call-button" class="mockup-trade-button mockup-call">
-                                CALL (Higher)
-                            </button>
-                            <button id="put-button" class="mockup-trade-button mockup-put">
-                                PUT (Lower)
-                            </button>
+                            <button id="call-button" class="mockup-trade-button mockup-call">CALL (Higher)</button>
+                            <button id="put-button" class="mockup-trade-button mockup-put">PUT (Lower)</button>
                         </div>
-                        
                         <div id="results-log" class="mockup-results-log">
                             <p>Trade Log:</p>
                         </div>
-
                     </div>
-                    </div>
+                </div>
             </main>
         </section>
+        <!--- THIS IS HOW IT WORKS SECTION -->
         <section class="how-it-works-section">
             <h2 class="section-title">How It Works</h2>
-            
             <div class="cards-container">
                 <div class="card">
                     <div class="card-icon"><i class="fa-solid fa-wallet"></i></div>
                     <h3>Deposit</h3>
                     <p>Open a real account and add funds. We work with more than 20 payment systems.</p>
                 </div>
-                
                 <div class="card">
                     <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
                     <h3>Trade</h3>
                     <p>Trade any of 100 assets and stocks. Use technical analysis and trade the news</p>
                 </div>
-                
                 <div class="card">
                     <div class="card-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
                     <h3>Withdraw</h3>
                     <p>Get funds easily to your bank card or e-wallet. We take no commission.</p>
                 </div>
             </div>
-
             <div class="trusted-container">
                 <div class="trusted-card">
                     <div class="trusted-icon"><i class="fa-solid fa-shield-halved"></i></div>
@@ -137,7 +141,6 @@
                     <p>ExpertOption is a leader in the online trading industry. We are trusted by more than 70,000,000 clients.</p>
                     <a href="#" class="see-more-btn">See more</a>
                 </div>
-                
                 <div class="platform-award-card">
                     <div class="award-icon"><i class="fa-solid fa-trophy"></i></div>
                     <h3>Best Trading Platform</h3>
@@ -145,10 +148,10 @@
                 </div>
             </div>
         </section>
-        <!---------------------- Global Trading Platform -->
+
+        <!--- THIS IS GLOBAL TRADING PLATFORM SECTION -->
         <section class="global-platform-section">
             <h2 class="section-title-global">Global Trading Platform</h2>
-            
             <div class="metrics-container">
                 <div class="metric-box">
                     <span class="metric-value">$10</span>
@@ -167,18 +170,84 @@
                     <span class="metric-label">Fees</span>
                 </div>
             </div>
-            
-            <p class="global-caption">People from 48 countries trade at ExpertOption</p>
-            
-            <div class="world-map-placeholder">
-                </div>
+            <p class="global-caption">People from 48 countries trade at ExpertOption</p>        
         </section>
+
+        <!--- THIS IS FEATURES SECTION -->
+        <section class="features-section">
+    <div class="features-grid">
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-chart-bar"></i>
+                </div>
+            <h3>FLEXIBLE TRADING</h3>
+            <p>Latest trends: quick and digital trading, express trades, pending trades, copy trading. Payouts of up to 218%.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h3>COMPREHENSIVE EDUCATION</h3>
+            <p>Our help section contains tutorials, guides and various trading strategies.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+            <h3>DIVERSE TRADING INSTRUMENTS</h3>
+            <p>Assets suitable for any trader: currency, commodities, stocks</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-laptop-code"></i>
+                </div>
+            <h3>DEMO ACCOUNT</h3>
+            <p>Try all platform benefits on the Demo account using virtual money. No investment needed, no risks involved.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <h3>EASY DEPOSITS AND WITHDRAWALS</h3>
+            <p>Use the most convenient payment method for hassle-free deposits and withdrawals.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-certificate"></i>
+            </div>
+            <h3>HIGH CUSTOMER LOYALTY</h3>
+            <p>Trading tournaments, regular bonuses, gifts, promo codes and contests are available to any trader.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-shield-alt"></i>
+            </div>
+            <h3>TRADING ADVANTAGES</h3>
+            <p>Use cashback and other advantages for a more comfortable trading experience with minimal risks.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fa-solid fa-sort"></i>
+                </div>
+            <h3>INDICATORS AND SIGNALS</h3>
+            <p>Everything you need for a top-tier trading experience including popular indicators and signals.</p>
+        </div>
+
+    </div>
+</section>
+        <!--- THIS IS TESTIMIAL SECTION -->
         <section class="testimonial-section">
             <h2 class="section-title">What Our Clients Say</h2>
-            
             <div class="carousel-container">
                 <div class="testimonials-wrapper" id="testimonials-wrapper">
-                    
                     <div class="testimonial-slide">
                         <div class="quote-icon">❝</div>
                         <p class="quote-text">"I've tried several trading platforms, but Equity Hub's execution speed is unmatched. The withdrawal process is incredibly fast, which gives me great peace of mind. Highly recommend for serious traders."</p>
@@ -187,7 +256,6 @@
                             <span class="client-location">London, UK</span>
                         </div>
                     </div>
-
                     <div class="testimonial-slide">
                         <div class="quote-icon">❝</div>
                         <p class="quote-text">"As a beginner, the learning resources here were a game-changer. The platform is intuitive, and I love having access to so many different assets. It truly simplified my entry into investing."</p>
@@ -196,7 +264,6 @@
                             <span class="client-location">Toronto, Canada</span>
                         </div>
                     </div>
-
                     <div class="testimonial-slide">
                         <div class="quote-icon">❝</div>
                         <p class="quote-text">"The low commission structure is fantastic for high-frequency trading. I appreciate the transparency and the live support chat, which is always responsive. A solid platform all around."</p>
@@ -205,7 +272,6 @@
                             <span class="client-location">Singapore</span>
                         </div>
                     </div>
-
                     <div class="testimonial-slide">
                         <div class="quote-icon">❝</div>
                         <p class="quote-text">"Trading 'in seconds' is absolutely accurate. I've seen major improvements in my returns since switching due to the precision and speed of their interface. Plus, the dark theme is easy on the eyes."</p>
@@ -214,21 +280,19 @@
                             <span class="client-location">Sydney, Australia</span>
                         </div>
                     </div>
-                    
                 </div>
             </div>
-            
             <div class="carousel-dots" id="carousel-dots">
                 <span class="dot active" data-slide="0"></span>
                 <span class="dot" data-slide="1"></span>
                 <span class="dot" data-slide="2"></span>
                 <span class="dot" data-slide="3"></span>
             </div>
-            
         </section>
+
+        <!--- THIS IS FOOTER SECTION -->
         <footer>
             <div class="footer-content">
-                
                 <div class="footer-col disclaimer-col">
                     <div class="footer-logo">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -240,7 +304,6 @@
                         The Company does not provide services to citizens and/or residents of Australia, Austria, Belarus, Belgium, Bulgaria, Canada, Croatia, Republic of Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Iceland, Iran, Ireland, Israel, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Myanmar, Netherlands, New Zealand, North Korea, Norway, Poland, Portugal, Puerto Rico, Romania, Russia, Singapore, Slovakia, Slovenia, South Sudan, Spain, Sudan, Sweden, Switzerland, UK, Ukraine, the USA, Yemen.
                     </p>
                 </div>
-                
                 <div class="footer-col link-group">
                     <h4>Home</h4>
                     <ul>
@@ -251,22 +314,23 @@
                     </ul>
                 </div>
                 <div class="footer-col link-group">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#">About company</a></li>
-                        <li><a href="#">Terms</a></li>
-                        <li><a href="#">Payment Policy</a></li>
-                        <li><a href="#">Return policy</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">AML & KYC</a></li>
-                        <li><a href="#">Regulation</a></li>
-                    </ul>
+                    <h4>Contacts</h4>
+                    <p>Email: support@equityhub.org</p>
+                    <p>Phone: +16066020676</p>
+                    <p>Address: 123 Finance St, New York, NY</p>
                 </div>
-
             </div>
+            <div class="footer-bottom">
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <p style="justify-content: center; text-align: center;">&copy; 2024 Equity Hubs. All rights reserved.</p>
+
         </footer>
     </div>
-
     <script src="index.js"></script>
 </body>
 </html>
