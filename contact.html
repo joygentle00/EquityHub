@@ -254,8 +254,15 @@
 
         </footer>
     </div>
-    <script src="index.js"></script>
-    <script>
+        <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinksMenu = document.getElementById('nav-links-menu');
+        menuToggle.addEventListener('click', () => {
+            navLinksMenu.classList.toggle('active');
+        });
+        
+
         // Google Translate Initialization
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
@@ -263,26 +270,28 @@
 
         // Function to change language based on dropdown selection
         function changeLanguage() {
-            var languageSelectDesktop = document.getElementById("language-select-desktop");
-            var languageSelectMobile = document.getElementById("language-select-mobile");
-            var selectedLanguage = languageSelectDesktop.value || languageSelectMobile.value;
+            var languageSelectDesktop = document.getElementById('language-select-desktop');
+            var languageSelectMobile = document.getElementById('language-select-mobile');
+            var selectedLang = languageSelectDesktop.value || languageSelectMobile.value;
             var translateElement = document.querySelector('.goog-te-combo');
+
             if (translateElement) {
-                translateElement.value = selectedLanguage;
+                translateElement.value = selectedLang;
                 translateElement.dispatchEvent(new Event('change'));
             }
         }
 
-        // Sync language selection between desktop and mobile dropdowns
-        document.getElementById("language-select-desktop").addEventListener("change", function() {
-            document.getElementById("language-select-mobile").value = this.value;
+        // Sync both dropdowns
+        document.getElementById('language-select-desktop').addEventListener('change', function() {
+            document.getElementById('language-select-mobile').value = this.value;
             changeLanguage();
         });
 
-        document.getElementById("language-select-mobile").addEventListener("change", function() {
-            document.getElementById("language-select-desktop").value = this.value;
+        document.getElementById('language-select-mobile').addEventListener('change', function() {
+            document.getElementById('language-select-desktop').value = this.value;
             changeLanguage();
         });
+
     </script>
 </body>
 </html>

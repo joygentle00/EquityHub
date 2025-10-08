@@ -7,6 +7,48 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Translate API -->
+     <style>
+          .chart-box {
+      position: relative;
+      width: 90%;
+      height: 80vh;
+      background: linear-gradient(to bottom, #0c1018, #111827);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .current-price {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1e293b;
+      color: #00ffff;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      box-shadow: 0 0 12px rgba(0,255,255,0.3);
+    }
+
+    .time-line {
+      position: absolute;
+      right: 80px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: gold;
+      opacity: 0.7;
+    }
+  </style>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
@@ -34,9 +76,6 @@
                             <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
                         </select>
                     </div>
-                    <a href="#" class="chat-icon-mobile">
-                        <i class="fa-solid fa-comment-dots"></i>
-                    </a>
                 </div>
                 <div class="logo-desktop-only">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,35 +121,12 @@
                         <span>+100 assets</span>
                     </div>
                 </div>
-                <div class="hero-image-section">
-                    <div class="trading-mockup">
-                        <header class="mockup-asset-info">
-                            <span class="mockup-asset-name">EUR/USD</span>
-                            <span id="current-price" class="mockup-current-price">1.09540</span>
-                        </header>
-                        <div id="chart-container" class="mockup-chart-container"></div>
-                        <div class="mockup-controls-panel">
-                            <div class="mockup-control-group">
-                                <label for="expiry-time">Time</label>
-                                <select id="expiry-time">
-                                    <option value="60">1 Min</option>
-                                    <option value="300" selected>5 Min</option>
-                                    <option value="900">15 Min</option>
-                                </select>
-                            </div>
-                            <div class="mockup-control-group">
-                                <label for="investment-amount">Amount ($)</label>
-                                <input type="number" id="investment-amount" value="100" min="10">
-                            </div>
-                        </div>
-                        <div class="mockup-trade-buttons">
-                            <button id="call-button" class="mockup-trade-button mockup-call">CALL (Higher)</button>
-                            <button id="put-button" class="mockup-trade-button mockup-put">PUT (Lower)</button>
-                        </div>
-                        <div id="results-log" class="mockup-results-log">
-                            <p>Trade Log:</p>
-                        </div>
-                    </div>
+                <div class="chart-box">
+                <canvas id="graph"></canvas>
+                <div class="time-line"></div>
+                <div class="current-price" id="priceBubble">$1.342631</div>
+            </div>
+        
                 </div>
             </main>
         </section>
@@ -328,8 +344,27 @@
                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <p style="justify-content: center; text-align: center;">&copy; 2024 Equity Hubs. All rights reserved.</p>
-
+            </div>
         </footer>
+    </div>
+    <!-- Chat Widget outside container -->
+    <div class="chat-widget">
+        <button class="chat-toggle">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
+        <div class="chat-panel">
+            <div class="chat-header">
+                <h3>Support Chat</h3>
+                <button class="chat-close">&times;</button>
+            </div>
+            <div class="chat-messages">
+                <p class="message bot">Hello! How can I assist you today?</p>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message...">
+                <button class="send-btn">Send</button>
+            </div>
+        </div>
     </div>
     <script src="index.js"></script>
     <script>
@@ -361,6 +396,93 @@
             document.getElementById('language-select-desktop').value = this.value;
             changeLanguage();
         });
+
+const canvas = document.getElementById('graph');
+const ctx = canvas.getContext('2d');
+const priceBubble = document.getElementById('priceBubble');
+
+const dpr = window.devicePixelRatio || 1;
+canvas.width = canvas.offsetWidth * dpr;
+canvas.height = canvas.offsetHeight * dpr;
+ctx.scale(dpr, dpr);
+
+const maxPoints = 300;
+const points = [];
+let baseY = canvas.offsetHeight / 2;
+let price = 1.342600;
+let velocity = 0;
+let targetY = baseY;
+
+// Generate new target and apply easing motion
+function nextPrice() {
+  if (Math.random() < 0.02) {
+    targetY = baseY + (Math.random() - 0.5) * 80;
+  }
+  velocity += (targetY - baseY) * 0.02;
+  velocity *= 0.9;
+  baseY += velocity;
+
+  let newY = baseY + (Math.random() - 0.5) * 4;
+  if (newY < 20) newY = 20;
+  if (newY > canvas.offsetHeight - 20) newY = canvas.offsetHeight - 20;
+
+  points.push(newY);
+  if (points.length > maxPoints) points.shift();
+
+  price += (Math.random() - 0.5) * 0.0001;
+}
+
+function draw() {
+  const w = canvas.offsetWidth;
+  const h = canvas.offsetHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  const step = w / (maxPoints - 1);
+
+  // Smooth gradient line
+  const lineGrad = ctx.createLinearGradient(0, 0, 0, h);
+  lineGrad.addColorStop(0, "#00ffff");
+  lineGrad.addColorStop(1, "#0088ff");
+
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = lineGrad;
+  ctx.shadowColor = "#00ffff";
+  ctx.shadowBlur = 12;
+
+  for (let i = 0; i < points.length; i++) {
+    const x = i * step;
+    const y = points[i];
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Shaded glowing area ("curtain" effect)
+  ctx.lineTo(w, h);
+  ctx.lineTo(0, h);
+  ctx.closePath();
+  const shadeGrad = ctx.createLinearGradient(0, h * 0.3, 0, h);
+  shadeGrad.addColorStop(0, "rgba(0,255,255,0.25)");
+  shadeGrad.addColorStop(1, "rgba(0,255,255,0)");
+  ctx.fillStyle = shadeGrad;
+  ctx.fill();
+
+  // Price bubble
+  const currentY = points[points.length - 1];
+  priceBubble.textContent = "$" + price.toFixed(6);
+  priceBubble.style.top = `${currentY - 10}px`;
+}
+
+function animate() {
+  nextPrice();
+  draw();
+  requestAnimationFrame(animate);
+}
+
+animate();
+
     </script>
+    
 </body>
 </html>

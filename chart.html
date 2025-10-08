@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpertOption Style Flowing Chart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #0c1018;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .chart-box {
+      position: relative;
+      width: 90%;
+      height: 80vh;
+      background: linear-gradient(to bottom, #0c1018, #111827);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .current-price {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1e293b;
+      color: #00ffff;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      box-shadow: 0 0 12px rgba(0,255,255,0.3);
+    }
+
+    .time-line {
+      position: absolute;
+      right: 80px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: gold;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="chart-box">
+    <canvas id="graph"></canvas>
+    <div class="time-line"></div>
+    <div class="current-price" id="priceBubble">$1.342631</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('graph');
+    const ctx = canvas.getContext('2d');
+    const priceBubble = document.getElementById('priceBubble');
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    const maxPoints = 250;
+    const points = [];
+    let baseY = canvas.offsetHeight / 2;
+    let price = 1.342600;
+
+    function nextPrice() {
+      const last = points.length ? points[points.length - 1] : baseY;
+      const change = (Math.random() - 0.5) * 6;
+      let newY = last + change;
+
+      const h = canvas.offsetHeight;
+      if (newY < 20) newY = 20;
+      if (newY > h - 20) newY = h - 20;
+
+      points.push(newY);
+      if (points.length > maxPoints) points.shift();
+
+      price += (Math.random() - 0.5) * 0.00005;
+    }
+
+    function draw() {
+      const w = canvas.offsetWidth;
+      const h = canvas.offsetHeight;
+      ctx.clearRect(0, 0, w, h);
+
+      const step = w / (maxPoints - 1);
+
+      // Line gradient
+      const lineGrad = ctx.createLinearGradient(0, 0, 0, h);
+      lineGrad.addColorStop(0, "#00ffff");
+      lineGrad.addColorStop(1, "#0077ff");
+
+      ctx.beginPath();
+      ctx.lineWidth = 2.5;
+      ctx.strokeStyle = lineGrad;
+      ctx.shadowColor = "#00ffff";
+      ctx.shadowBlur = 15;
+
+      for (let i = 0; i < points.length; i++) {
+        const x = i * step;
+        const y = points[i];
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Shaded area under the line
+      const lastY = points[points.length - 1] || baseY;
+      ctx.lineTo(w, h);
+      ctx.lineTo(0, h);
+      ctx.closePath();
+
+      const shadeGrad = ctx.createLinearGradient(0, lastY - 50, 0, h);
+      shadeGrad.addColorStop(0, "rgba(0,255,255,0.25)");
+      shadeGrad.addColorStop(1, "rgba(0,255,255,0)");
+      ctx.fillStyle = shadeGrad;
+      ctx.fill();
+
+      // Price bubble follow
+      priceBubble.textContent = "$" + price.toFixed(6);
+      priceBubble.style.top = `${lastY - 10}px`;
+    }
+
+    function animate() {
+      nextPrice();
+      draw();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

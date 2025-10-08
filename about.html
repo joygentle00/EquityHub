@@ -171,6 +171,42 @@
 
         </footer>
     </div>
-    <script src="index.js"></script>
+    
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinksMenu = document.getElementById('nav-links-menu');
+        menuToggle.addEventListener('click', () => {
+            navLinksMenu.classList.toggle('active');
+        });
+
+        // Google Translate Initialization
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+        }
+
+        // Change Language Function
+        function changeLanguage() {
+            const selectDesktop = document.getElementById('language-select-desktop');
+            const selectMobile = document.getElementById('language-select-mobile');
+            const selectedLang = selectDesktop.value || selectMobile.value;
+            const translateSelect = document.querySelector('.goog-te-combo');
+            if (translateSelect) {
+                translateSelect.value = selectedLang;
+                translateSelect.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // Sync language selection between desktop and mobile
+        document.getElementById('language-select-desktop').addEventListener('change', function() {
+            document.getElementById('language-select-mobile').value = this.value;
+            changeLanguage();
+        });
+        document.getElementById('language-select-mobile').addEventListener('change', function() {
+            document.getElementById('language-select-desktop').value = this.value;
+            changeLanguage();
+        });
+        
+    </script>
 </body>
 </html>

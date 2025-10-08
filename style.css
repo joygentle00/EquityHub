@@ -69,7 +69,7 @@ nav {
 }
 
 /* Hide mobile-specific elements on desktop */
-.nav-left-mobile, .flag-selector, .chat-icon-mobile {
+.nav-left-mobile, .flag-selector {
     display: none;
 }
 
@@ -139,7 +139,7 @@ nav {
         gap: 20px;
     }
     
-    .logo-desktop-only, .online-chat {
+    .logo-desktop-only {
         display: none;
     }
 
@@ -153,12 +153,6 @@ nav {
         height: 3px;
         background-color: #fff;
         margin: 4px 0;
-    }
-
-    .chat-icon-mobile {
-        color: #3b82f6;
-        font-size: 1.6rem;
-        position: relative;
     }
 
     .nav-right-buttons {
@@ -839,28 +833,26 @@ footer {
 /* ------------------------------------------- */
 
 .features-section {
-    /* The light background from the image */
     background-color: #0d1a2e;
     padding: 80px 8%;
-    color: white; /* Darker text for light background */
+    color: white;
 }
 
 .features-section h3 {
-    color: white; /* Use your established blue color */
+    color: white;
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
 
 .features-section p {
     font-size: 0.95rem;
-    color: white; /* Slightly lighter body text */
+    color: white;
 }
 
 .features-grid {
     display: grid;
-    /* 4 columns for desktop */
     grid-template-columns: repeat(4, 1fr); 
-    gap: 40px 30px; /* Vertical and horizontal gap */
+    gap: 40px 30px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -870,37 +862,181 @@ footer {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    /* Optional: padding/border to define the card area if needed, 
-       but the image suggests just the content is centered. */
 }
 
 .feature-icon {
     font-size: 2.5rem;
-    color: #3b82f6; /* Blue icon color */
+    color: #3b82f6;
     margin-bottom: 20px;
-    
-    /* Styles to match the subtle circle/shield outline in the image */
-    background: #e3f2ff; /* Very light blue background for the icon circle */
+    background: #e3f2ff;
     border-radius: 50%;
     width: 60px;
     height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #c7e1ff; /* Light blue border */
+    border: 1px solid #c7e1ff;
 }
 
 /* Responsive adjustments for the grid */
 @media (max-width: 992px) {
     .features-grid {
-        /* Change to 2 columns on medium screens */
         grid-template-columns: repeat(2, 1fr); 
     }
 }
 
 @media (max-width: 600px) {
     .features-grid {
-        /* Change to 1 column on small screens */
         grid-template-columns: 1fr; 
     }
 }
+
+/* Chat Widget Styles */
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.chat-toggle {
+    background-color: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+}
+
+.chat-toggle:hover {
+    transform: scale(1.1);
+}
+
+.chat-panel {
+    display: none;
+    background-color: #1a2a47;
+    width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    margin-top: -10px;
+}
+
+.chat-header {
+    background-color: #2563eb;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.chat-header h3 {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.chat-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.chat-messages {
+    padding: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.bot {
+    background-color: #0d1a2e;
+    color: #fff;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    background-color: #0d1a2e;
+}
+
+.chat-input input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #3b82f6;
+    border-radius: 4px 0 0 4px;
+    background-color: #1e1e1e;
+    color: #fff;
+}
+
+.send-btn {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    color: #fff;
+    cursor: pointer;
+}
+
+.send-btn:hover {
+    background-color: #45a049;
+}
+
+.chat-panel.active {
+    display: block;
+}
+
+.chart-box {
+      position: relative;
+      width: 90%;
+      height: 80vh;
+      background: linear-gradient(to bottom, #0c1018, #111827);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .current-price {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1e293b;
+      color: #00ffff;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      box-shadow: 0 0 12px rgba(0,255,255,0.3);
+    }
+
+    .time-line {
+      position: absolute;
+      right: 80px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: gold;
+      opacity: 0.7;
+    }
