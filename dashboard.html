@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equity Hubs || Trade</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            background: #0c1018;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        header {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ffff;
+        }
+        .balance {
+            font-size: 18px;
+            background: #1e293b;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #00ffcc;
+            box-shadow: 0 0 8px rgba(0,255,255,0.2);
+        }
+        .language-selector {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-trigger {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+        .default-flag {
+            width: 20px;
+            height: 20px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg');
+            background-size: cover;
+            margin-right: 8px;
+        }
+        .dropdown-flag {
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+            margin-right: 8px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 150px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dropdown-menu.active {
+            display: block;
+        }
+        .dropdown-option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+        }
+        .dropdown-option:hover {
+            background: #f0f0f0;
+        }
+        .dropdown-option img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .language-selector-mobile .dropdown-trigger {
+            padding: 5px;
+        }
+        .language-selector-desktop .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+        .chart-box {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 60vh;
+            background: linear-gradient(to bottom, #0c1018, #111827);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+            margin-bottom: 20px;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .current-price {
+            position: absolute;
+            right: 10px;
+            background: #1e293b;
+            color: #00ffff;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 0 12px rgba(0,255,255,0.3);
+            transition: top 0.1s linear, background-color 0.1s linear;
+            z-index: 10;
+        }
+        .time-line {
+            position: absolute;
+            right: 80px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: gold;
+            opacity: 0.7;
+            z-index: 5;
+        }
+        .crosshair-x, .crosshair-y {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 8;
+        }
+        .crosshair-x {
+            width: 100%;
+            height: 1px;
+        }
+        .crosshair-y {
+            width: 1px;
+            height: 100%;
+        }
+        .crosshair-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #00ffff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9;
+        }
+        .price-label {
+            position: absolute;
+            left: 5px;
+            color: #888;
+            font-size: 12px;
+            z-index: 7;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .btn.deposit {
+            background: #10b981;
+            color: #fff;
+        }
+        .btn.deposit:hover {
+            background: #0e9f6e;
+        }
+        .btn.withdraw {
+            background: #ef4444;
+            color: #fff;
+        }
+        .btn.withdraw:hover {
+            background: #dc2626;
+        }
+        .transactions {
+            width: 100%;
+            max-width: 1200px;
+            background: #1e293b;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        .transactions h4 {
+            margin-bottom: 10px;
+            color: #00ffff;
+        }
+        .tx-item {
+            padding: 10px;
+            border-bottom: 1px solid #334155;
+        }
+        .tx-item:last-child {
+            border-bottom: none;
+        }
+        .popup-container {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .popup {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .popup h2 {
+            margin-bottom: 20px;
+            color: #00ffff;
+        }
+        .popup label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .popup input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0c1018;
+            color: #fff;
+        }
+        .popup .btn {
+            width: 100%;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #ff0000;
+        }
+        @media (max-width: 768px) {
+            .chart-box, .transactions {
+                height: 50vh;
+            }
+        }
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .chart-box, .transactions {
+                height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-left-mobile">
+            <div class="language-selector language-selector-mobile">
+                <div class="dropdown-trigger" id="language-dropdown-mobile">
+                    <div class="default-flag"></div>
+                    <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg')"></div>
+                    <span>English</span>
+                </div>
+                <ul class="dropdown-menu" id="language-menu-mobile">
+                    <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg" alt="English"> English
+                    </li>
+                    <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish"> Spanish
+                    </li>
+                    <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French"> French
+                    </li>
+                    <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German"> German
+                    </li>
+                    <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese"> Chinese
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="logo">Equity Hubs</div>
+        <div class="nav-right">
+            <div class="language-selector language-selector-desktop">
+                <div class="dropdown-trigger" id="language-dropdown-desktop">
+                    <div class="default-flag"></div>
+                    <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg')"></div>
+                    <span>English</span>
+                </div>
+                <ul class="dropdown-menu" id="language-menu-desktop">
+                    <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg" alt="English"> English
+                    </li>
+                    <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish"> Spanish
+                    </li>
+                    <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French"> French
+                    </li>
+                    <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German"> German
+                    </li>
+                    <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese"> Chinese
+                    </li>
+                </ul>
+            </div>
+            <div class="balance">Balance: <span id="balance">$50.00</span></div>
+        </div>
+        <div id="google_translate_element" style="display: none;"></div>
+    </header>
+
+    <div class="chart-box">
+        <canvas id="graph"></canvas>
+        <div class="time-line"></div>
+        <div class="current-price" id="priceBubble">$1.342631</div>
+        <div class="crosshair-x"></div>
+        <div class="crosshair-y"></div>
+        <div class="crosshair-dot"></div>
+    </div>
+
+    <div class="actions">
+        <button id="depositBtn" class="btn deposit">Deposit</button>
+        <button id="withdrawBtn" class="btn withdraw">Withdraw</button>
+    </div>
+
+    <div class="popup-container" id="depositPopup">
+        <div class="popup">
+            <span class="close" onclick="this.closest('.popup-container').style.display='none'">&times;</span>
+            <h2>Deposit Funds</h2>
+            <form id="depositForm">
+                <label for="depositAmount">Amount ($):</label>
+                <input type="number" id="depositAmount" name="depositAmount" min="1" required>
+                <label for="walletAddress">Wallet Address:</label>
+                <input type="text" id="walletAddress" name="walletAddress" required>
+                <label for="accountName">Account Name:</label>
+                <input type="text" id="accountName" name="accountName" required>
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber" name="accountNumber" required>
+                <label for="bankName">Bank Name:</label>
+                <input type="text" id="bankName" name="bankName" required>
+                <label for="bankCode">Bank Code:</label>
+                <input type="text" id="bankCode" name="bankCode" required>
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" required>
+                <label for="currency">Currency:</label>
+                <input type="text" id="currency" name="currency" required>
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" name="phone" required>
+                <button type="submit" class="btn deposit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup-container" id="withdrawPopup">
+        <div class="popup">
+            <span class="close" onclick="this.closest('.popup-container').style.display='none'">&times;</span>
+            <h2>Withdraw Funds</h2>
+            <form id="withdrawForm">
+                <label for="withdrawAmount">Amount ($):</label>
+                <input type="number" id="withdrawAmount" name="withdrawAmount" min="1" required>
+                <label for="withdrawWalletAddress">Wallet Address:</label>
+                <input type="text" id="withdrawWalletAddress" name="withdrawWalletAddress" required>
+                <label for="withdrawAccountName">Account Name:</label>
+                <input type="text" id="withdrawAccountName" name="withdrawAccountName" required>
+                <label for="withdrawAccountNumber">Account Number:</label>
+                <input type="text" id="withdrawAccountNumber" name="withdrawAccountNumber" required>
+                <label for="withdrawBankName">Bank Name:</label>
+                <input type="text" id="withdrawBankName" name="withdrawBankName" required>
+                <label for="withdrawBankCode">Bank Code:</label>
+                <input type="text" id="withdrawBankCode" name="withdrawBankCode" required>
+                <label for="withdrawCountry">Country:</label>
+                <input type="text" id="withdrawCountry" name="withdrawCountry" required>
+                <label for="withdrawCurrency">Currency:</label>
+                <input type="text" id="withdrawCurrency" name="withdrawCurrency" required>
+                <label for="withdrawPhone">Phone Number:</label>
+                <input type="text" id="withdrawPhone" name="withdrawPhone" required>
+                <button type="submit" class="btn withdraw">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="transactions">
+        <h4>Live Trades & Transactions</h4>
+        <div id="txList"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
+            authDomain: "investment-40343.firebaseapp.com",
+            projectId: "investment-40343",
+            storageBucket: "investment-40343.firebasestorage.app",
+            messagingSenderId: "126093031981",
+            appId: "1:126093031981:web:fd4ae73c063044693b16a4",
+            measurementId: "G-SXL6ZGL49W"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.googleTranslateElementInit = function () {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        };
+
+        function changeLanguage(value, flagUrl, text) {
+            const desktopTrigger = document.getElementById('language-dropdown-desktop');
+            const mobileTrigger = document.getElementById('language-dropdown-mobile');
+            const desktopMenu = document.getElementById('language-menu-desktop');
+            const mobileMenu = document.getElementById('language-menu-mobile');
+            const translateElement = document.querySelector('.goog-te-combo');
+
+            desktopTrigger.querySelector('.dropdown-flag').style.backgroundImage = `url('${flagUrl}')`;
+            desktopTrigger.querySelector('span').textContent = text;
+            mobileTrigger.querySelector('.dropdown-flag').style.backgroundImage = `url('${flagUrl}')`;
+            mobileTrigger.querySelector('span').textContent = text;
+
+            desktopMenu.classList.remove('active');
+            mobileMenu.classList.remove('active');
+
+            if (translateElement) {
+                translateElement.value = value;
+                translateElement.dispatchEvent(new Event('change'));
+            }
+        }
+
+        function setupDropdown(triggerId, menuId) {
+            const trigger = document.getElementById(triggerId);
+            const menu = document.getElementById(menuId);
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menu.classList.toggle('active');
+            });
+
+            menu.querySelectorAll('.dropdown-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const value = option.getAttribute('data-value');
+                    const flagUrl = option.getAttribute('data-flag');
+                    const text = option.textContent.trim();
+                    changeLanguage(value, flagUrl, text);
+                });
+            });
+
+            document.addEventListener('click', () => {
+                menu.classList.remove('active');
+            });
+        }
+
+        setupDropdown('language-dropdown-mobile', 'language-menu-mobile');
+        setupDropdown('language-dropdown-desktop', 'language-menu-desktop');
+        changeLanguage('en', 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg', 'English');
+
+        let balance = 50.00;
+        const balanceEl = document.getElementById('balance');
+        balanceEl.textContent = `$${balance.toFixed(2)}`;
+
+        const canvas = document.getElementById('graph');
+        const ctx = canvas.getContext('2d');
+        const priceBubble = document.getElementById('priceBubble');
+        const crosshairX = document.querySelector('.crosshair-x');
+        const crosshairY = document.querySelector('.crosshair-y');
+        const crosshairDot = document.querySelector('.crosshair-dot');
+
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            return rect;
+        }
+
+        let baseY;
+        const maxPoints = 250;
+        const points = [];
+        let price = 1.342600;
+        const priceRange = { min: 1.30, max: 1.40 }; // Price range for grid
+
+        window.addEventListener('load', () => {
+            const rect = resizeCanvas();
+            baseY = rect.height / 2;
+            animate();
+        });
+        window.addEventListener('resize', () => {
+            const rect = resizeCanvas();
+            baseY = rect.height / 2;
+        });
+
+        function nextPrice() {
+            if (!baseY) return;
+            const last = points.length ? points[points.length - 1] : baseY;
+            const change = (Math.random() - 0.5) * 6;
+            let newY = last + change;
+            const h = canvas.getBoundingClientRect().height;
+            if (newY < 20) newY = 20;
+            if (newY > h - 20) newY = h - 20;
+            points.push(newY);
+            if (points.length > maxPoints) points.shift();
+            price += (Math.random() - 0.5) * 0.00005;
+            price = Math.max(priceRange.min, Math.min(priceRange.max, price));
+        }
+
+        function draw() {
+            if (!baseY) return;
+            const rect = canvas.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid
+            const gridLines = 10;
+            const priceStep = (priceRange.max - priceRange.min) / gridLines;
+            ctx.font = '12px Poppins';
+            ctx.fillStyle = '#888';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i <= gridLines; i++) {
+                const price = priceRange.max - i * priceStep;
+                const y = (i / gridLines) * h;
+                // Horizontal line
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(w, y);
+                ctx.stroke();
+                // Price label
+                ctx.fillText(`$${price.toFixed(4)}`, 5, y - 5);
+            }
+
+            // Draw trading line
+            const step = w / (maxPoints - 1);
+            const lineGrad = ctx.createLinearGradient(0, 0, 0, h);
+            lineGrad.addColorStop(0, "#00ffff");
+            lineGrad.addColorStop(1, "#0077ff");
+            ctx.beginPath();
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = lineGrad;
+            ctx.shadowColor = "#00ffff";
+            ctx.shadowBlur = 15;
+            for (let i = 0; i < points.length; i++) {
+                const x = i * step;
+                const y = points[i];
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Shaded area
+            const lastY = points[points.length - 1] || baseY;
+            ctx.lineTo(w, h);
+            ctx.lineTo(0, h);
+            ctx.closePath();
+            const shadeGrad = ctx.createLinearGradient(0, lastY - 50, 0, h);
+            shadeGrad.addColorStop(0, "rgba(0,255,255,0.25)");
+            shadeGrad.addColorStop(1, "rgba(0,255,255,0)");
+            ctx.fillStyle = shadeGrad;
+            ctx.shadowBlur = 0;
+            ctx.fill();
+
+            // Update price bubble
+            priceBubble.textContent = `$${price.toFixed(6)}`;
+            priceBubble.style.top = `${lastY - 10}px`;
+            const lastChange = points.length > 1 ? points[points.length - 1] - points[points.length - 2] : 0;
+            priceBubble.style.backgroundColor = lastChange < 0 ? '#0077ff' : '#ff0077';
+        }
+
+        // Crosshair logic
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const lastY = points[points.length - 1] || baseY;
+            crosshairX.style.top = `${mouseY}px`;
+            crosshairY.style.left = `${mouseX}px`;
+            crosshairX.style.display = 'block';
+            crosshairY.style.display = 'block';
+            // Snap dot to latest point
+            const latestX = (points.length - 1) * (rect.width / (maxPoints - 1));
+            crosshairDot.style.left = `${latestX}px`;
+            crosshairDot.style.top = `${lastY}px`;
+            crosshairDot.style.display = 'block';
+            // Show price at mouse Y
+            const priceAtY = priceRange.max - (mouseY / rect.height) * (priceRange.max - priceRange.min);
+            priceBubble.textContent = `$${priceAtY.toFixed(6)}`;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            crosshairX.style.display = 'none';
+            crosshairY.style.display = 'none';
+            crosshairDot.style.display = 'none';
+            priceBubble.textContent = `$${price.toFixed(6)}`;
+            priceBubble.style.top = `${(points[points.length - 1] || baseY) - 10}px`;
+        });
+
+        function animate() {
+            nextPrice();
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        // Popup handling
+        const depositBtn = document.getElementById('depositBtn');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        const depositPopup = document.getElementById('depositPopup');
+        const withdrawPopup = document.getElementById('withdrawPopup');
+        const depositForm = document.getElementById('depositForm');
+        const withdrawForm = document.getElementById('withdrawForm');
+
+        depositBtn.addEventListener('click', () => {
+            depositPopup.style.display = 'flex';
+        });
+
+        withdrawBtn.addEventListener('click', () => {
+            withdrawPopup.style.display = 'flex';
+        });
+
+        document.querySelectorAll('.popup-container .close').forEach(close => {
+            close.addEventListener('click', () => {
+                close.closest('.popup-container').style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === depositPopup) depositPopup.style.display = 'none';
+            if (e.target === withdrawPopup) withdrawPopup.style.display = 'none';
+        });
+
+        depositForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (amount > 0) {
+                balance += amount;
+                balanceEl.textContent = `$${balance.toFixed(2)}`;
+                alert(`Successfully deposited $${amount.toFixed(2)}`);
+                depositPopup.style.display = 'none';
+                depositForm.reset();
+                // Simulate transaction
+                const txItem = document.createElement('div');
+                txItem.className = 'tx-item';
+                txItem.innerHTML = `<strong>Deposit</strong> $${amount.toFixed(2)} at $${price.toFixed(6)} <em>(${new Date().toLocaleTimeString()})</em>`;
+                document.getElementById('txList').prepend(txItem);
+                if (document.getElementById('txList').childElementCount > 10) {
+                    document.getElementById('txList').removeChild(document.getElementById('txList').lastChild);
+                }
+            } else {
+                alert('Invalid amount. Please enter a positive value.');
+            }
+        });
+
+        withdrawForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            if (amount > 0 && amount <= balance) {
+                balance -= amount;
+                balanceEl.textContent = `$${balance.toFixed(2)}`;
+                alert(`Successfully withdrew $${amount.toFixed(2)}`);
+                withdrawPopup.style.display = 'none';
+                withdrawForm.reset();
+                // Simulate transaction
+                const txItem = document.createElement('div');
+                txItem.className = 'tx-item';
+                txItem.innerHTML = `<strong>Withdraw</strong> $${amount.toFixed(2)} at $${price.toFixed(6)} <em>(${new Date().toLocaleTimeString()})</em>`;
+                document.getElementById('txList').prepend(txItem);
+                if (document.getElementById('txList').childElementCount > 10) {
+                    document.getElementById('txList').removeChild(document.getElementById('txList').lastChild);
+                }
+            } else {
+                alert('Invalid amount. Please check your balance and try again.');
+            }
+        });
+
+        // Transaction ticker
+        const txList = document.getElementById('txList');
+        const names = ["Gentle Saviour", "Mark", "Sophia", "James", "Olivia", "Chris", "Ava", "Daniel", "Emma", "John"];
+        function addTransaction() {
+            const types = ['Buy', 'Sell'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const amount = (Math.random() * 100).toFixed(2);
+            const txPrice = (price + (Math.random() - 0.5) * 0.01).toFixed(6);
+            const time = new Date().toLocaleTimeString();
+            const txItem = document.createElement('div');
+            txItem.className = 'tx-item';
+            txItem.innerHTML = `<strong>${type}</strong> $${amount} at $${txPrice} <em>(${time})</em>`;
+            txList.prepend(txItem);
+            if (txList.childElementCount > 10) {
+                txList.removeChild(txList.lastChild);
+            }
+        }
+        setInterval(addTransaction, 5000);
+    </script>
+</body>
+</html>
