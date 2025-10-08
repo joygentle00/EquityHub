@@ -205,6 +205,14 @@
         .btn.withdraw:hover {
             background: #dc2626;
         }
+        .btn.back {
+            background: #6b7280;
+            color: #fff;
+            margin-right: 10px;
+        }
+        .btn.back:hover {
+            background: #4b5563;
+        }
         .transactions {
             width: 100%;
             max-width: 1200px;
@@ -242,8 +250,10 @@
             border-radius: 14px;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
             width: 90%;
-            max-width: 400px;
+            max-width: 600px;
             position: relative;
+            overflow-y: auto;
+            max-height: 80vh;
         }
         .popup h2 {
             margin-bottom: 20px;
@@ -252,6 +262,7 @@
         .popup label {
             display: block;
             margin-bottom: 8px;
+            color: #00ffff;
         }
         .popup input {
             width: 100%;
@@ -261,6 +272,14 @@
             border: 1px solid #334155;
             background: #0c1018;
             color: #fff;
+        }
+        .popup input[readonly] {
+            background: #334155;
+            cursor: not-allowed;
+        }
+        .popup input[type="file"] {
+            background: none;
+            border: none;
         }
         .popup .btn {
             width: 100%;
@@ -276,6 +295,57 @@
         .close:hover {
             color: #ff0000;
         }
+        .wallet-address-container {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        .copy-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .copy-btn:hover {
+            background: #0e9f6e;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .payment-instructions, .btc-payment-details, .eth-payment-details, .account-details, .upload-payment-confirmation {
+            margin-bottom: 20px;
+        }
+        .payment-instructions p, .btc-payment-details p, .eth-payment-details p, .account-details p, .upload-payment-confirmation p {
+            font-size: 16px;
+            color: #00ffff;
+            margin: 6px 0;
+        }
+        .account-details p strong, .btc-payment-details p strong, .eth-payment-details p strong {
+            color: #00ffff;
+        }
+        .note {
+            font-size: 14px;
+            color: #00ffff;
+            margin-top: 10px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #00ffff;
+            margin: 20px 0;
+        }
+        a {
+            color: #00ffff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
         @media (max-width: 768px) {
             .chart-box, .transactions {
                 height: 50vh;
@@ -289,6 +359,12 @@
             }
             .chart-box, .transactions {
                 height: 40vh;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .button-group .btn {
+                width: 100%;
             }
         }
     </style>
@@ -347,7 +423,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="balance">Balance: <span id="balance">$50.00</span></div>
+            <div class="balance">Balance: <span id="balance">$0.00</span></div>
         </div>
         <div id="google_translate_element" style="display: none;"></div>
     </header>
@@ -370,26 +446,61 @@
         <div class="popup">
             <span class="close" onclick="this.closest('.popup-container').style.display='none'">&times;</span>
             <h2>Deposit Funds</h2>
-            <form id="depositForm">
+            <form id="depositAmountForm">
                 <label for="depositAmount">Amount ($):</label>
                 <input type="number" id="depositAmount" name="depositAmount" min="1" required>
-                <label for="walletAddress">Wallet Address:</label>
-                <input type="text" id="walletAddress" name="walletAddress" required>
-                <label for="accountName">Account Name:</label>
-                <input type="text" id="accountName" name="accountName" required>
-                <label for="accountNumber">Account Number:</label>
-                <input type="text" id="accountNumber" name="accountNumber" required>
-                <label for="bankName">Bank Name:</label>
-                <input type="text" id="bankName" name="bankName" required>
-                <label for="bankCode">Bank Code:</label>
-                <input type="text" id="bankCode" name="bankCode" required>
-                <label for="country">Country:</label>
-                <input type="text" id="country" name="country" required>
-                <label for="currency">Currency:</label>
-                <input type="text" id="currency" name="currency" required>
-                <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" name="phone" required>
-                <button type="submit" class="btn deposit">Submit</button>
+                <button type="submit" class="btn deposit">Next</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup-container" id="depositDetailsPopup">
+        <div class="popup">
+            <span class="close" onclick="this.closest('.popup-container').style.display='none'">&times;</span>
+            <h2>Deposit Details</h2>
+            <form id="depositDetailsForm">
+                <div class="payment-instructions">
+                    <h2>Payment Instructions</h2>
+                    <p>Please ensure you send the exact amount to the specified wallet address. After sending the payment, take a screenshot of the transaction confirmation for your records.</p>
+                    <p class="note">Note: Cryptocurrency transactions are irreversible. Double-check the wallet address before sending any funds.</p>
+                </div>
+                <hr>
+                <div class="btc-payment-details">
+                    <h2>Bitcoin (BTC) Payment Details</h2>
+                    <p><strong>Wallet Address:</strong> 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</p>
+                    <div class="wallet-address-container">
+                        <input type="text" id="btcWalletAddress" value="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" readonly>
+                        <button type="button" class="copy-btn" onclick="navigator.clipboard.write(document.getElementById('btcWalletAddress').value).then(() => alert('BTC wallet address copied!'))">Copy</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="eth-payment-details">
+                    <h2>Ethereum (ETH) Payment Details</h2>
+                    <p><strong>Wallet Address:</strong> 0x32Be343B94f860124dC4fEe278FDCBD38C102D88</p>
+                    <div class="wallet-address-container">
+                        <input type="text" id="ethWalletAddress" value="0x32Be343B94f860124dC4fEe278FDCBD38C102D88" readonly>
+                        <button type="button" class="copy-btn" onclick="navigator.clipboard.write(document.getElementById('ethWalletAddress').value).then(() => alert('ETH wallet address copied!'))">Copy</button>
+                    </div>
+                    <p><strong>Amount ($):</strong> <span id="depositAmountConfirm"></span></p>
+                </div>
+                <hr>
+                <div class="account-details">
+                    <h2>Account Details</h2>
+                    <p><strong>Account Name:</strong> John Doe</p>
+                    <p><strong>Account Number:</strong> 123456789</p>
+                    <p><strong>Bank Name:</strong> Global Bank</p>
+                    <p><strong>SWIFT Code:</strong> GBINUS33</p>
+                </div>
+                <hr>
+                <div class="upload-payment-confirmation">
+                    <h2>Upload Payment Confirmation</h2>
+                    <p>Please upload a screenshot or photo of your payment confirmation to expedite the verification process.</p>
+                    <input type="file" id="paymentConfirmation" name="paymentConfirmation" accept="image/*">
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn back" onclick="document.getElementById('depositDetailsPopup').style.display='none';document.getElementById('depositPopup').style.display='flex';">Back</button>
+                    <button type="submit" class="btn deposit">Confirm</button>
+                </div>
             </form>
         </div>
     </div>
@@ -430,7 +541,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
@@ -445,6 +557,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         window.googleTranslateElementInit = function () {
             new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
@@ -498,9 +611,31 @@
         setupDropdown('language-dropdown-desktop', 'language-menu-desktop');
         changeLanguage('en', 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg', 'English');
 
-        let balance = 50.00;
+        let balance = 0.00;
         const balanceEl = document.getElementById('balance');
         balanceEl.textContent = `$${balance.toFixed(2)}`;
+
+        // Firebase balance and $50 credit on account creation
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDoc = doc(db, 'users', user.uid);
+                const docSnap = await getDoc(userDoc);
+                if (docSnap.exists()) {
+                    balance = docSnap.data().balance || 0.00;
+                } else {
+                    balance = 50.00;
+                    await setDoc(userDoc, { balance: 50.00, createdAt: new Date().toISOString() });
+                    const txItem = document.createElement('div');
+                    txItem.className = 'tx-item';
+                    txItem.innerHTML = `<strong>Sign-Up Bonus</strong> $50.00 at $${price.toFixed(6)} <em>(${new Date().toLocaleTimeString()})</em>`;
+                    document.getElementById('txList').prepend(txItem);
+                }
+                balanceEl.textContent = `$${balance.toFixed(2)}`;
+            } else {
+                balance = 0.00;
+                balanceEl.textContent = `$${balance.toFixed(2)}`;
+            }
+        });
 
         const canvas = document.getElementById('graph');
         const ctx = canvas.getContext('2d');
@@ -522,7 +657,8 @@
         const maxPoints = 250;
         const points = [];
         let price = 1.342600;
-        const priceRange = { min: 1.30, max: 1.40 }; // Price range for grid
+        const priceRange = { min: 1.30, max: 1.40 };
+        let momentum = 0;
 
         window.addEventListener('load', () => {
             const rect = resizeCanvas();
@@ -537,14 +673,16 @@
         function nextPrice() {
             if (!baseY) return;
             const last = points.length ? points[points.length - 1] : baseY;
-            const change = (Math.random() - 0.5) * 6;
+            momentum += (Math.random() - 0.5) * 0.2;
+            momentum = Math.max(-0.5, Math.min(0.5, momentum));
+            const change = momentum + (Math.random() - 0.5) * 2;
             let newY = last + change;
             const h = canvas.getBoundingClientRect().height;
             if (newY < 20) newY = 20;
             if (newY > h - 20) newY = h - 20;
             points.push(newY);
             if (points.length > maxPoints) points.shift();
-            price += (Math.random() - 0.5) * 0.00005;
+            price += momentum * 0.005 + (Math.random() - 0.5) * 0.002;
             price = Math.max(priceRange.min, Math.min(priceRange.max, price));
         }
 
@@ -555,7 +693,6 @@
             const h = rect.height;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw grid
             const gridLines = 10;
             const priceStep = (priceRange.max - priceRange.min) / gridLines;
             ctx.font = '12px Poppins';
@@ -566,16 +703,13 @@
             for (let i = 0; i <= gridLines; i++) {
                 const price = priceRange.max - i * priceStep;
                 const y = (i / gridLines) * h;
-                // Horizontal line
                 ctx.beginPath();
                 ctx.moveTo(0, y);
                 ctx.lineTo(w, y);
                 ctx.stroke();
-                // Price label
                 ctx.fillText(`$${price.toFixed(4)}`, 5, y - 5);
             }
 
-            // Draw trading line
             const step = w / (maxPoints - 1);
             const lineGrad = ctx.createLinearGradient(0, 0, 0, h);
             lineGrad.addColorStop(0, "#00ffff");
@@ -593,7 +727,6 @@
             }
             ctx.stroke();
 
-            // Shaded area
             const lastY = points[points.length - 1] || baseY;
             ctx.lineTo(w, h);
             ctx.lineTo(0, h);
@@ -605,14 +738,12 @@
             ctx.shadowBlur = 0;
             ctx.fill();
 
-            // Update price bubble
             priceBubble.textContent = `$${price.toFixed(6)}`;
             priceBubble.style.top = `${lastY - 10}px`;
             const lastChange = points.length > 1 ? points[points.length - 1] - points[points.length - 2] : 0;
             priceBubble.style.backgroundColor = lastChange < 0 ? '#0077ff' : '#ff0077';
         }
 
-        // Crosshair logic
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
@@ -622,12 +753,10 @@
             crosshairY.style.left = `${mouseX}px`;
             crosshairX.style.display = 'block';
             crosshairY.style.display = 'block';
-            // Snap dot to latest point
             const latestX = (points.length - 1) * (rect.width / (maxPoints - 1));
             crosshairDot.style.left = `${latestX}px`;
             crosshairDot.style.top = `${lastY}px`;
             crosshairDot.style.display = 'block';
-            // Show price at mouse Y
             const priceAtY = priceRange.max - (mouseY / rect.height) * (priceRange.max - priceRange.min);
             priceBubble.textContent = `$${priceAtY.toFixed(6)}`;
         });
@@ -641,17 +770,19 @@
         });
 
         function animate() {
-            nextPrice();
             draw();
             requestAnimationFrame(animate);
         }
 
-        // Popup handling
+        setInterval(nextPrice, 1000);
+
         const depositBtn = document.getElementById('depositBtn');
         const withdrawBtn = document.getElementById('withdrawBtn');
         const depositPopup = document.getElementById('depositPopup');
+        const depositDetailsPopup = document.getElementById('depositDetailsPopup');
         const withdrawPopup = document.getElementById('withdrawPopup');
-        const depositForm = document.getElementById('depositForm');
+        const depositAmountForm = document.getElementById('depositAmountForm');
+        const depositDetailsForm = document.getElementById('depositDetailsForm');
         const withdrawForm = document.getElementById('withdrawForm');
 
         depositBtn.addEventListener('click', () => {
@@ -670,19 +801,53 @@
 
         window.addEventListener('click', (e) => {
             if (e.target === depositPopup) depositPopup.style.display = 'none';
+            if (e.target === depositDetailsPopup) depositDetailsPopup.style.display = 'none';
             if (e.target === withdrawPopup) withdrawPopup.style.display = 'none';
         });
 
-        depositForm.addEventListener('submit', (e) => {
+        let pendingDepositAmount = 0;
+
+        depositAmountForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('depositAmount').value);
             if (amount > 0) {
+                pendingDepositAmount = amount;
+                document.getElementById('depositAmountConfirm').textContent = `$${amount.toFixed(2)}`;
+                depositPopup.style.display = 'none';
+                depositDetailsPopup.style.display = 'flex';
+                depositAmountForm.reset();
+            } else {
+                alert('Invalid amount. Please enter a positive value.');
+            }
+        });
+
+        depositDetailsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const amount = pendingDepositAmount;
+            const paymentConfirmation = document.getElementById('paymentConfirmation').files[0];
+            if (amount > 0) {
+                let confirmationUrl = null;
+                const user = auth.currentUser;
+                if (paymentConfirmation && user) {
+                    const storageRef = ref(storage, `users/${user.uid}/payment_confirmations/${Date.now()}_${paymentConfirmation.name}`);
+                    await uploadBytes(storageRef, paymentConfirmation);
+                    confirmationUrl = await getDownloadURL(storageRef);
+                }
                 balance += amount;
                 balanceEl.textContent = `$${balance.toFixed(2)}`;
-                alert(`Successfully deposited $${amount.toFixed(2)}`);
-                depositPopup.style.display = 'none';
-                depositForm.reset();
-                // Simulate transaction
+                if (user) {
+                    await setDoc(doc(db, 'users', user.uid), { balance }, { merge: true });
+                    await addDoc(collection(db, 'users', user.uid, 'transactions'), {
+                        type: 'Deposit',
+                        amount,
+                        price,
+                        timestamp: new Date().toISOString(),
+                        confirmationUrl
+                    });
+                }
+                alert(`Successfully deposited $${amount.toFixed(2)}. ${confirmationUrl ? 'Payment confirmation uploaded.' : 'No confirmation uploaded.'}`);
+                depositDetailsPopup.style.display = 'none';
+                depositDetailsForm.reset();
                 const txItem = document.createElement('div');
                 txItem.className = 'tx-item';
                 txItem.innerHTML = `<strong>Deposit</strong> $${amount.toFixed(2)} at $${price.toFixed(6)} <em>(${new Date().toLocaleTimeString()})</em>`;
@@ -690,21 +855,31 @@
                 if (document.getElementById('txList').childElementCount > 10) {
                     document.getElementById('txList').removeChild(document.getElementById('txList').lastChild);
                 }
+                pendingDepositAmount = 0;
             } else {
-                alert('Invalid amount. Please enter a positive value.');
+                alert('Invalid amount. Please try again.');
             }
         });
 
-        withdrawForm.addEventListener('submit', (e) => {
+        withdrawForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             if (amount > 0 && amount <= balance) {
                 balance -= amount;
                 balanceEl.textContent = `$${balance.toFixed(2)}`;
+                const user = auth.currentUser;
+                if (user) {
+                    await setDoc(doc(db, 'users', user.uid), { balance }, { merge: true });
+                    await addDoc(collection(db, 'users', user.uid, 'transactions'), {
+                        type: 'Withdraw',
+                        amount,
+                        price,
+                        timestamp: new Date().toISOString()
+                    });
+                }
                 alert(`Successfully withdrew $${amount.toFixed(2)}`);
                 withdrawPopup.style.display = 'none';
                 withdrawForm.reset();
-                // Simulate transaction
                 const txItem = document.createElement('div');
                 txItem.className = 'tx-item';
                 txItem.innerHTML = `<strong>Withdraw</strong> $${amount.toFixed(2)} at $${price.toFixed(6)} <em>(${new Date().toLocaleTimeString()})</em>`;
@@ -717,7 +892,6 @@
             }
         });
 
-        // Transaction ticker
         const txList = document.getElementById('txList');
         const names = ["Gentle Saviour", "Mark", "Sophia", "James", "Olivia", "Chris", "Ava", "Daniel", "Emma", "John"];
         function addTransaction() {
