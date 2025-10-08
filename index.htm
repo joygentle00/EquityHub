@@ -6,50 +6,142 @@
     <title>Equity Hubs</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon to prevent 404 error -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Google Translate API -->
-     <style>
-          .chart-box {
-      position: relative;
-      width: 90%;
-      height: 80vh;
-      background: linear-gradient(to bottom, #0c1018, #111827);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .current-price {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #1e293b;
-      color: #00ffff;
-      padding: 6px 14px;
-      border-radius: 12px;
-      font-family: "Poppins", sans-serif;
-      font-weight: 500;
-      font-size: 14px;
-      box-shadow: 0 0 12px rgba(0,255,255,0.3);
-    }
-
-    .time-line {
-      position: absolute;
-      right: 80px;
-      top: 0;
-      width: 2px;
-      height: 100%;
-      background: gold;
-      opacity: 0.7;
-    }
-  </style>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .popup-content h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .popup-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .popup-content button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .popup-content button:hover {
+            background: #0056b3;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .popup-content a {
+            color: #007bff;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .popup-content a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        /* Language selector styles */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-trigger {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+        .dropdown-trigger i {
+            margin-right: 8px;
+            color: #333;
+        }
+        .dropdown-flag {
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+            margin-right: 8px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 150px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dropdown-menu.active {
+            display: block;
+        }
+        .dropdown-option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+        }
+        .dropdown-option:hover {
+            background: #f0f0f0;
+        }
+        .dropdown-option img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .language-selector-mobile .dropdown-trigger {
+            padding: 5px;
+        }
+        .language-selector-desktop .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -66,16 +158,33 @@
                         <div class="hamburger-lines"></div>
                         <div class="hamburger-lines"></div>
                     </div>
-                    <!-- Language Selector for Mobile -->
-                    <div class="language-selector">
-                        <select id="language-select-mobile" onchange="changeLanguage()">
-                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
-                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
-                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
-                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
-                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
-                        </select>
+                    <div class="language-selector language-selector-mobile">
+                        <div class="dropdown-trigger" id="language-dropdown-mobile">
+                            <i class="fas fa-globe"></i>
+                            <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png')"></div>
+                            <span>English</span>
+                        </div>
+                        <ul class="dropdown-menu" id="language-menu-mobile">
+                            <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                            </li>
+                            <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                            </li>
+                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png" alt="French">
+                            </li>
+                            <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                            </li>
+                            <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                            </li>
+                        </ul>
                     </div>
+                    <a href="#" class="chat-icon-mobile">
+                        <i class="fa-solid fa-comment-dots"></i>
+                    </a>
                 </div>
                 <div class="logo-desktop-only">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,26 +196,83 @@
                     <a href="about.html">About Us</a>
                     <a href="contact.html">Contacts</a>
                     <a href="investment.html">Investment</a>
-                    <!-- Language Selector for Desktop -->
                     <div class="language-selector language-selector-desktop">
-                        <select id="language-select-desktop" onchange="changeLanguage()">
-                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
-                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
-                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
-                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
-                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
-                        </select>
+                        <div class="dropdown-trigger" id="language-dropdown-desktop">
+                            <i class="fas fa-globe"></i>
+                            <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg')"></div>
+                            <span>English</span>
+                        </div>
+                        <ul class="dropdown-menu" id="language-menu-desktop">
+                            <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                            </li>
+                            <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                            </li>
+                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French">
+                            </li>
+                            <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                            </li>
+                            <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="nav-right-buttons">
+                <div class="nav-right-buttons auth-buttons">
                     <a href="#" class="login-btn">Login</a>
                     <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
                 </div>
+                <div class="nav-right-buttons trade-buttons" style="display: none;">
+                    <a style="background-color: rgb(4, 28, 4); text-align: white; padding: 12px; border-radius: 5px;" href="user_dashboard.html" class="trade-btn">Trade</a>
+                </div>
             </nav>
-            <!-- Hidden div for Google Translate widget -->
             <div id="google_translate_element" style="display: none;"></div>
         </header>
-        <!--- THIS IS HERO SECTION -->
+
+        <!-- Login Popup -->
+        <div id="login-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Login</h2>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <p id="login-error" class="error-message"></p>
+                <button id="login-submit">Login</button>
+                <a href="#" id="forgot-password-link">Forgot Password?</a>
+                <a href="#" id="switch-to-register">Don't have an account? Register</a>
+            </div>
+        </div>
+
+        <!-- Register Popup -->
+        <div id="register-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Create Account</h2>
+                <input type="text" id="register-name" placeholder="Name" required>
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <input type="password" id="register-confirm-password" placeholder="Confirm Password" required>
+                <p id="register-error" class="error-message"></p>
+                <button id="register-submit">Register</button>
+                <a href="#" id="switch-to-login">Already have an account? Login</a>
+            </div>
+        </div>
+
+        <!-- Forgot Password Popup -->
+        <div id="forgot-password-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Forgot Password</h2>
+                <input type="email" id="forgot-email" placeholder="Email" required>
+                <p id="forgot-error" class="error-message"></p>
+                <button id="forgot-submit">Send Reset Link</button>
+                <a href="#" id="switch-to-login-from-forgot">Back to Login</a>
+            </div>
+        </div>
+
         <section class="hero-section">
             <main>
                 <div class="hero-content">
@@ -114,23 +280,45 @@
                     <h1><span style="color: white;">Equity Hub:</span> Trade in Seconds</h1> 
                     <p>Providing you with the opportunity to invest<br>in more than 100 assets for continuous income</p>
                     <div class="asset-icons">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bitcoin_Logo.png/640px-Bitcoin_Logo.png" alt="McDonald's">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ethereum_Logo.png/640px-Ethereum_Logo.png" alt="Google">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Binance-coin-bnb-logo.png/640px-Binance-coin-bnb-logo.png" alt="Apple">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/USDC_Logo.png/640px-USDC_Logo.png" alt="Amazon">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bitcoin_Logo.png/640px-Bitcoin_Logo.png" alt="Bitcoin">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ethereum_Logo.png/640px-Ethereum_Logo.png" alt="Ethereum">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Binance-coin-bnb-logo.png/640px-Binance-coin-bnb-logo.png" alt="Binance Coin">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/USDC_Logo.png/640px-USDC_Logo.png" alt="USDC">
                         <span>+100 assets</span>
                     </div>
                 </div>
-                <div class="chart-box">
-                <canvas id="graph"></canvas>
-                <div class="time-line"></div>
-                <div class="current-price" id="priceBubble">$1.342631</div>
-            </div>
-        
+                <div class="hero-image-section">
+                    <div class="trading-mockup">
+                        <header class="mockup-asset-info">
+                            <span class="mockup-asset-name">EUR/USD</span>
+                            <span id="current-price" class="mockup-current-price">1.09540</span>
+                        </header>
+                        <div id="chart-container" class="mockup-chart-container"></div>
+                        <div class="mockup-controls-panel">
+                            <div class="mockup-control-group">
+                                <label for="expiry-time">Time</label>
+                                <select id="expiry-time">
+                                    <option value="60">1 Min</option>
+                                    <option value="300" selected>5 Min</option>
+                                    <option value="900">15 Min</option>
+                                </select>
+                            </div>
+                            <div class="mockup-control-group">
+                                <label for="investment-amount">Amount ($)</label>
+                                <input type="number" id="investment-amount" value="100" min="10">
+                            </div>
+                        </div>
+                        <div class="mockup-trade-buttons">
+                            <button id="call-button" class="mockup-trade-button mockup-call">CALL (Higher)</button>
+                            <button id="put-button" class="mockup-trade-button mockup-put">PUT (Lower)</button>
+                        </div>
+                        <div id="results-log" class="mockup-results-log">
+                            <p>Trade Log:</p>
+                        </div>
+                    </div>
                 </div>
             </main>
         </section>
-        <!--- THIS IS HOW IT WORKS SECTION -->
         <section class="how-it-works-section">
             <h2 class="section-title">How It Works</h2>
             <div class="cards-container">
@@ -154,7 +342,7 @@
                 <div class="trusted-card">
                     <div class="trusted-icon"><i class="fa-solid fa-shield-halved"></i></div>
                     <h2>Trusted</h2>
-                    <p>ExpertOption is a leader in the online trading industry. We are trusted by more than 70,000,000 clients.</p>
+                    <p>Equity Hubs is a leader in the online trading industry. We are trusted by more than 70,000,000 clients.</p>
                     <a href="#" class="see-more-btn">See more</a>
                 </div>
                 <div class="platform-award-card">
@@ -164,8 +352,6 @@
                 </div>
             </div>
         </section>
-
-        <!--- THIS IS GLOBAL TRADING PLATFORM SECTION -->
         <section class="global-platform-section">
             <h2 class="section-title-global">Global Trading Platform</h2>
             <div class="metrics-container">
@@ -188,78 +374,66 @@
             </div>
             <p class="global-caption">People from 48 countries trade at ExpertOption</p>        
         </section>
-
-        <!--- THIS IS FEATURES SECTION -->
         <section class="features-section">
-    <div class="features-grid">
-        
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-chart-bar"></i>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-chart-bar"></i>
+                    </div>
+                    <h3>FLEXIBLE TRADING</h3>
+                    <p>Latest trends: quick and digital trading, express trades, pending trades, copy trading. Payouts of up to 218%.</p>
                 </div>
-            <h3>FLEXIBLE TRADING</h3>
-            <p>Latest trends: quick and digital trading, express trades, pending trades, copy trading. Payouts of up to 218%.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-graduation-cap"></i>
-            </div>
-            <h3>COMPREHENSIVE EDUCATION</h3>
-            <p>Our help section contains tutorials, guides and various trading strategies.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-sack-dollar"></i>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3>COMPREHENSIVE EDUCATION</h3>
+                    <p>Our help section contains tutorials, guides and various trading strategies.</p>
                 </div>
-            <h3>DIVERSE TRADING INSTRUMENTS</h3>
-            <p>Assets suitable for any trader: currency, commodities, stocks</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-laptop-code"></i>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                    <h3>DIVERSE TRADING INSTRUMENTS</h3>
+                    <p>Assets suitable for any trader: currency, commodities, stocks</p>
                 </div>
-            <h3>DEMO ACCOUNT</h3>
-            <p>Try all platform benefits on the Demo account using virtual money. No investment needed, no risks involved.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-wallet"></i>
-            </div>
-            <h3>EASY DEPOSITS AND WITHDRAWALS</h3>
-            <p>Use the most convenient payment method for hassle-free deposits and withdrawals.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-certificate"></i>
-            </div>
-            <h3>HIGH CUSTOMER LOYALTY</h3>
-            <p>Trading tournaments, regular bonuses, gifts, promo codes and contests are available to any trader.</p>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-shield-alt"></i>
-            </div>
-            <h3>TRADING ADVANTAGES</h3>
-            <p>Use cashback and other advantages for a more comfortable trading experience with minimal risks.</p>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon">
-                <i class="fa-solid fa-sort"></i>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <h3>DEMO ACCOUNT</h3>
+                    <p>Try all platform benefits on the Demo account using virtual money. No investment needed, no risks involved.</p>
                 </div>
-            <h3>INDICATORS AND SIGNALS</h3>
-            <p>Everything you need for a top-tier trading experience including popular indicators and signals.</p>
-        </div>
-
-    </div>
-</section>
-        <!--- THIS IS TESTIMIAL SECTION -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3>EASY DEPOSITS AND WITHDRAWALS</h3>
+                    <p>Use the most convenient payment method for hassle-free deposits and withdrawals.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+                    <h3>HIGH CUSTOMER LOYALTY</h3>
+                    <p>Trading tournaments, regular bonuses, gifts, promo codes and contests are available to any trader.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-shield-alt"></i>
+                    </div>
+                    <h3>TRADING ADVANTAGES</h3>
+                    <p>Use cashback and other advantages for a more comfortable trading experience with minimal risks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-sort"></i>
+                    </div>
+                    <h3>INDICATORS AND SIGNALS</h3>
+                    <p>Everything you need for a top-tier trading experience including popular indicators and signals.</p>
+                </div>
+            </div>
+        </section>
         <section class="testimonial-section">
             <h2 class="section-title">What Our Clients Say</h2>
             <div class="carousel-container">
@@ -305,8 +479,6 @@
                 <span class="dot" data-slide="3"></span>
             </div>
         </section>
-
-        <!--- THIS IS FOOTER SECTION -->
         <footer>
             <div class="footer-content">
                 <div class="footer-col disclaimer-col">
@@ -347,142 +519,210 @@
             </div>
         </footer>
     </div>
-    <!-- Chat Widget outside container -->
-    <div class="chat-widget">
-        <button class="chat-toggle">
-            <i class="fa-solid fa-comment-dots"></i>
-        </button>
-        <div class="chat-panel">
-            <div class="chat-header">
-                <h3>Support Chat</h3>
-                <button class="chat-close">&times;</button>
-            </div>
-            <div class="chat-messages">
-                <p class="message bot">Hello! How can I assist you today?</p>
-            </div>
-            <div class="chat-input">
-                <input type="text" placeholder="Type your message...">
-                <button class="send-btn">Send</button>
-            </div>
-        </div>
-    </div>
     <script src="index.js"></script>
-    <script>
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
+            authDomain: "investment-40343.firebaseapp.com",
+            projectId: "investment-40343",
+            storageBucket: "investment-40343.firebasestorage.app",
+            messagingSenderId: "126093031981",
+            appId: "1:126093031981:web:fd4ae73c063044693b16a4",
+            measurementId: "G-SXL6ZGL49W"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Popup Elements
+        const loginPopup = document.getElementById('login-popup');
+        const registerPopup = document.getElementById('register-popup');
+        const forgotPasswordPopup = document.getElementById('forgot-password-popup');
+        const loginBtn = document.querySelector('.login-btn');
+        const registerBtn = document.querySelector('.register-btn');
+        const authButtons = document.querySelector('.auth-buttons');
+        const tradeButtons = document.querySelector('.trade-buttons');
+        const closeButtons = document.querySelectorAll('.close-btn');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const switchToLoginFromForgot = document.getElementById('switch-to-login-from-forgot');
+
+        // Error Messages
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+        const forgotError = document.getElementById('forgot-error');
+
+        // Show/Hide Popups
+        function showPopup(popup) {
+            popup.style.display = 'flex';
+        }
+
+        function hidePopup(popup) {
+            popup.style.display = 'none';
+            popup.querySelectorAll('input').forEach(input => input.value = '');
+            popup.querySelector('.error-message').style.display = 'none';
+        }
+
+        // Event Listeners for Buttons
+        loginBtn.addEventListener('click', () => showPopup(loginPopup));
+        registerBtn.addEventListener('click', () => showPopup(registerPopup));
+        forgotPasswordLink.addEventListener('click', () => {
+            hidePopup(loginPopup);
+            showPopup(forgotPasswordPopup);
+        });
+        switchToRegister.addEventListener('click', () => {
+            hidePopup(loginPopup);
+            showPopup(registerPopup);
+        });
+        switchToLogin.addEventListener('click', () => {
+            hidePopup(registerPopup);
+            showPopup(loginPopup);
+        });
+        switchToLoginFromForgot.addEventListener('click', () => {
+            hidePopup(forgotPasswordPopup);
+            showPopup(loginPopup);
+        });
+
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hidePopup(btn.closest('.popup'));
+            });
+        });
+
+        // Firebase Authentication Handlers
+        document.getElementById('login-submit').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    hidePopup(loginPopup);
+                })
+                .catch(error => {
+                    loginError.textContent = error.message;
+                    loginError.style.display = 'block';
+                });
+        });
+
+        document.getElementById('register-submit').addEventListener('click', () => {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (!name) {
+                registerError.textContent = 'Name is required';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Passwords do not match';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    return updateProfile(userCredential.user, {
+                        displayName: name
+                    }).then(() => {
+                        hidePopup(registerPopup);
+                    });
+                })
+                .catch(error => {
+                    registerError.textContent = error.message;
+                    registerError.style.display = 'block';
+                });
+        });
+
+        document.getElementById('forgot-submit').addEventListener('click', () => {
+            const email = document.getElementById('forgot-email').value;
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    forgotError.textContent = 'Password reset email sent!';
+                    forgotError.style.color = 'green';
+                    forgotError.style.display = 'block';
+                })
+                .catch(error => {
+                    forgotError.textContent = error.message;
+                    forgotError.style.color = 'red';
+                    forgotError.style.display = 'block';
+                });
+        });
+
+        // Authentication State Listener
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                authButtons.style.display = 'none';
+                tradeButtons.style.display = 'block';
+            } else {
+                authButtons.style.display = 'block';
+                tradeButtons.style.display = 'none';
+            }
+        });
+
         // Google Translate Initialization
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
         }
 
         // Language Selector Logic
-        function changeLanguage() {
-            var selectDesktop = document.getElementById('language-select-desktop');
-            var selectMobile = document.getElementById('language-select-mobile');
-            var selectedLang = selectDesktop.value || selectMobile.value;
-            var translateElement = document.querySelector('.goog-te-combo');
-
+        function changeLanguage(lang, flagUrl, langText) {
+            const translateElement = document.getElementById('google_translate_element');
             if (translateElement) {
-                translateElement.value = selectedLang;
-                translateElement.dispatchEvent(new Event('change'));
+                const select = translateElement.querySelector('select.goog-te-combo');
+                if (select) {
+                    select.value = lang;
+                    select.dispatchEvent(new Event('change'));
+                }
             }
+            document.querySelectorAll('.dropdown-flag').forEach(flag => {
+                flag.style.backgroundImage = `url('${flagUrl}')`;
+            });
+            document.querySelectorAll('.dropdown-trigger span').forEach(span => {
+                span.textContent = langText;
+            });
         }
 
-        // Sync both dropdowns
-        document.getElementById('language-select-desktop').addEventListener('change', function() {
-            document.getElementById('language-select-mobile').value = this.value;
-            changeLanguage();
-        });
+        // Dropdown toggle logic
+        function setupDropdown(triggerId, menuId) {
+            const trigger = document.getElementById(triggerId);
+            const menu = document.getElementById(menuId);
+            trigger.addEventListener('click', () => {
+                menu.classList.toggle('active');
+            });
 
-        document.getElementById('language-select-mobile').addEventListener('change', function() {
-            document.getElementById('language-select-desktop').value = this.value;
-            changeLanguage();
-        });
+            // Handle option selection
+            menu.querySelectorAll('.dropdown-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const value = option.getAttribute('data-value');
+                    const flagUrl = option.getAttribute('data-flag');
+                    const text = option.textContent.trim();
+                    changeLanguage(value, flagUrl, text);
+                });
+            });
 
-const canvas = document.getElementById('graph');
-const ctx = canvas.getContext('2d');
-const priceBubble = document.getElementById('priceBubble');
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.remove('active');
+                }
+            });
+        }
 
-const dpr = window.devicePixelRatio || 1;
-canvas.width = canvas.offsetWidth * dpr;
-canvas.height = canvas.offsetHeight * dpr;
-ctx.scale(dpr, dpr);
+        // Initialize dropdowns
+        setupDropdown('language-dropdown-mobile', 'language-menu-mobile');
+        setupDropdown('language-dropdown-desktop', 'language-menu-desktop');
 
-const maxPoints = 300;
-const points = [];
-let baseY = canvas.offsetHeight / 2;
-let price = 1.342600;
-let velocity = 0;
-let targetY = baseY;
-
-// Generate new target and apply easing motion
-function nextPrice() {
-  if (Math.random() < 0.02) {
-    targetY = baseY + (Math.random() - 0.5) * 80;
-  }
-  velocity += (targetY - baseY) * 0.02;
-  velocity *= 0.9;
-  baseY += velocity;
-
-  let newY = baseY + (Math.random() - 0.5) * 4;
-  if (newY < 20) newY = 20;
-  if (newY > canvas.offsetHeight - 20) newY = canvas.offsetHeight - 20;
-
-  points.push(newY);
-  if (points.length > maxPoints) points.shift();
-
-  price += (Math.random() - 0.5) * 0.0001;
-}
-
-function draw() {
-  const w = canvas.offsetWidth;
-  const h = canvas.offsetHeight;
-  ctx.clearRect(0, 0, w, h);
-
-  const step = w / (maxPoints - 1);
-
-  // Smooth gradient line
-  const lineGrad = ctx.createLinearGradient(0, 0, 0, h);
-  lineGrad.addColorStop(0, "#00ffff");
-  lineGrad.addColorStop(1, "#0088ff");
-
-  ctx.beginPath();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = lineGrad;
-  ctx.shadowColor = "#00ffff";
-  ctx.shadowBlur = 12;
-
-  for (let i = 0; i < points.length; i++) {
-    const x = i * step;
-    const y = points[i];
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  }
-  ctx.stroke();
-
-  // Shaded glowing area ("curtain" effect)
-  ctx.lineTo(w, h);
-  ctx.lineTo(0, h);
-  ctx.closePath();
-  const shadeGrad = ctx.createLinearGradient(0, h * 0.3, 0, h);
-  shadeGrad.addColorStop(0, "rgba(0,255,255,0.25)");
-  shadeGrad.addColorStop(1, "rgba(0,255,255,0)");
-  ctx.fillStyle = shadeGrad;
-  ctx.fill();
-
-  // Price bubble
-  const currentY = points[points.length - 1];
-  priceBubble.textContent = "$" + price.toFixed(6);
-  priceBubble.style.top = `${currentY - 10}px`;
-}
-
-function animate() {
-  nextPrice();
-  draw();
-  requestAnimationFrame(animate);
-}
-
-animate();
-
+        // Initialize with default language (English)
+        changeLanguage('en', 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png', 'English');
     </script>
-    
 </body>
 </html>

@@ -6,73 +6,197 @@
     <title>Equity Hubs</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon to prevent 404 error -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-   <style>
+    <style>
 
-        /* Investment Plans Section */
-        .investment-plans-section {
+
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .popup-content h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .popup-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .popup-content button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .popup-content button:hover {
+            background: #0056b3;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .popup-content a {
+            color: #007bff;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .popup-content a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        /* Language selector styles */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-trigger {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+        .dropdown-trigger i {
+            margin-right: 8px;
+            color: #333;
+        }
+        .dropdown-flag {
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+            margin-right: 8px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 150px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dropdown-menu.active {
+            display: block;
+        }
+        .dropdown-option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+        }
+        .dropdown-option:hover {
+            background: #f0f0f0;
+        }
+        .dropdown-option img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .language-selector-mobile .dropdown-trigger {
+            padding: 5px;
+        }
+        .language-selector-desktop .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .popup-content {
+                max-width: 90%;
+            }
+        }
+        /* Investment section styles */
+        .investment-section {
+            padding: 40px 20px;
+            background: #f9f9f9;
+            text-align: center;
+        }
+        .investment-section h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .investment-section p {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            color: #666;
+        }
+        .investment-options {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            padding: 40px 20px;
-            background-color: #f9f9f9;
         }
-
-        .plan-card {
-            background-color: white;
+        .investment-card {
+            background: white;
             border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            border-radius: 8px;
             padding: 20px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 250px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
         }
-
-        .plan-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        .investment-card:hover {
+            transform: translateY(-5px);
         }
-
-        .plan-card h2 {
-            margin-bottom: 10px;
-            color: #333;
+        .investment-card h3 {
+            margin-top: 0;
+            color: #007bff;
         }
-
-        .plan-price {
-            font-size: 24px;
-            color: #27ae60;
-            margin-bottom: 15px;
-        }
-
-        .plan-card ul {
-            list-style-type: none;
-            padding: 0;
-            margin-bottom: 20px;
-        }
-
-        .plan-card ul li {
-            margin-bottom: 10px;
+        .investment-card p {
             color: #555;
         }
-
-        .select-plan-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #27ae60;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
+        @media (max-width: 600px) {
+            .investment-card {
+                width: 100%;
+            }
         }
-
-        .select-plan-btn:hover {
-            background-color: #219150;
-        }
-
-   </style>
+        /* Chart styles */
+    </style>
 </head>
 <body>
     <div class="container">
@@ -89,15 +213,29 @@
                         <div class="hamburger-lines"></div>
                         <div class="hamburger-lines"></div>
                     </div>
-                    <!-- Language Selector for Mobile -->
-                    <div class="language-selector">
-                        <select id="language-select-mobile" onchange="changeLanguage()">
-                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
-                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
-                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
-                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
-                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
-                        </select>
+                    <div class="language-selector language-selector-mobile">
+                        <div class="dropdown-trigger" id="language-dropdown-mobile">
+                            <i class="fas fa-globe"></i>
+                            <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png')"></div>
+                            <span>English</span>
+                        </div>
+                        <ul class="dropdown-menu" id="language-menu-mobile">
+                            <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                            </li>
+                            <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                            </li>
+                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png" alt="French">
+                            </li>
+                            <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                            </li>
+                            <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                            </li>
+                        </ul>
                     </div>
                     <a href="#" class="chat-icon-mobile">
                         <i class="fa-solid fa-comment-dots"></i>
@@ -113,87 +251,116 @@
                     <a href="about.html">About Us</a>
                     <a href="contact.html">Contacts</a>
                     <a href="investment.html">Investment</a>
-                    <!-- Language Selector for Desktop -->
                     <div class="language-selector language-selector-desktop">
-                        <select id="language-select-desktop" onchange="changeLanguage()">
-                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
-                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
-                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
-                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
-                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
-                        </select>
+                        <div class="dropdown-trigger" id="language-dropdown-desktop">
+                            <i class="fas fa-globe"></i>
+                            <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg')"></div>
+                            <span>English</span>
+                        </div>
+                        <ul class="dropdown-menu" id="language-menu-desktop">
+                            <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                            </li>
+                            <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                            </li>
+                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French">
+                            </li>
+                            <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                            </li>
+                            <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="nav-right-buttons">
+                <div class="nav-right-buttons auth-buttons">
                     <a href="#" class="login-btn">Login</a>
                     <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
                 </div>
+                <div class="nav-right-buttons trade-buttons" style="display: none;">
+                    <a style="background-color: rgb(4, 28, 4); text-align: white; padding: 12px; border-radius: 5px;" href="user_dashboard.html" class="trade-btn">Trade</a>
+                </div>
             </nav>
-            <!-- Hidden div for Google Translate widget -->
             <div id="google_translate_element" style="display: none;"></div>
         </header>
-        <!--- THIS IS HERO SECTION -->
-        <section class="hero-section">
-            <div class="hero-text">
-                <h1>Investment Plans</h1>
-                <p>Choose the plan that suits you best and start your investment journey with Equity Hubs.</p>
+
+        <!-- Login Popup -->
+        <div id="login-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Login</h2>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <p id="login-error" class="error-message"></p>
+                <button id="login-submit">Login</button>
+                <a href="#" id="forgot-password-link">Forgot Password?</a>
+                <a href="#" id="switch-to-register">Don't have an account? Register</a>
             </div>
-        </section>
-        <!--- THIS IS INVESTMENT PLANS SECTION -->
-        <section class="investment-plans-section">
-            <div class="plan-card">
-                <h2>Basic Plan</h2>
-                <p class="plan-price">$100 - $999</p>
-                <ul>
-                    <li>Daily Return: 1.5%</li>
-                    <li>Duration: 30 Days</li>
-                    <li>Total Return: 45%</li>
-                    <li>24/7 Support</li>
-                    <li>Secure Investment</li>
-                </ul>
-                <a href="#" class="select-plan-btn">Select Plan</a>
+        </div>
+
+        <!-- Register Popup -->
+        <div id="register-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Create Account</h2>
+                <input type="text" id="register-name" placeholder="Name" required>
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <input type="password" id="register-confirm-password" placeholder="Confirm Password" required>
+                <p id="register-error" class="error-message"></p>
+                <button id="register-submit">Register</button>
+                <a href="#" id="switch-to-login">Already have an account? Login</a>
             </div>
-            <div class="plan-card">
-                <h2>Standard Plan</h2>
-                <p class="plan-price">$1,000 - $4,999</p>
-                <ul>
-                    <li>Daily Return: 2.0%</li>
-                    <li>Duration: 45 Days</li>
-                    <li>Total Return: 90%</li>
-                    <li>24/7 Support</li>
-                    <li>Secure Investment</li>
-                </ul>
-                <a href="#" class="select-plan-btn">Select Plan</a>
+        </div>
+
+        <!-- Forgot Password Popup -->
+        <div id="forgot-password-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Forgot Password</h2>
+                <input type="email" id="forgot-email" placeholder="Email" required>
+                <p id="forgot-error" class="error-message"></p>
+                <button id="forgot-submit">Send Reset Link</button>
+                <a href="#" id="switch-to-login-from-forgot">Back to Login</a>
             </div>
-            <div class="plan-card">
-                <h2>Premium Plan</h2>
-                <p class="plan-price">$5,000 - $19,999</p>
-                <ul>
-                    <li>Daily Return: 2.5%</li>
-                    <li>Duration: 60 Days</li>
-                    <li>Total Return: 150%</li>
-                    <li>24/7 Support</li>
-                    <li>Secure Investment</li>
-                </ul>
-                <a href="#" class="select-plan-btn">Select Plan</a>
-            </div>
-            <div class="plan-card">
-                <h2>VIP Plan</h2>
-                <p class="plan-price">$20,000+</p>
-                <ul>
-                    <li>Daily Return: 3.0%</li>
-                    <li>Duration: 90 Days</li>
-                    <li>Total Return: 270%</li>
-                    <li>Dedicated Account Manager</li>
-                    <li>Secure Investment</li>
-                </ul>
-                <a href="#" class="select-plan-btn">Select Plan</a>
-            </div>
-        </section>
+        </div>
+        <main>
+            <section class="investment-section">
+                <h1>Investment Opportunities</h1>
+                <p>Discover a variety of investment options tailored to your financial goals. Whether you're looking for short-term gains or long-term growth, we have something for everyone.</p>
+                <div class="investment-options">
+                    <div class="investment-card">
+                        <h3>Stocks</h3>
+                        <p>Invest in shares of leading companies and benefit from their growth.</p>
+                    </div>
+                    <div class="investment-card">
+                        <h3>Bonds</h3>
+                        <p>Secure your investment with government and corporate bonds.</p>  
+                    </div>
+                    <div class="investment-card">
+                        <h3>Mutual Funds</h3>
+                        <p>Diversify your portfolio with professionally managed mutual funds.</p>
+                    </div>
+                    <div class="investment-card">
+                        <h3>ETFs</h3>
+                        <p>Trade a basket of assets with low fees and high liquidity.</p>
+                    </div>
+                    <div class="investment-card">
+                        <h3>Real Estate</h3>
+                        <p>Invest in property markets for steady income and appreciation.</p>
+                    </div>
+                    <div class="investment-card">
+                        <h3>Cryptocurrency</h3>
+                        <p>Explore the world of digital assets and blockchain technology.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
 
 
-
-        <!--- THIS IS FOOTER SECTION -->
         <footer>
             <div class="footer-content">
                 <div class="footer-col disclaimer-col">
@@ -231,47 +398,222 @@
                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <p style="justify-content: center; text-align: center;">&copy; 2024 Equity Hubs. All rights reserved.</p>
-
+            </div>
         </footer>
     </div>
-    <script>
-        // Mobile Menu Toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinksMenu = document.getElementById('nav-links-menu');
-        menuToggle.addEventListener('click', () => {
+    <script src="index.js"></script>
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
+            authDomain: "investment-40343.firebaseapp.com",
+            projectId: "investment-40343",
+            storageBucket: "investment-40343.firebasestorage.app",
+            messagingSenderId: "126093031981",
+            appId: "1:126093031981:web:fd4ae73c063044693b16a4",
+            measurementId: "G-SXL6ZGL49W"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Popup Elements
+        const loginPopup = document.getElementById('login-popup');
+        const registerPopup = document.getElementById('register-popup');
+        const forgotPasswordPopup = document.getElementById('forgot-password-popup');
+        const loginBtn = document.querySelector('.login-btn');
+        const registerBtn = document.querySelector('.register-btn');
+        const authButtons = document.querySelector('.auth-buttons');
+        const tradeButtons = document.querySelector('.trade-buttons');
+        const closeButtons = document.querySelectorAll('.close-btn');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const switchToLoginFromForgot = document.getElementById('switch-to-login-from-forgot');
+
+        // Error Messages
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+        const forgotError = document.getElementById('forgot-error');
+
+        // Show/Hide Popups
+        function showPopup(popup) {
+            popup.style.display = 'flex';
+        }
+
+        function hidePopup(popup) {
+            popup.style.display = 'none';
+            popup.querySelectorAll('input').forEach(input => input.value = '');
+            popup.querySelector('.error-message').style.display = 'none';
+        }
+
+        // Event Listeners for Buttons
+        loginBtn.addEventListener('click', () => showPopup(loginPopup));
+        registerBtn.addEventListener('click', () => showPopup(registerPopup));
+        forgotPasswordLink.addEventListener('click', () => {
+            hidePopup(loginPopup);
+            showPopup(forgotPasswordPopup);
+        });
+        switchToRegister.addEventListener('click', () => {
+            hidePopup(loginPopup);
+            showPopup(registerPopup);
+        });
+        switchToLogin.addEventListener('click', () => {
+            hidePopup(registerPopup);
+            showPopup(loginPopup);
+        });
+        switchToLoginFromForgot.addEventListener('click', () => {
+            hidePopup(forgotPasswordPopup);
+            showPopup(loginPopup);
+        });
+
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hidePopup(btn.closest('.popup'));
+            });
+        });
+
+        // Firebase Authentication Handlers
+        document.getElementById('login-submit').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    hidePopup(loginPopup);
+                })
+                .catch(error => {
+                    loginError.textContent = error.message;
+                    loginError.style.display = 'block';
+                });
+        });
+
+        document.getElementById('register-submit').addEventListener('click', () => {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (!name) {
+                registerError.textContent = 'Name is required';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Passwords do not match';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    return updateProfile(userCredential.user, {
+                        displayName: name
+                    }).then(() => {
+                        hidePopup(registerPopup);
+                    });
+                })
+                .catch(error => {
+                    registerError.textContent = error.message;
+                    registerError.style.display = 'block';
+                });
+        });
+
+        document.getElementById('forgot-submit').addEventListener('click', () => {
+            const email = document.getElementById('forgot-email').value;
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert('Password reset email sent!');
+                    hidePopup(forgotPasswordPopup);
+                })
+                .catch(error => {
+                    forgotError.textContent = error.message;
+                    forgotError.style.display = 'block';
+                });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('popup')) {
+                hidePopup(e.target);
+            }
+        });
+
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            const navLinksMenu = document.getElementById('nav-links-menu');
             navLinksMenu.classList.toggle('active');
         });
-        
+
+        // Authentication State Listener
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                authButtons.style.display = 'none';
+                tradeButtons.style.display = 'block';
+            } else {
+                authButtons.style.display = 'block';
+                tradeButtons.style.display = 'none';
+            }
+        });
 
         // Google Translate Initialization
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
         }
 
-        // Function to change language based on dropdown selection
-        function changeLanguage() {
-            var languageSelectDesktop = document.getElementById('language-select-desktop');
-            var languageSelectMobile = document.getElementById('language-select-mobile');
-            var selectedLang = languageSelectDesktop.value || languageSelectMobile.value;
-            var translateElement = document.querySelector('.goog-te-combo');
-
+        // Language Selector Logic
+        function changeLanguage(lang, flagUrl, langText) {
+            const translateElement = document.getElementById('google_translate_element');
             if (translateElement) {
-                translateElement.value = selectedLang;
-                translateElement.dispatchEvent(new Event('change'));
+                const select = translateElement.querySelector('select.goog-te-combo');
+                if (select) {
+                    select.value = lang;
+                    select.dispatchEvent(new Event('change'));
+                }
             }
+            document.querySelectorAll('.dropdown-flag').forEach(flag => {
+                flag.style.backgroundImage = `url('${flagUrl}')`;
+            });
+            document.querySelectorAll('.dropdown-trigger span').forEach(span => {
+                span.textContent = langText;
+            });
         }
 
-        // Sync both dropdowns
-        document.getElementById('language-select-desktop').addEventListener('change', function() {
-            document.getElementById('language-select-mobile').value = this.value;
-            changeLanguage();
-        });
+        // Dropdown toggle logic
+        function setupDropdown(triggerId, menuId) {
+            const trigger = document.getElementById(triggerId);
+            const menu = document.getElementById(menuId);
+            trigger.addEventListener('click', () => {
+                menu.classList.toggle('active');
+            });
 
-        document.getElementById('language-select-mobile').addEventListener('change', function() {
-            document.getElementById('language-select-desktop').value = this.value;
-            changeLanguage();
-        });
+            // Handle option selection
+            menu.querySelectorAll('.dropdown-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const value = option.getAttribute('data-value');
+                    const flagUrl = option.getAttribute('data-flag');
+                    const text = option.textContent.trim();
+                    changeLanguage(value, flagUrl, text);
+                });
+            });
 
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize dropdowns
+        setupDropdown('language-dropdown-mobile', 'language-menu-mobile');
+        setupDropdown('language-dropdown-desktop', 'language-menu-desktop');
+
+        // Initialize with default language (English)
+        changeLanguage('en', 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png', 'English');
     </script>
 </body>
 </html>

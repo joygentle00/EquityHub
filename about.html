@@ -6,36 +6,199 @@
     <title>Equity Hubs</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon to prevent 404 error -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
-        /* Additional styles for the about page */
-        .about-section {
+
+
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        .popup-content h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .popup-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .popup-content button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .popup-content button:hover {
+            background: #0056b3;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .popup-content a {
+            color: #007bff;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .popup-content a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        /* Language selector styles */
+        .language-selector {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-trigger {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+        .dropdown-trigger i {
+            margin-right: 8px;
+            color: #333;
+        }
+        .dropdown-flag {
+            width: 20px;
+            height: 20px;
+            background-size: cover;
+            margin-right: 8px;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 150px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dropdown-menu.active {
+            display: block;
+        }
+        .dropdown-option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+        }
+        .dropdown-option:hover {
+            background: #f0f0f0;
+        }
+        .dropdown-option img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .language-selector-mobile .dropdown-trigger {
+            padding: 5px;
+        }
+        .language-selector-desktop .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .popup-content {
+                max-width: 90%;
+            }
+        }
+        /* Investment section styles */
+
+         .about-us{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
             padding: 40px 20px;
-            background-color: #0d1a2e;
+            background-color: #f9f9f9;
+         }
+            .about-content {
+                flex: 1;
+                min-width: 300px;
+                max-width: 600px;
+                margin-right: 20px;
+            }
+            .about-content h1 {
+                font-size: 32px;
+                margin-bottom: 20px;
+                color: #333;
+            }
+            .about-content p {
+                font-size: 16px;
+                line-height: 1.6;
+                color: #555;
+                margin-bottom: 15px;
+            }
+            .about-image {
+                flex: 1;
+                min-width: 300px;
+                max-width: 600px;
+                text-align: center;
+            }
+            .about-image img {
+                max-width: 100%;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+        @media (max-width: 768px) {
+            .about-us {
+                flex-direction: column;
+            }
+            .about-content, .about-image {
+                margin: 0 0 20px 0;
+                max-width: 100%;
+            }
         }
-        .about-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: left;
-        }
-        .about-content h2 {
-            color: white;
-            margin-bottom: 20px;
-        }
-        .about-content p {
-            color: white;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .about-content ul {
-            list-style-type: disc;
-            padding-left: 20px;
-            color: white;
-        }
-        .about-content ul li {
-            margin-bottom: 10px;
-        }
+        /* Testimonial section styles */
+        
     </style>
 </head>
 <body>
@@ -53,15 +216,29 @@
                         <div class="hamburger-lines"></div>
                         <div class="hamburger-lines"></div>
                     </div>
-                    <!-- Language Selector for Mobile -->
-                    <div class="language-selector">
-                        <select id="language-select-mobile" onchange="changeLanguage()">
-                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
-                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
-                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
-                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
-                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
-                        </select>
+                    <div class="language-selector language-selector-mobile">
+                        <div class="dropdown-trigger" id="language-dropdown-mobile">
+                            <i class="fas fa-globe"></i>
+                            <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png')"></div>
+                            <span>English</span>
+                        </div>
+                        <ul class="dropdown-menu" id="language-menu-mobile">
+                            <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                            </li>
+                            <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                            </li>
+                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png" alt="French">
+                            </li>
+                            <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                            </li>
+                            <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                            </li>
+                        </ul>
                     </div>
                     <a href="#" class="chat-icon-mobile">
                         <i class="fa-solid fa-comment-dots"></i>
@@ -77,60 +254,143 @@
                     <a href="about.html">About Us</a>
                     <a href="contact.html">Contacts</a>
                     <a href="investment.html">Investment</a>
-                    <!-- Language Selector for Desktop -->
                     <div class="language-selector language-selector-desktop">
-                        <select id="language-select-desktop" onchange="changeLanguage()">
-                            <option value="en" data-flag="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg">English</option>
-                            <option value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">Spanish</option>
-                            <option value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">French</option>
-                            <option value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">German</option>
-                            <option value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">Chinese</option>
-                        </select>
+                        <div class="dropdown-trigger" id="language-dropdown-desktop">
+                            <i class="fas fa-globe"></i>
+                            <div class="dropdown-flag" style="background-image: url('https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_Kingdom.svg')"></div>
+                            <span>English</span>
+                        </div>
+                        <ul class="dropdown-menu" id="language-menu-desktop">
+                            <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                            </li>
+                            <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                            </li>
+                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French">
+                            </li>
+                            <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                            </li>
+                            <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="nav-right-buttons">
+                <div class="nav-right-buttons auth-buttons">
                     <a href="#" class="login-btn">Login</a>
                     <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
                 </div>
+                <div class="nav-right-buttons trade-buttons" style="display: none;">
+                    <a style="background-color: rgb(4, 28, 4); text-align: white; padding: 12px; border-radius: 5px;" href="user_dashboard.html" class="trade-btn">Trade</a>
+                </div>
             </nav>
-            <!-- Hidden div for Google Translate widget -->
             <div id="google_translate_element" style="display: none;"></div>
         </header>
-        <!--- THIS IS HERO SECTION -->
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1>About Equity Hubs</h1>
-                <p>Your Trusted Partner in Global Trading</p>
+
+        <!-- Login Popup -->
+        <div id="login-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Login</h2>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <p id="login-error" class="error-message"></p>
+                <button id="login-submit">Login</button>
+                <a href="#" id="forgot-password-link">Forgot Password?</a>
+                <a href="#" id="switch-to-register">Don't have an account? Register</a>
             </div>
+        </div>
+
+        <!-- Register Popup -->
+        <div id="register-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Create Account</h2>
+                <input type="text" id="register-name" placeholder="Name" required>
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <input type="password" id="register-confirm-password" placeholder="Confirm Password" required>
+                <p id="register-error" class="error-message"></p>
+                <button id="register-submit">Register</button>
+                <a href="#" id="switch-to-login">Already have an account? Login</a>
+            </div>
+        </div>
+
+        <!-- Forgot Password Popup -->
+        <div id="forgot-password-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span>
+                <h2>Forgot Password</h2>
+                <input type="email" id="forgot-email" placeholder="Email" required>
+                <p id="forgot-error" class="error-message"></p>
+                <button id="forgot-submit">Send Reset Link</button>
+                <a href="#" id="switch-to-login-from-forgot">Back to Login</a>
+            </div>
+        </div>
+        <main>
+            <section class="about-us">
+                <div class="about-content">
+                    <h1>About Equity Hubs</h1>
+                    <p>At Equity Hubs, we are dedicated to providing a secure and user-friendly platform for all your investment needs. Our mission is to empower individuals to take control of their financial future through smart investment strategies and cutting-edge technology.</p>
+                    <p>Founded in 2020, Equity Hubs has quickly grown to become a trusted name in the investment community. We offer a wide range of investment options, including stocks, bonds, mutual funds, and ETFs, all designed to help you achieve your financial goals.</p>
+                    <p>Our team of experienced professionals is committed to delivering exceptional service and support to our clients. We believe in transparency, integrity, and putting our clients' interests first.</p>
+                    <p>Whether you're a seasoned investor or just starting out, Equity Hubs provides the tools and resources you need to succeed in today's dynamic market. Join us today and take the first step towards a brighter financial future.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="About Us Image">
+                </div>
+            </section>
             
-        </section>
-        <section class="about-section">
-            <div class="about-content">
-                <h2>Who We Are</h2>
-                <p>Equity Hubs is a leading online trading platform dedicated to providing traders worldwide with access to a wide range of financial markets. Our mission is to empower individuals and institutions to achieve their financial goals through innovative technology, comprehensive educational resources, and exceptional customer support.</p>
-                
-                <h2>Our Mission</h2>
-                <p>At Equity Hubs, our mission is to democratize access to global financial markets. We strive to create a transparent, secure, and user-friendly trading environment where traders of all experience levels can thrive. Our commitment to innovation and excellence drives us to continuously enhance our platform and services.</p>
-                
-                <h2>What We Offer</h2>
-                <ul>
-                    <li><strong>Diverse Asset Classes:</strong> Trade a variety of assets including stocks, forex, commodities, indices, and cryptocurrencies.</li>
-                    <li><strong>Advanced Trading Platform:</strong> Our state-of-the-art platform offers powerful tools, real-time data, and customizable features to enhance your trading experience.</li>
-                    <li><strong>Educational Resources:</strong> Access a wealth of educational materials including webinars, tutorials, articles, and market analysis to help you make informed trading decisions.</li>
-                    <li><strong>24/7 Customer Support:</strong> Our dedicated support team is available around the clock to assist you with any questions or issues you may encounter.</li>
-                    <li><strong>Secure Transactions:</strong> We prioritize the security of your funds and personal information with advanced encryption and regulatory compliance.</li>
-                </ul>
-                
-                <h2>Our Values</h2>
-                <p>Integrity, transparency, and customer-centricity are at the core of everything we do. We believe in building long-term relationships with our clients based on trust and mutual success. Our team is passionate about helping traders achieve their financial aspirations while adhering to the highest ethical standards.</p>
-                
-                <h2>Join Us Today</h2>
-                <p>Whether you're a seasoned trader or just starting your trading journey, Equity Hubs is here to support you every step of the way. Join our community of traders today and experience the difference that a trusted partner can make in your trading success.</p>
+        </main>
+        <section class="testimonial-section">
+            <h2 class="section-title">What Our Clients Say</h2>
+            <div class="carousel-container">
+                <div class="testimonials-wrapper" id="testimonials-wrapper">
+                    <div class="testimonial-slide">
+                        <div class="quote-icon">❝</div>
+                        <p class="quote-text">"I've tried several trading platforms, but Equity Hub's execution speed is unmatched. The withdrawal process is incredibly fast, which gives me great peace of mind. Highly recommend for serious traders."</p>
+                        <div class="client-info">
+                            <span class="client-name">Alex M.</span>
+                            <span class="client-location">London, UK</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="quote-icon">❝</div>
+                        <p class="quote-text">"As a beginner, the learning resources here were a game-changer. The platform is intuitive, and I love having access to so many different assets. It truly simplified my entry into investing."</p>
+                        <div class="client-info">
+                            <span class="client-name">Sofia R.</span>
+                            <span class="client-location">Toronto, Canada</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="quote-icon">❝</div>
+                        <p class="quote-text">"The low commission structure is fantastic for high-frequency trading. I appreciate the transparency and the live support chat, which is always responsive. A solid platform all around."</p>
+                        <div class="client-info">
+                            <span class="client-name">Chen W.</span>
+                            <span class="client-location">Singapore</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-slide">
+                        <div class="quote-icon">❝</div>
+                        <p class="quote-text">"Trading 'in seconds' is absolutely accurate. I've seen major improvements in my returns since switching due to the precision and speed of their interface. Plus, the dark theme is easy on the eyes."</p>
+                        <div class="client-info">
+                            <span class="client-name">David H.</span>
+                            <span class="client-location">Sydney, Australia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-dots" id="carousel-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+                <span class="dot" data-slide="3"></span>
             </div>
         </section>
 
-
-        <!--- THIS IS FOOTER SECTION -->
         <footer>
             <div class="footer-content">
                 <div class="footer-col disclaimer-col">
@@ -168,16 +428,165 @@
                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <p style="justify-content: center; text-align: center;">&copy; 2024 Equity Hubs. All rights reserved.</p>
-
+            </div>
         </footer>
     </div>
-    
-    <script>
-        // Mobile Menu Toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinksMenu = document.getElementById('nav-links-menu');
-        menuToggle.addEventListener('click', () => {
+    <script src="index.js"></script>
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
+            authDomain: "investment-40343.firebaseapp.com",
+            projectId: "investment-40343",
+            storageBucket: "investment-40343.firebasestorage.app",
+            messagingSenderId: "126093031981",
+            appId: "1:126093031981:web:fd4ae73c063044693b16a4",
+            measurementId: "G-SXL6ZGL49W"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Popup Elements
+        const loginPopup = document.getElementById('login-popup');
+        const registerPopup = document.getElementById('register-popup');
+        const forgotPasswordPopup = document.getElementById('forgot-password-popup');
+        const loginBtn = document.querySelector('.login-btn');
+        const registerBtn = document.querySelector('.register-btn');
+        const authButtons = document.querySelector('.auth-buttons');
+        const tradeButtons = document.querySelector('.trade-buttons');
+        const closeButtons = document.querySelectorAll('.close-btn');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const switchToLoginFromForgot = document.getElementById('switch-to-login-from-forgot');
+
+        // Error Messages
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+        const forgotError = document.getElementById('forgot-error');
+
+        // Show/Hide Popups
+        function showPopup(popup) {
+            popup.style.display = 'flex';
+        }
+
+        function hidePopup(popup) {
+            popup.style.display = 'none';
+            popup.querySelectorAll('input').forEach(input => input.value = '');
+            popup.querySelector('.error-message').style.display = 'none';
+        }
+
+        // Event Listeners for Buttons
+        loginBtn.addEventListener('click', () => showPopup(loginPopup));
+        registerBtn.addEventListener('click', () => showPopup(registerPopup));
+        forgotPasswordLink.addEventListener('click', () => {
+            hidePopup(loginPopup);
+            showPopup(forgotPasswordPopup);
+        });
+        switchToRegister.addEventListener('click', () => {
+            hidePopup(loginPopup);
+            showPopup(registerPopup);
+        });
+        switchToLogin.addEventListener('click', () => {
+            hidePopup(registerPopup);
+            showPopup(loginPopup);
+        });
+        switchToLoginFromForgot.addEventListener('click', () => {
+            hidePopup(forgotPasswordPopup);
+            showPopup(loginPopup);
+        });
+
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hidePopup(btn.closest('.popup'));
+            });
+        });
+
+        // Firebase Authentication Handlers
+        document.getElementById('login-submit').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    hidePopup(loginPopup);
+                })
+                .catch(error => {
+                    loginError.textContent = error.message;
+                    loginError.style.display = 'block';
+                });
+        });
+
+        document.getElementById('register-submit').addEventListener('click', () => {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (!name) {
+                registerError.textContent = 'Name is required';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                registerError.textContent = 'Passwords do not match';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    return updateProfile(userCredential.user, {
+                        displayName: name
+                    }).then(() => {
+                        hidePopup(registerPopup);
+                    });
+                })
+                .catch(error => {
+                    registerError.textContent = error.message;
+                    registerError.style.display = 'block';
+                });
+        });
+
+        document.getElementById('forgot-submit').addEventListener('click', () => {
+            const email = document.getElementById('forgot-email').value;
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert('Password reset email sent!');
+                    hidePopup(forgotPasswordPopup);
+                })
+                .catch(error => {
+                    forgotError.textContent = error.message;
+                    forgotError.style.display = 'block';
+                });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('popup')) {
+                hidePopup(e.target);
+            }
+        });
+
+        document.getElementById('menu-toggle').addEventListener('click', () => {
+            const navLinksMenu = document.getElementById('nav-links-menu');
             navLinksMenu.classList.toggle('active');
+        });
+
+        // Authentication State Listener
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                authButtons.style.display = 'none';
+                tradeButtons.style.display = 'block';
+            } else {
+                authButtons.style.display = 'block';
+                tradeButtons.style.display = 'none';
+            }
         });
 
         // Google Translate Initialization
@@ -185,28 +594,56 @@
             new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
         }
 
-        // Change Language Function
-        function changeLanguage() {
-            const selectDesktop = document.getElementById('language-select-desktop');
-            const selectMobile = document.getElementById('language-select-mobile');
-            const selectedLang = selectDesktop.value || selectMobile.value;
-            const translateSelect = document.querySelector('.goog-te-combo');
-            if (translateSelect) {
-                translateSelect.value = selectedLang;
-                translateSelect.dispatchEvent(new Event('change'));
+        // Language Selector Logic
+        function changeLanguage(lang, flagUrl, langText) {
+            const translateElement = document.getElementById('google_translate_element');
+            if (translateElement) {
+                const select = translateElement.querySelector('select.goog-te-combo');
+                if (select) {
+                    select.value = lang;
+                    select.dispatchEvent(new Event('change'));
+                }
             }
+            document.querySelectorAll('.dropdown-flag').forEach(flag => {
+                flag.style.backgroundImage = `url('${flagUrl}')`;
+            });
+            document.querySelectorAll('.dropdown-trigger span').forEach(span => {
+                span.textContent = langText;
+            });
         }
 
-        // Sync language selection between desktop and mobile
-        document.getElementById('language-select-desktop').addEventListener('change', function() {
-            document.getElementById('language-select-mobile').value = this.value;
-            changeLanguage();
-        });
-        document.getElementById('language-select-mobile').addEventListener('change', function() {
-            document.getElementById('language-select-desktop').value = this.value;
-            changeLanguage();
-        });
-        
+        // Dropdown toggle logic
+        function setupDropdown(triggerId, menuId) {
+            const trigger = document.getElementById(triggerId);
+            const menu = document.getElementById(menuId);
+            trigger.addEventListener('click', () => {
+                menu.classList.toggle('active');
+            });
+
+            // Handle option selection
+            menu.querySelectorAll('.dropdown-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const value = option.getAttribute('data-value');
+                    const flagUrl = option.getAttribute('data-flag');
+                    const text = option.textContent.trim();
+                    changeLanguage(value, flagUrl, text);
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize dropdowns
+        setupDropdown('language-dropdown-mobile', 'language-menu-mobile');
+        setupDropdown('language-dropdown-desktop', 'language-menu-desktop');
+
+        // Initialize with default language (English)
+        changeLanguage('en', 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png', 'English');
     </script>
 </body>
 </html>

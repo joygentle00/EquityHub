@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Equity Hubs || Dashboard</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        /* Global Reset and Body Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            background: #0c1018; /* Dark background */
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Dashboard Header --- */
+        header {
+            width: 100%;
+            padding: 15px 30px;
+            background: #111827; /* Slightly lighter dark header background */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            /* Resetting the primary header for this dashboard view */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #00ffff; /* Cyan logo color */
+        }
+
+        .balance {
+            background: #1e293b;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #00ffcc; /* Bright green/cyan for balance */
+            box-shadow: 0 0 8px rgba(0,255,255,0.2);
+            font-weight: 600;
+        }
+
+        /* --- Chart Area --- */
+        .chart-box {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            height: 60vh;
+            margin-top: 30px;
+            background: linear-gradient(to bottom, #0c1018, #111827);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .current-price {
+            position: absolute;
+            right: 10px;
+            /* Y position is controlled by JS to follow the line */
+            background: #1e293b;
+            color: #00ffff;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 0 12px rgba(0,255,255,0.3);
+            transition: top 0.1s linear, background-color 0.1s linear; /* Smooth bubble follow */
+            z-index: 10;
+        }
+
+        .time-line {
+            position: absolute;
+            right: 80px; /* Fixed position for the imaginary expiry line */
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: gold;
+            opacity: 0.7;
+            z-index: 5;
+        }
+
+        /* --- Action Buttons --- */
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        .btn {
+            background: linear-gradient(90deg, #0077ff, #00ffff);
+            border: none;
+            color: #fff;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .withdraw {
+            background: linear-gradient(90deg, #ff0077, #ff6600); /* Red/Orange gradient */
+        }
+
+        /* --- Random transactions Log --- */
+        .transactions {
+            margin-top: 30px;
+            width: 90%;
+            max-width: 1200px;
+            background: #1a1f2e;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 0 15px rgba(0,255,255,0.05);
+        }
+        .transactions::-webkit-scrollbar { width: 6px; }
+        .transactions::-webkit-scrollbar-thumb { background: #00ffff; border-radius: 3px; }
+
+        .tx {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 0;
+            font-size: 15px;
+        }
+        .tx:last-child {
+            border-bottom: none;
+        }
+
+        .tx span.name { color: #00ffff; font-weight: 500; }
+        .tx span.type { font-weight: 600; }
+        .tx span.type.deposit { color: #00ff88; }
+        .tx span.type.withdraw { color: #ff3366; }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="logo">Equity Hubs</div>
+        <div class="balance">Balance: <span id="balance">$50.00</span></div>
+    </header>
+
+    <div class="chart-box">
+        <canvas id="graph"></canvas>
+        <div class="time-line"></div>
+        <div class="current-price" id="priceBubble">$1.342631</div>
+    </div>
+
+    <div class="actions">
+        <button class="btn deposit">Deposit</button>
+        <button class="btn withdraw">Withdraw</button>
+    </div>
+
+    <div class="transactions">
+        <h4>Live Trades & Transactions</h4>
+        <div id="txList"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+
+    <script>
+        // 🟦 Firebase Config (Included for future integration)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
+            authDomain: "investment-40343.firebaseapp.com",
+            projectId: "investment-40343",
+            storageBucket: "investment-40343.firebasestorage.app",
+            messagingSenderId: "126093031981",
+            appId: "1:126093031981:web:fd4ae73c063044693b16a4",
+            measurementId: "G-SXL6ZGL49W"
+        };
+
+        // Initialize Firebase (Keep this block even if only simulating locally)
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // --- Simulated User Data ---
+        // Simulating the $50 initial bonus
+        let balance = 50.00; 
+        const balanceElement = document.getElementById("balance");
+        balanceElement.textContent = `$${balance.toFixed(2)}`;
+
+        // --- Chart Animation Logic ---
+        const canvas = document.getElementById('graph');
+        const ctx = canvas.getContext('2d');
+        const priceBubble = document.getElementById('priceBubble');
+        
+        // Function to handle canvas resize and DPI scaling
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        const maxPoints = 250;
+        const points = []; // Array to store the vertical Y coordinates
+        let baseY = canvas.offsetHeight / 2;
+        let price = 1.342600; // Starting simulated price
+
+        // Generates the next point for the line graph
+        function nextPrice() {
+            const last = points.length ? points[points.length - 1] : baseY;
+            const change = (Math.random() - 0.5) * 6; // Random vertical movement
+            let newY = last + change;
+            const h = canvas.offsetHeight;
+            
+            // Boundary checks (keep the line visible)
+            if (newY < 20) newY = 20;
+            if (newY > h - 20) newY = h - 20;
+
+            points.push(newY);
+            if (points.length > maxPoints) points.shift(); // Keep only maxPoints
+            
+            // Update the simulated price based on the change
+            price += (Math.random() - 0.5) * 0.00005;
+        }
+
+        // Draws the chart line and shaded area
+        function draw() {
+            const w = canvas.offsetWidth;
+            const h = canvas.offsetHeight;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            const step = w / (maxPoints - 1);
+            
+            // --- DRAW LINE ---
+            const lineGrad = ctx.createLinearGradient(0, 0, 0, h);
+            lineGrad.addColorStop(0, "#00ffff");
+            lineGrad.addColorStop(1, "#0077ff");
+
+            ctx.beginPath();
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = lineGrad;
+            ctx.shadowColor = "#00ffff";
+            ctx.shadowBlur = 15;
+
+            for (let i = 0; i < points.length; i++) {
+                const x = i * step;
+                const y = points[i];
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // --- DRAW SHADED AREA ---
+            const lastY = points[points.length - 1] || baseY;
+            ctx.lineTo(w, h); // Draw line to bottom right corner
+            ctx.lineTo(0, h); // Draw line to bottom left corner
+            ctx.closePath();
+
+            const shadeGrad = ctx.createLinearGradient(0, lastY - 50, 0, h);
+            shadeGrad.addColorStop(0, "rgba(0,255,255,0.25)");
+            shadeGrad.addColorStop(1, "rgba(0,255,255,0)");
+
+            ctx.fillStyle = shadeGrad;
+            ctx.shadowBlur = 0; // Disable shadow for the fill area
+            ctx.fill();
+
+            // --- UPDATE PRICE BUBBLE ---
+            priceBubble.textContent = "$" + price.toFixed(6);
+            priceBubble.style.top = `${lastY - 10}px`; // Move bubble with the line
+            
+            // Simple color change based on last movement
+            const lastChange = points[points.length - 1] - points[points.length - 2];
+            if (lastChange < 0) { // Price going up (Y is smaller)
+                priceBubble.style.backgroundColor = '#0077ff'; // Blue for 'Call'
+            } else { // Price going down (Y is larger)
+                priceBubble.style.backgroundColor = '#ff0077'; // Red/Pink for 'Put'
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            nextPrice();
+            draw();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- Fake random deposits/withdrawals ---
+        const txList = document.getElementById("txList");
+        const names = ["Gentle Saviour", "Mark", "Sophia", "James", "Olivia", "Chris", "Ava", "Daniel", "Emma", "John"];
+        
+        function randomTx() {
+            const name = names[Math.floor(Math.random() * names.length)];
+            const type = Math.random() > 0.5 ? "deposit" : "withdraw";
+            const amount = (Math.random() * 900 + 100).toFixed(2);
+            
+            const div = document.createElement("div");
+            div.classList.add("tx");
+            div.innerHTML = `
+                <span class="name">${name}</span>
+                <span class="type ${type}">${type === "deposit" ? "Deposited" : "Withdrew"} $${amount}</span>
+            `;
+            
+            txList.prepend(div);
+            
+            // Limit the list to 10 entries
+            if (txList.children.length > 10) txList.removeChild(txList.lastChild);
+        }
+        // Start the transaction ticker
+        setInterval(randomTx, 3000); 
+
+        // --- Deposit / Withdraw buttons ---
+        document.querySelector(".deposit").onclick = () => {
+            balance += 100;
+            balanceElement.textContent = `$${balance.toFixed(2)}`;
+        };
+        document.querySelector(".withdraw").onclick = () => {
+            if (balance >= 50) balance -= 50;
+            balanceElement.textContent = `$${balance.toFixed(2)}`;
+        };
+    </script>
+</body>
+</html>
