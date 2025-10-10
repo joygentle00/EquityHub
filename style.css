@@ -8,15 +8,15 @@
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #0d1a2e;
+    background-color: black;
     color: #fff;
     overflow-x: hidden;
 }
 
 /* Container & Background */
 .container {
-    background: radial-gradient(circle at top right, rgba(29, 78, 216, 0.4), transparent 40%), 
-                radial-gradient(circle at center left, rgba(17, 24, 39, 0.712), transparent 60%),
+    background: radial-gradient(circle at top right, rgba(0, 0, 0, 0.4), transparent 40%), 
+                radial-gradient(circle at center left, rgba(15, 14, 14, 0.712), transparent 60%),
                 #0d1a2e;
     min-height: 100vh;
     padding: 0 8%;

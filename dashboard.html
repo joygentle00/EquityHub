@@ -307,22 +307,42 @@
                     </div>
                 </div>
                 <div class="market-widget" id="market-news-widget">
-                    <div class="market-widget-title">Market News</div>
                     <div class="tradingview-widget-container">
                         <div class="tradingview-widget-container__widget"></div>
                         <script type="application/json" id="market-news-config">
                         {
                           "feedMode": "market",
                           "market": "crypto",
-                          "colorTheme": "dark",
-                          "isTransparent": false,
-                          "displayMode": "regular",
                           "width": "100%",
                           "height": "400",
-                          "locale": "en"
+                          "locale": "en",
+                          "colorTheme": "dark",
+                          "symbols": [
+                            {"proName": "OANDA:SPX500USD"},
+                            {"proName": "BITSTAMP:BTCUSD"},
+                            {"proName": "BITSTAMP:ETHUSD"}
+                          ]
                         }
                         </script>
                         <script src="https://s3.tradingview.com/external-embedding/embed-widget-news.js" async></script>
+                        <!-- If you provide specific news sources or articles, you can replace the widget with custom HTML content below and comment out the TradingView script -->
+                        <!--
+                        <div class="custom-news">
+                            <h3>Custom News Feed</h3>
+                            <ul>
+                                <li><a href="https://example.com/news1">News Title 1</a> - [Source]</li>
+                                <li><a href="https://example.com/news2">News Title 2</a> - [Source]</li>
+                            </ul>
+                        </div>
+                        <style>
+                            .custom-news { padding: 20px; background: #111827; border-radius: 12px; }
+                            .custom-news h3 { color: #00ffff; margin-bottom: 10px; }
+                            .custom-news ul { list-style-type: none; }
+                            .custom-news li { margin-bottom: 10px; }
+                            .custom-news a { color: #00ffff; text-decoration: none; }
+                            .custom-news a:hover { text-decoration: underline; }
+                        </style>
+                        -->
                     </div>
                 </div>
             </div>
@@ -354,11 +374,9 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Show the dashboard for all authenticated users
                 document.getElementById('main-container').style.display = 'flex';
                 document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'User'}!`;
 
-                // Fetch user data from Firestore
                 const userId = user.uid;
                 const userRef = doc(db, 'users', userId);
                 try {
@@ -377,7 +395,6 @@
                     document.getElementById('total-bonus').textContent = `$${parseFloat(data.totalBonus || 0).toFixed(2)}`;
                     document.getElementById('withdrawals').textContent = `$${parseFloat(data.withdrawals || 0).toFixed(2)}`;
 
-                    // Check if user is admin and add Admin Dashboard link
                     const adminDocRef = doc(db, 'admins', user.uid);
                     const adminDoc = await getDoc(adminDocRef);
                     const isAdmin = adminDoc.exists() && adminDoc.data().isAdmin === true;
@@ -403,7 +420,6 @@
             }
         });
 
-        // Logout functionality
         const logoutLink = document.getElementById('logout-link');
         logoutLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -415,7 +431,6 @@
             });
         });
 
-        // Sidebar toggle
         const sidebar = document.getElementById('sidebar');
         const hamburger = document.querySelector('.hamburger');
         hamburger.addEventListener('click', () => {
@@ -432,7 +447,6 @@
             alert('Chat feature coming soon!');
         });
 
-        // Update current price periodically
         async function updateCurrentPrice() {
             try {
                 const response = await fetch(
