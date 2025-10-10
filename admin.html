@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Equity Hubs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0c1018;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 95vh;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #111827;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar nav ul {
+            list-style-type: none;
+        }
+
+        .sidebar nav ul li {
+            padding: 15px 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .sidebar nav ul li.active a,
+        .sidebar nav ul li:hover a {
+            background-color: #00ffff;
+            padding: 18px;
+            border-radius: 15px;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            color: inherit;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .sidebar nav ul li .icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .welcome {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .admin-section {
+            background: #0c1018;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+        }
+
+        .admin-section h2 {
+            font-size: 20px;
+            color: #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .user-list, .deposit-requests {
+            margin-bottom: 40px;
+        }
+
+        .user-table, .request-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #111827;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .user-table th, .user-table td,
+        .request-table th, .request-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .user-table th, .request-table th {
+            background: #1e293b;
+            color: #00ffff;
+            font-weight: 600;
+        }
+
+        .editable-field {
+            cursor: pointer;
+            color: #00ffff;
+        }
+
+        .editable-field:hover {
+            text-decoration: underline;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #00ffff;
+            border-radius: 4px;
+            background: #111827;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .admin-save-btn {
+            padding: 5px 10px;
+            background: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .admin-save-btn:hover {
+            background: #00e5e5;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .approve-btn {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .reject-btn {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        .hamburger {
+            display: none;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #00ffff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        /* Enhanced Auth Section */
+        .auth-section {
+            background: #111827;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .auth-section h1 {
+            font-size: 28px;
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+
+        .auth-section p {
+            font-size: 16px;
+            color: #a0aec0;
+            margin-bottom: 20px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .auth-btn {
+            padding: 12px 24px;
+            background: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .auth-btn:hover {
+            background: #00e5e5;
+        }
+
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: #111827;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            border: 1px solid #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .popup-content h2 {
+            color: #00ffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .popup-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            background: #1e293b;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .popup-content input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        .popup-content button {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background: #00ffff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .popup-content button:hover {
+            background: #00e5e5;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #00ffff;
+            color: #000;
+        }
+
+        .popup-content a {
+            color: #00ffff;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .popup-content a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                transform: translateX(-100%);
+                z-index: 999;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .auth-section {
+                padding: 20px;
+            }
+
+            .auth-section h1 {
+                font-size: 24px;
+            }
+
+            .auth-section p {
+                font-size: 14px;
+            }
+
+            .auth-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .popup-content {
+                padding: 20px;
+                max-width: 90%;
+            }
+
+            .popup-content h2 {
+                font-size: 20px;
+            }
+
+            .popup-content input,
+            .popup-content button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .close-btn {
+                font-size: 20px;
+                width: 28px;
+                height: 28px;
+            }
+
+            .user-table, .request-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .user-table th, .user-table td,
+            .request-table th, .request-table td {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="hamburger" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <div class="sidebar" id="sidebar">
+            <nav>
+                <ul>
+                    <li class="active">
+                        <a href="admin.html">
+                            <span class="icon"><i class="fa-solid fa-user-shield"></i></span>
+                            <span class="text">Admin Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="dashboard.html">
+                            <span class="icon"><i class="fa-solid fa-house"></i></span>
+                            <span class="text">User Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="logout-link">
+                            <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+                            <span class="text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div id="auth-section" class="auth-section" style="display: none;">
+                <h1>Admin Authentication</h1>
+                <p>Manage with Confidence</p>
+                <div class="auth-buttons">
+                    <button class="auth-btn" id="login-btn">Login</button>
+                    <button class="auth-btn" id="register-btn">Create Account</button>
+                </div>
+            </div>
+
+            <div id="admin-content" style="display: none;">
+                <h1 class="welcome" id="welcome-message">Welcome, Admin!</h1>
+                <section class="admin-section">
+                    <h2>User Management</h2>
+                    <div class="user-list">
+                        <table class="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Total Deposit</th>
+                                    <th>Total Profit</th>
+                                    <th>Total Bonus</th>
+                                    <th>Withdrawals</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-table-body"></tbody>
+                        </table>
+                    </div>
+
+                    <h2>Deposit Requests</h2>
+                    <div class="deposit-requests">
+                        <table class="request-table">
+                            <thead>
+                                <tr>
+                                    <th>User Email</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="request-table-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Login Popup -->
+            <div id="login-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn">&times;</span>
+                    <h2>Admin Login</h2>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <p id="login-error" class="error-message"></p>
+                    <button id="login-submit">Login</button>
+                    <a href="#" id="switch-to-register">Don't have an admin account? Create one</a>
+                </div>
+            </div>
+
+            <!-- Register Popup -->
+            <div id="register-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn">&times;</span>
+                    <h2>Create Admin Account</h2>
+                    <input type="text" id="register-name" placeholder="Name" required>
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <input type="password" id="register-password" placeholder="Password" required>
+                    <p id="register-error" class="error-message"></p>
+                    <button id="register-submit">Create Account</button>
+                    <a href="#" id="switch-to-login">Already have an admin account? Login</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
+            authDomain: "investment-40343.firebaseapp.com",
+            projectId: "investment-40343",
+            storageBucket: "investment-40343.firebasestorage.app",
+            messagingSenderId: "126093031981",
+            appId: "1:126093031981:web:fd4ae73c063044693b16a4",
+            measurementId: "G-SXL6ZGL49W"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Popup Elements
+        const loginPopup = document.getElementById('login-popup');
+        const registerPopup = document.getElementById('register-popup');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const closeButtons = document.querySelectorAll('.close-btn');
+        const switchToRegister = document.getElementById('switch-to-register');
+        const switchToLogin = document.getElementById('switch-to-login');
+        const authSection = document.getElementById('auth-section');
+        const adminContent = document.getElementById('admin-content');
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+
+        // Show/Hide Popups
+        function showPopup(popup) {
+            popup.style.display = 'flex';
+        }
+
+        function hidePopup(popup) {
+            popup.style.display = 'none';
+            popup.querySelectorAll('input').forEach(input => input.value = '');
+            popup.querySelector('.error-message').style.display = 'none';
+        }
+
+        // Event Listeners for Buttons
+        if (loginBtn) loginBtn.addEventListener('click', () => showPopup(loginPopup));
+        if (registerBtn) registerBtn.addEventListener('click', () => showPopup(registerPopup));
+        switchToRegister.addEventListener('click', () => {
+            hidePopup(loginPopup);
+            showPopup(registerPopup);
+        });
+        switchToLogin.addEventListener('click', () => {
+            hidePopup(registerPopup);
+            showPopup(loginPopup);
+        });
+
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hidePopup(btn.closest('.popup'));
+            });
+        });
+
+        // Firebase Authentication Handlers
+        document.getElementById('login-submit').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    hidePopup(loginPopup);
+                })
+                .catch(error => {
+                    loginError.textContent = error.message;
+                    loginError.style.display = 'block';
+                });
+        });
+
+        document.getElementById('register-submit').addEventListener('click', async () => {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+
+            if (!name) {
+                registerError.textContent = 'Name is required';
+                registerError.style.display = 'block';
+                return;
+            }
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(userCredential.user, { displayName: name });
+                // Assume a Cloud Function sets isAdmin: true custom claim
+                // For now, set a Firestore document to indicate admin status (temporary workaround)
+                await setDoc(doc(db, 'admins', userCredential.user.uid), { isAdmin: true });
+                hidePopup(registerPopup);
+            } catch (error) {
+                registerError.textContent = error.message;
+                registerError.style.display = 'block';
+            }
+        });
+
+        // Check auth state and restrict to admin
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Check for admin status in Firestore (temporary workaround until custom claims are implemented)
+                const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+                const isAdmin = adminDoc.exists() && adminDoc.data().isAdmin;
+
+                if (!isAdmin) {
+                    alert('Access restricted to admins only.');
+                    signOut(auth).then(() => {
+                        authSection.style.display = 'block';
+                        adminContent.style.display = 'none';
+                        document.getElementById('sidebar').style.display = 'none';
+                        document.querySelector('.hamburger').style.display = 'none';
+                        showPopup(loginPopup);
+                    });
+                    return;
+                }
+
+                authSection.style.display = 'none';
+                adminContent.style.display = 'block';
+                document.getElementById('sidebar').style.display = 'block';
+                document.querySelector('.hamburger').style.display = 'block';
+                document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'Admin'}!`;
+
+                // Load users and deposit requests
+                await loadUsers();
+                await loadDepositRequests();
+            } else {
+                authSection.style.display = 'block';
+                adminContent.style.display = 'none';
+                document.getElementById('sidebar').style.display = 'none';
+                document.querySelector('.hamburger').style.display = 'none';
+                showPopup(loginPopup);
+            }
+        });
+
+        // Load all users
+        async function loadUsers() {
+            const userTableBody = document.getElementById('user-table-body');
+            userTableBody.innerHTML = '';
+            const usersSnapshot = await getDocs(collection(db, 'users'));
+            usersSnapshot.forEach(doc => {
+                const userData = doc.data();
+                const userId = doc.id;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${userData.displayName || 'N/A'}</td>
+                    <td>${userData.email || 'N/A'}</td>
+                    <td>
+                        <span class="editable-field" data-field="totalDeposit" data-user="${userId}">
+                            $${parseFloat(userData.totalDeposit || 0).toFixed(2)}
+                        </span>
+                        <input type="number" class="admin-input" id="input-deposit-${userId}" style="display: none;" value="${parseFloat(userData.totalDeposit || 0)}">
+                        <button class="admin-save-btn" id="save-deposit-${userId}" style="display: none;">Save</button>
+                    </td>
+                    <td>
+                        <span class="editable-field" data-field="totalProfit" data-user="${userId}">
+                            $${parseFloat(userData.totalProfit || 0).toFixed(2)}
+                        </span>
+                        <input type="number" class="admin-input" id="input-profit-${userId}" style="display: none;" value="${parseFloat(userData.totalProfit || 0)}">
+                        <button class="admin-save-btn" id="save-profit-${userId}" style="display: none;">Save</button>
+                    </td>
+                    <td>
+                        <span class="editable-field" data-field="totalBonus" data-user="${userId}">
+                            $${parseFloat(userData.totalBonus || 0).toFixed(2)}
+                        </span>
+                        <input type="number" class="admin-input" id="input-bonus-${userId}" style="display: none;" value="${parseFloat(userData.totalBonus || 0)}">
+                        <button class="admin-save-btn" id="save-bonus-${userId}" style="display: none;">Save</button>
+                    </td>
+                    <td>
+                        <span class="editable-field" data-field="withdrawals" data-user="${userId}">
+                            $${parseFloat(userData.withdrawals || 0).toFixed(2)}
+                        </span>
+                        <input type="number" class="admin-input" id="input-withdrawals-${userId}" style="display: none;" value="${parseFloat(userData.withdrawals || 0)}">
+                        <button class="admin-save-btn" id="save-withdrawals-${userId}" style="display: none;">Save</button>
+                    </td>
+                    <td>$${parseFloat(userData.balance || 0).toFixed(2)}</td>
+                `;
+                userTableBody.appendChild(row);
+
+                // Add event listeners for editable fields
+                ['totalDeposit', 'totalProfit', 'totalBonus', 'withdrawals'].forEach(field => {
+                    const fieldElement = row.querySelector(`[data-field="${field}"][data-user="${userId}"]`);
+                    const input = document.getElementById(`input-${field}-${userId}`);
+                    const saveBtn = document.getElementById(`save-${field}-${userId}`);
+
+                    fieldElement.addEventListener('click', () => {
+                        fieldElement.style.display = 'none';
+                        input.style.display = 'block';
+                        saveBtn.style.display = 'block';
+                    });
+
+                    saveBtn.addEventListener('click', async () => {
+                        const newValue = parseFloat(input.value);
+                        if (isNaN(newValue) || newValue < 0) {
+                            alert('Please enter a valid positive number');
+                            return;
+                        }
+
+                        try {
+                            const userRef = doc(db, 'users', userId);
+                            await setDoc(userRef, { [field]: newValue }, { merge: true });
+                            // Recalculate balance
+                            const userSnap = await getDoc(userRef);
+                            const userData = userSnap.data();
+                            const newBalance = (userData.totalDeposit || 0) + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.withdrawals || 0);
+                            await setDoc(userRef, { balance: newBalance }, { merge: true });
+
+                            fieldElement.textContent = `$${newValue.toFixed(2)}`;
+                            row.querySelector('td:last-child').textContent = `$${newBalance.toFixed(2)}`;
+                            fieldElement.style.display = 'block';
+                            input.style.display = 'none';
+                            saveBtn.style.display = 'none';
+                        } catch (error) {
+                            console.error(`Error updating ${field}:`, error);
+                            alert(`Failed to update ${field}. Please try again.`);
+                        }
+                    });
+                });
+            });
+        }
+
+        // Load deposit requests
+        async function loadDepositRequests() {
+            const requestTableBody = document.getElementById('request-table-body');
+            requestTableBody.innerHTML = '';
+            const requestsSnapshot = await getDocs(collection(db, 'depositRequests'));
+            requestsSnapshot.forEach(doc => {
+                const requestData = doc.data();
+                const requestId = doc.id;
+                if (requestData.status === 'pending') {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${requestData.userEmail}</td>
+                        <td>$${parseFloat(requestData.amount).toFixed(2)}</td>
+                        <td>${requestData.status}</td>
+                        <td>
+                            <button class="action-btn approve-btn" data-request="${requestId}" data-user="${requestData.userId}" data-amount="${requestData.amount}">Approve</button>
+                            <button class="action-btn reject-btn" data-request="${requestId}">Reject</button>
+                        </td>
+                    `;
+                    requestTableBody.appendChild(row);
+                }
+            });
+
+            // Add event listeners for action buttons
+            document.querySelectorAll('.approve-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const requestId = btn.getAttribute('data-request');
+                    const userId = btn.getAttribute('data-user');
+                    const amount = parseFloat(btn.getAttribute('data-amount'));
+
+                    try {
+                        const userRef = doc(db, 'users', userId);
+                        const userSnap = await getDoc(userRef);
+                        const userData = userSnap.exists() ? userSnap.data() : { totalDeposit: 0, totalProfit: 0, totalBonus: 0, withdrawals: 0 };
+                        const newDeposit = (userData.totalDeposit || 0) + amount;
+                        const newBalance = newDeposit + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.withdrawals || 0);
+
+                        await setDoc(userRef, {
+                            totalDeposit: newDeposit,
+                            balance: newBalance
+                        }, { merge: true });
+
+                        await updateDoc(doc(db, 'depositRequests', requestId), { status: 'approved' });
+                        loadDepositRequests(); // Refresh table
+                    } catch (error) {
+                        console.error('Error approving deposit:', error);
+                        alert('Failed to approve deposit. Please try again.');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.reject-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const requestId = btn.getAttribute('data-request');
+                    try {
+                        await updateDoc(doc(db, 'depositRequests', requestId), { status: 'rejected' });
+                        loadDepositRequests(); // Refresh table
+                    } catch (error) {
+                        console.error('Error rejecting deposit:', error);
+                        alert('Failed to reject deposit. Please try again.');
+                    }
+                });
+            });
+        }
+
+        // Logout functionality
+        const logoutLink = document.getElementById('logout-link');
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                authSection.style.display = 'block';
+                adminContent.style.display = 'none';
+                document.getElementById('sidebar').style.display = 'none';
+                document.querySelector('.hamburger').style.display = 'none';
+                showPopup(loginPopup);
+            }).catch((error) => {
+                console.error('Logout failed:', error.message);
+                alert('Logout failed. Please try again.');
+            });
+        });
+
+        // Sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const hamburger = document.querySelector('.hamburger');
+
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
