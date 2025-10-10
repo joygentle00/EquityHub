@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equity Hubs</title>
+    <title>Equity Hubs - Investment</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Favicon to prevent 404 error -->
@@ -11,6 +11,54 @@
     <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
+        /* Note: Assumes style.css contains base styles for container, header, footer, etc. */
+        /* Hamburger menu styles */
+        .nav-left-mobile {
+            display: flex;
+            align-items: center;
+        }
+        .menu-icon {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .hamburger-lines {
+            width: 100%;
+            height: 3px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .nav-links.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: #1e293b;
+            padding: 20px;
+            z-index: 999;
+        }
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: flex;
+            }
+            .nav-links {
+                display: none;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+        }
         /* Popup styles */
         .popup {
             display: none;
@@ -141,12 +189,10 @@
             left: auto;
             right: 0;
         }
-
         /* Investment section styles */
         .investment-section {
             padding: 40px 20px;
             text-align: center;
-
         }
         .investment-section h1 {
             font-size: 32px;
@@ -205,8 +251,6 @@
                 align-items: center;
             }
         }
-        /* Chart styles */
-        /* Chart styles */
     </style>
 </head>
 <body>
@@ -258,7 +302,7 @@
                     </svg>
                 </div>
                 <div class="nav-links" id="nav-links-menu">
-                    <a href="index.htm">Home</a>
+                    <a href="index.html">Home</a>
                     <a href="about.html">About Us</a>
                     <a href="contact.html">Contacts</a>
                     <a href="investment.html">Investment</a>
@@ -292,7 +336,7 @@
                     <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
                 </div>
                 <div class="nav-right-buttons trade-buttons" style="display: none;">
-                    <a style="background-color: rgb(4, 28, 4); text-align: white; padding: 12px; border-radius: 5px;" href="dashboard.html" class="trade-btn">Trade</a>
+                    <a style="background-color: rgb(4, 28, 4); text-align: center; padding: 12px; border-radius: 5px;" href="dashboard.html" class="trade-btn">Trade</a>
                 </div>
             </nav>
             <div id="google_translate_element" style="display: none;"></div>
@@ -338,6 +382,7 @@
                 <a href="#" id="switch-to-login-from-forgot">Back to Login</a>
             </div>
         </div>
+
         <main>
             <section class="investment-section">
                 <h1>Investment Opportunities</h1>
@@ -348,21 +393,21 @@
                         <p>Minimum Investment: $100</p>
                         <p>Return: 5% Monthly</p>
                         <p>Duration: 6 Months</p>
-                        <button class="invest-btn">Invest Now</button>
+                        <button class="invest-btn" data-plan="Basic">Invest Now</button>
                     </div>
                     <div class="investment-plan">
                         <h2>Standard Plan</h2>
                         <p>Minimum Investment: $500</p>
                         <p>Return: 7% Monthly</p>
                         <p>Duration: 12 Months</p>
-                        <button class="invest-btn">Invest Now</button>
+                        <button class="invest-btn" data-plan="Standard">Invest Now</button>
                     </div>
                     <div class="investment-plan">
                         <h2>Premium Plan</h2>
                         <p>Minimum Investment: $1000</p>
                         <p>Return: 10% Monthly</p>
                         <p>Duration: 24 Months</p>
-                        <button class="invest-btn">Invest Now</button>
+                        <button class="invest-btn" data-plan="Premium">Invest Now</button>
                     </div>
                 </div>
             </section>
@@ -384,7 +429,7 @@
                 <div class="footer-col link-group">
                     <h4>Home</h4>
                     <ul>
-                        <li><a href="index.htm">Home</a></li>
+                        <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="contact.html">Contacts</a></li>
                         <li><a href="investment.html">Investment</a></li>
@@ -408,7 +453,6 @@
             </div>
         </footer>
     </div>
-    <script src="index.js"></script>
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
@@ -492,6 +536,7 @@
             signInWithEmailAndPassword(auth, email, password)
                 .then(() => {
                     hidePopup(loginPopup);
+                    window.location.href = 'deposit.html';
                 })
                 .catch(error => {
                     loginError.textContent = error.message;
@@ -523,6 +568,7 @@
                         displayName: name
                     }).then(() => {
                         hidePopup(registerPopup);
+                        window.location.href = 'deposit.html';
                     });
                 })
                 .catch(error => {
@@ -546,7 +592,7 @@
                 });
         });
 
-        // Authentication State Listener
+        // Authentication State Listener and Invest Button Handling
         onAuthStateChanged(auth, user => {
             if (user) {
                 authButtons.style.display = 'none';
@@ -554,6 +600,31 @@
             } else {
                 authButtons.style.display = 'block';
                 tradeButtons.style.display = 'none';
+            }
+
+            // Handle Invest Now buttons
+            document.querySelectorAll('.invest-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (user) {
+                        window.location.href = 'deposit.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                });
+            });
+        });
+
+        // Hamburger Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links-menu');
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
             }
         });
 
@@ -595,6 +666,7 @@
                     const flagUrl = option.getAttribute('data-flag');
                     const text = option.textContent.trim();
                     changeLanguage(value, flagUrl, text);
+                    menu.classList.remove('active');
                 });
             });
 
