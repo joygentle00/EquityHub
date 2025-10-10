@@ -692,39 +692,47 @@
 
                     ['totalDeposit', 'totalProfit', 'totalBonus', 'balance'].forEach(field => {
                         const fieldElement = row.querySelector(`[data-field="${field}"][data-user="${userId}"]`);
+                        if (!fieldElement) {
+                            console.error(`Field element not found for ${field} and user ${userId}`);
+                            return;
+                        }
                         const input = document.getElementById(`input-${field}-${userId}`);
                         const saveBtn = document.getElementById(`save-${field}-${userId}`);
 
-                        fieldElement.addEventListener('click', () => {
-                            fieldElement.style.display = 'none';
-                            input.style.display = 'block';
-                            saveBtn.style.display = 'block';
-                        });
+                        if (input && saveBtn) {
+                            fieldElement.addEventListener('click', () => {
+                                fieldElement.style.display = 'none';
+                                input.style.display = 'block';
+                                saveBtn.style.display = 'block';
+                            });
 
-                        saveBtn.addEventListener('click', async () => {
-                            const newValue = parseFloat(input.value);
-                            if (isNaN(newValue) || newValue < 0) {
-                                alert('Please enter a valid positive number');
-                                return;
-                            }
+                            saveBtn.addEventListener('click', async () => {
+                                const newValue = parseFloat(input.value);
+                                if (isNaN(newValue) || newValue < 0) {
+                                    alert('Please enter a valid positive number');
+                                    return;
+                                }
 
-                            try {
-                                const userRef = doc(db, 'users', userId);
-                                await setDoc(userRef, { [field]: newValue }, { merge: true });
-                                const userSnap = await getDoc(userRef);
-                                const userData = userSnap.data();
-                                const newWithdrawals = (userData.totalDeposit || 0) + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.balance || 0);
-                                await setDoc(userRef, { withdrawals: newWithdrawals }, { merge: true });
+                                try {
+                                    const userRef = doc(db, 'users', userId);
+                                    await setDoc(userRef, { [field]: newValue }, { merge: true });
+                                    const userSnap = await getDoc(userRef);
+                                    const userData = userSnap.data();
+                                    const newWithdrawals = (userData.totalDeposit || 0) + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.balance || 0);
+                                    await setDoc(userRef, { withdrawals: newWithdrawals }, { merge: true });
 
-                                fieldElement.textContent = `$${newValue.toFixed(2)}`;
-                                fieldElement.style.display = 'block';
-                                input.style.display = 'none';
-                                saveBtn.style.display = 'none';
-                            } catch (error) {
-                                console.error(`Error updating ${field}:`, error);
-                                alert(`Failed to update ${field}: ${error.message}`);
-                            }
-                        });
+                                    fieldElement.textContent = `$${newValue.toFixed(2)}`;
+                                    fieldElement.style.display = 'block';
+                                    input.style.display = 'none';
+                                    saveBtn.style.display = 'none';
+                                } catch (error) {
+                                    console.error(`Error updating ${field}:`, error);
+                                    alert(`Failed to update ${field}: ${error.message}`);
+                                }
+                            });
+                        } else {
+                            console.error(`Input or Save button not found for ${field} and user ${userId}`);
+                        }
                     });
                 });
             } catch (error) {
@@ -745,7 +753,13 @@
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${requestData.userEmail}</td>
-                            <td>$${parseFloat(requestData.amount).toFixed(2)}</td>
+                            <td>
+                                <span class="editable-field" data-field="amount" data-request="${requestId}">
+                                    $${parseFloat(requestData.amount || 0).toFixed(2)}
+                                </span>
+                                <input type="number" class="admin-input" id="input-amount-${requestId}" style="display: none;" value="${parseFloat(requestData.amount || 0)}">
+                                <button class="admin-save-btn" id="save-amount-${requestId}" style="display: none;">Save</button>
+                            </td>
                             <td>${requestData.status}</td>
                             <td>
                                 <button class="action-btn approve-btn" data-request="${requestId}" data-user="${requestData.userId}" data-amount="${requestData.amount}">Approve</button>
@@ -753,6 +767,38 @@
                             </td>
                         `;
                         requestTableBody.appendChild(row);
+
+                        const fieldElement = row.querySelector(`[data-field="amount"][data-request="${requestId}"]`);
+                        const input = document.getElementById(`input-amount-${requestId}`);
+                        const saveBtn = document.getElementById(`save-amount-${requestId}`);
+
+                        if (fieldElement && input && saveBtn) {
+                            fieldElement.addEventListener('click', () => {
+                                fieldElement.style.display = 'none';
+                                input.style.display = 'block';
+                                saveBtn.style.display = 'block';
+                            });
+
+                            saveBtn.addEventListener('click', async () => {
+                                const newAmount = parseFloat(input.value);
+                                if (isNaN(newAmount) || newAmount < 0) {
+                                    alert('Please enter a valid positive number');
+                                    return;
+                                }
+
+                                try {
+                                    await updateDoc(doc(db, 'depositRequests', requestId), { amount: newAmount });
+                                    fieldElement.textContent = `$${newAmount.toFixed(2)}`;
+                                    fieldElement.style.display = 'block';
+                                    input.style.display = 'none';
+                                    saveBtn.style.display = 'none';
+                                    loadDepositRequests(); // Refresh to update the table
+                                } catch (error) {
+                                    console.error('Error updating amount:', error);
+                                    alert(`Failed to update amount: ${error.message}`);
+                                }
+                            });
+                        }
                     }
                 });
 

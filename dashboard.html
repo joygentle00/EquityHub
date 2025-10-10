@@ -466,6 +466,18 @@
         }
         setInterval(updateCurrentPrice, 10000);
         updateCurrentPrice();
+
+        /// logout-link//
+        logout-link.addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Logout failed:', error.message);
+                alert('Logout failed. Please try again.');
+            });
+        });
+        
     </script>
 </body>
 </html>
