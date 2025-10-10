@@ -1,0 +1,217 @@
+body {
+  margin: 0;
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  background: #151515;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  position: relative; /* For overlay effect on mobile */
+}
+
+/* Hamburger Button */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  background: #212121;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.5rem;
+  z-index: 101;
+}
+
+/* Sidebar (Default Desktop) */
+.sidebar {
+  width: 260px;
+  background: #171717;
+  padding: 24px 0;
+  box-shadow: 0 0 40px 0 #141414 inset;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar nav ul li {
+  width: 180px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 30px 24px;
+  border-radius: 24px;
+  margin-bottom: 18px;
+  color: #d8d8d8;
+  cursor: pointer;
+  font-size: 1.15rem;
+  transition: background 0.2s;
+  background: none;
+}
+
+.sidebar nav ul li.active,
+.sidebar nav ul li:hover {
+  background: #181818;
+  box-shadow: 0 0 20px #10101080;
+  color: #fff;
+}
+
+.sidebar .icon {
+  font-size: 2rem;
+  width: 38px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar .text {
+  flex: 1;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 32px 48px;
+  position: relative;
+  min-width: 0;
+}
+
+.welcome {
+  font-size: 2.6rem;
+  font-weight: 400;
+  margin-bottom: 36px;
+  letter-spacing: 1px;
+}
+
+.balance-section,
+.balance-card,
+.balance-header,
+.balance-value,
+.balance-growth,
+.balance-details,
+.balance-chart,
+.balance-info-grid,
+.info-card,
+.info-value,
+.info-label,
+.info-icon,
+.chat-bubble,
+.bubble-text,
+.bubble-icon,
+.bubble-status {
+  /* Keep existing styles unchanged */
+}
+
+/* Mobile Responsiveness (<= 900px) */
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    height: 100%;
+    transform: translateX(-100%); /* Hidden by default */
+    z-index: 100;
+    padding: 24px 0;
+  }
+
+  .sidebar.active {
+    transform: translateX(0); /* Slide in when active */
+  }
+
+  .sidebar nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sidebar nav ul li {
+    width: 100%;
+    min-width: 0;
+    padding: 16px 24px;
+    margin-bottom: 0;
+    font-size: 1rem;
+  }
+
+  .main-content {
+    padding: 18px 24px;
+  }
+
+  .balance-details {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .balance-chart {
+    margin-right: 0;
+    width: 100%;
+    height: 120px;
+  }
+
+  .balance-info-grid {
+    min-width: 100px;
+    grid-template-columns: 1fr;
+  }
+
+  /* Overlay effect for main content when sidebar is open */
+  .container {
+    flex-direction: column;
+  }
+
+  .main-content {
+    transition: padding-left 0.3s ease;
+  }
+
+  .main-content.sidebar-open {
+    padding-left: 260px; /* Match sidebar width when open */
+  }
+}
+
+/* Additional Breakpoints */
+@media (max-width: 1200px) {
+  .main-content {
+    padding: 24px 10px;
+  }
+  .balance-card {
+    padding: 24px 12px;
+  }
+}
+
+.info-card {
+    background-color: #181818;
+    border-radius: 16px;
+  padding: 18px 12px;
+}
+.info-value {
+  font-size: 1.4rem;
+}
+.info-label {
+  font-size: 0.9rem;
+}
+.info-icon {
+  font-size: 1.6rem;
+}
+.chat-bubble {
+  padding: 12px 16px;
+}
+.bubble-text {
+  font-size: 0.9rem;
+}
+.bubble-icon {
+  font-size: 1.2rem;
+}
+.bubble-status {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+}

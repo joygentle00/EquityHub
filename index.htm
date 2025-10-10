@@ -36,7 +36,7 @@
             margin-top: 0;
             color: #333;
         }
-        .popup-content input {
+        .popup-content input, .popup-content select {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -252,6 +252,22 @@
                 <span class="close-btn">&times;</span>
                 <h2>Create Account</h2>
                 <input type="text" id="register-name" placeholder="Name" required>
+                <select id="register-country" required>
+                    <option value="" disabled selected>Select Country</option>
+                    <option value="NG">Nigeria</option>
+                    <option value="GH">Ghana</option>
+                    <option value="KE">Kenya</option>
+                    <option value="ZA">South Africa</option>
+                    <option value="IN">India</option>
+                    <option value="BR">Brazil</option>
+                    <option value="MX">Mexico</option>
+                    <option value="JP">Japan</option>
+                    <option value="CN">China</option>
+                    <option value="TR">Turkey</option>
+                    <!-- Add more countries as needed -->
+                </select>
+                <input type="tel" id="register-phone" placeholder="Phone Number" required>
+                <input type="text" id="register-referral" placeholder="Referral Code (Optional)">
                 <input type="email" id="register-email" placeholder="Email" required>
                 <input type="password" id="register-password" placeholder="Password" required>
                 <input type="password" id="register-confirm-password" placeholder="Confirm Password" required>
@@ -524,6 +540,7 @@
         // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
         // Firebase Configuration
         const firebaseConfig = {
@@ -539,6 +556,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
         // Popup Elements
         const loginPopup = document.getElementById('login-popup');
@@ -566,7 +584,7 @@
 
         function hidePopup(popup) {
             popup.style.display = 'none';
-            popup.querySelectorAll('input').forEach(input => input.value = '');
+            popup.querySelectorAll('input, select').forEach(input => input.value = '');
             popup.querySelector('.error-message').style.display = 'none';
         }
 
@@ -612,6 +630,9 @@
 
         document.getElementById('register-submit').addEventListener('click', () => {
             const name = document.getElementById('register-name').value;
+            const country = document.getElementById('register-country').value;
+            const phone = document.getElementById('register-phone').value;
+            const referral = document.getElementById('register-referral').value;
             const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
             const confirmPassword = document.getElementById('register-confirm-password').value;
@@ -621,7 +642,16 @@
                 registerError.style.display = 'block';
                 return;
             }
-
+            if (!country) {
+                registerError.textContent = 'Country is required';
+                registerError.style.display = 'block';
+                return;
+            }
+            if (!phone) {
+                registerError.textContent = 'Phone number is required';
+                registerError.style.display = 'block';
+                return;
+            }
             if (password !== confirmPassword) {
                 registerError.textContent = 'Passwords do not match';
                 registerError.style.display = 'block';
@@ -630,9 +660,18 @@
 
             createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    return updateProfile(userCredential.user, {
-                        displayName: name
-                    }).then(() => {
+                    const user = userCredential.user;
+                    return Promise.all([
+                        updateProfile(user, { displayName: name }),
+                        setDoc(doc(db, 'users', user.uid), {
+                            name: name,
+                            country: country,
+                            phone: phone,
+                            referralCode: referral || null,
+                            email: email,
+                            createdAt: new Date().toISOString()
+                        })
+                    ]).then(() => {
                         hidePopup(registerPopup);
                     });
                 })

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equity Hubs || Trade</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css"> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+   <style>
+    :root {
+    /* Trading Screen Colors */
+    --dark-bg: #0c1018;
+    --main-dark: #141a23;
+    --mid-dark: #1a222e;
+    --chart-dark: #171d26;
+    --primary-blue: #3b82f6; 
+    --teal-accent: #2299a9; 
+    --sell-red: #d32f2f;
+    --buy-green: #388e3c;
+    --text-light: #e5e7eb;
+    --text-mid: #9ca3af;
+    --price-line: #00ffff;
+    --price-bubble: #f7a900;
+
+    /* Dashboard Screen Colors */
+    --dashboard-bg: #1e1e1e; /* Main background for the dashboard */
+    --dashboard-card: #2c2c2c; /* Card background color */
+    --welcome-text: #e0e0e0;
+    --green-arrow: #388e3c;
+    --dashboard-icon: #e0e0e0;
+    --chat-red: #ff3b30;
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    background-color: var(--main-dark);
+    color: var(--text-light);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Screen Management */
+.screen {
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+    position: relative;
+}
+.active-screen {
+    display: flex;
+}
+
+/* ======================================================= */
+/* Screen 1: TRADING VIEW STYLES */
+/* ======================================================= */
+#tradingScreen {
+    background-color: var(--main-dark);
+}
+
+/* Top Status Bar Placeholder */
+.status-bar-placeholder {
+    width: 100%;
+    height: 30px;
+    background: black;
+    color: white;
+    padding: 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+}
+.status-bar-placeholder .time {
+    font-weight: 600;
+}
+.status-bar-placeholder .signal-icons .fa-signal, .fa-battery-full {
+    margin-left: 5px;
+}
+.status-bar-placeholder .fa-battery-full {
+    color: #4cd964;
+}
+
+/* Main Header (Trading View) */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--main-dark);
+    border-bottom: 1px solid var(--mid-dark);
+}
+
+.menu-icon {
+    font-size: 20px;
+    position: relative;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--text-mid);
+}
+
+.menu-icon .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--primary-blue);
+    color: white;
+    border-radius: 50%;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.balance-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.balance-amount {
+    font-size: 16px;
+    color: white;
+}
+
+.balance-label {
+    font-size: 10px;
+    color: var(--text-mid);
+    font-weight: 400;
+}
+
+.finances-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Asset Selector */
+.asset-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px 10px;
+    background-color: var(--main-dark);
+}
+
+.asset-info {
+    display: flex;
+    align-items: center;
+    background-color: var(--mid-dark);
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.asset-info .fa-heart {
+    font-size: 18px;
+    color: var(--teal-accent);
+    margin-right: 8px;
+}
+
+.asset-name-group {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: var(--teal-accent);
+}
+
+.asset-name {
+    margin-right: 5px;
+}
+
+.chart-options i {
+    font-size: 18px;
+    margin-left: 15px;
+    color: var(--text-mid);
+    cursor: pointer;
+}
+
+/* Chart Area */
+.chart-area-container {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    position: relative;
+    background-color: var(--chart-dark);
+    height: 40vh; /* Give it a fixed height for mobile view */
+    min-height: 250px;
+}
+
+.chart-placeholder {
+    flex-grow: 1;
+    position: relative;
+    padding-right: 80px; /* Space for price labels */
+}
+
+/* Price Labels */
+.price-labels {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 5px;
+    font-size: 10px;
+    font-weight: 500;
+    z-index: 5;
+    pointer-events: none;
+    border-left: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.price-label {
+    color: var(--text-mid);
+    text-align: right;
+    line-height: 1;
+    position: relative;
+}
+
+.current-line-price {
+    color: var(--text-light);
+    background-color: var(--price-bubble);
+    padding: 2px 5px;
+    border-radius: 2px;
+    text-align: right;
+    position: absolute; 
+    right: 0;
+    width: 100%;
+    top: 25%; /* Example position from image */
+    z-index: 10;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Trade Indicator Overlays */
+.trade-indicator-line {
+    color: white;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px 0 0 4px;
+    position: absolute;
+    right: 80px; 
+    width: 100px;
+    text-align: left;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.trade-indicator-up {
+    background-color: var(--buy-green);
+}
+
+.trade-indicator-bubble {
+    position: absolute;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    background-color: var(--buy-green);
+}
+
+.support-resistance {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    z-index: 8;
+    left: 40%; 
+    transform: translateX(-50%);
+}
+
+.sr4 { background-color: var(--buy-green); }
+.sr5 { background-color: var(--sell-red); }
+
+.video-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    z-index: 7;
+}
+
+.chart-utilities {
+    position: absolute;
+    right: 80px; /* Aligned to the chart area edge */
+    top: 100px; 
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 10px;
+    border-radius: 5px 0 0 5px;
+    z-index: 10;
+}
+.chart-utilities i {
+    color: var(--text-light);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Trade Controls (Investment and Duration) */
+.trade-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--mid-dark);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background-color: var(--main-dark);
+    border-radius: 10px;
+    padding: 8px 15px;
+    flex: 1;
+    margin: 0 5px;
+    font-weight: 500;
+    position: relative;
+    height: 50px;
+    justify-content: space-between;
+}
+
+.investment-input button, .duration-input i {
+    color: var(--text-mid);
+    font-size: 18px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0 5px;
+}
+
+.investment-input .investment-amount, .duration-input .duration-time {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 60px;
+    text-align: center;
+}
+.investment-label, .duration-label {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--text-mid);
+    white-space: nowrap;
+}
+
+/* SELL/BUY Buttons */
+.trade-buttons-row {
+    display: flex;
+    width: 100%;
+    background-color: var(--mid-dark);
+    padding: 0 10px 10px;
+}
+
+.trade-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    border: none;
+    color: white;
+    font-weight: 800;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 0 5px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.trade-btn-shape {
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    z-index: -1;
+}
+
+.sell-btn { background-color: var(--sell-red); }
+.sell-shape { background-color: #f44336; clip-path: polygon(0% 0%, 100% 0%, 0% 100%); }
+.buy-btn { background-color: var(--buy-green); }
+.buy-shape { background-color: #4caf50; clip-path: polygon(100% 0%, 100% 100%, 0% 100%); }
+
+.action-text { font-size: 22px; line-height: 1; }
+.profit-percent { font-size: 12px; font-weight: 500; }
+
+/* Bottom Browser Navigation Bar */
+.bottom-nav-placeholder {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    background-color: #333;
+    border-top: 1px solid #444;
+}
+
+.browser-address {
+    font-size: 12px;
+    background-color: #444;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    flex-grow: 1;
+    text-align: center;
+    margin-right: 10px;
+}
+
+.browser-controls {
+    display: flex;
+    gap: 20px;
+    font-size: 18px;
+    color: white;
+}
+
+.browser-controls .disabled {
+    color: var(--text-mid);
+}
+
+/* ======================================================= */
+/* Screen 2: DASHBOARD STYLES */
+/* ======================================================= */
+#dashboardScreen {
+    background-color: var(--dashboard-bg);
+}
+
+.dashboard-content {
+    padding: 20px;
+    position: relative;
+    flex-grow: 1;
+}
+
+.welcome-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--welcome-text);
+    margin-bottom: 20px;
+}
+
+/* Large Balance Card */
+.card-large {
+    background-color: var(--dashboard-card);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.account-balance-label {
+    font-size: 12px;
+    color: var(--text-mid);
+    margin-bottom: 5px;
+}
+
+.account-balance-amount {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 10px;
+}
+
+.account-balance-change {
+    font-size: 14px;
+    color: var(--text-mid);
+}
+
+.green-arrow {
+    color: var(--green-arrow);
+    margin-right: 5px;
+}
+
+/* Small Cards Grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.card-small {
+    background-color: var(--dashboard-card);
+    padding: 15px;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    min-height: 80px;
+}
+
+.card-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+
+.card-label {
+    font-size: 10px;
+    color: var(--text-mid);
+}
+
+.card-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 36px;
+    color: rgba(255, 255, 255, 0.1); /* Very subtle icon in the corner */
+}
+
+/* Live Chat Button */
+.live-chat-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background-color: var(--chat-red);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    z-index: 50;
+}
+   </style>
+  
+  </head>
+<body>
+
+    <div id="tradingScreen" class="screen active-screen">
+        <div class="status-bar-placeholder">
+            <span class="time">8:26 AM</span>
+            <span>Swiftgram</span>
+            <span class="signal-icons"><i class="fas fa-signal"></i><i class="fas fa-battery-full"></i></span>
+        </div>
+    
+        <header class="main-header">
+            <div class="menu-icon"><i class="fas fa-bars"></i><span class="badge">1</span></div>
+            <div class="balance-container">
+                <span class="balance-amount">$0.00</span>
+                <span class="balance-label">real balance</span>
+            </div>
+            <button class="finances-btn">Finances</button>
+            <div class="menu-icon"><i class="fas fa-sliders-h"></i></div>
+        </header>
+    
+        <div class="asset-selector">
+            <div class="asset-info">
+                <i class="fas fa-heart"></i>
+                <div class="asset-name-group">
+                    <span class="asset-name">Smarty</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="chart-options">
+                <i class="fas fa-chart-line"></i>
+                <i class="fas fa-clock"></i>
+            </div>
+        </div>
+    
+        <div class="chart-area-container">
+            <div class="price-labels">
+                <div class="price-label">229.7710</div>
+                <div class="price-label">229.7700</div>
+                <div class="current-line-price">$229.7670</div> 
+                <div class="price-label">229.7625</div>
+                <div class="price-label">229.7600</div>
+            </div>
+
+            <div class="chart-placeholder">
+                <canvas id="realtimeChart"></canvas>
+                <i class="fas fa-play-circle video-icon"></i>
+                
+                <div class="trade-indicator-bubble trade-info-up" style="top: 25%; right: 90px;">$92.50</div>
+                <div class="trade-indicator-line trade-indicator-up" style="top: 25%;">229.7670</div>
+                <div class="support-resistance sr4" style="top: 35%;">SR 4</div>
+                <div class="support-resistance sr5" style="top: 65%;">SR 5</div>
+            </div>
+
+            <div class="chart-utilities">
+                <i class="fas fa-expand-alt"></i>
+                <i class="fas fa-crosshairs"></i>
+                <i class="fas fa-chart-bar"></i>
+                <i class="fas fa-envelope"></i>
+            </div>
+        </div>
+    
+        <div class="trade-controls">
+            <div class="input-group investment-input">
+                <button class="minus-btn"><i class="fas fa-minus"></i></button>
+                <span class="investment-amount">$50</span>
+                <span class="investment-label">investment</span>
+                <button class="plus-btn"><i class="fas fa-plus"></i></button>
+            </div>
+            <div class="input-group duration-input">
+                <span class="duration-time">00:00:05</span>
+                <span class="duration-label">deal duration</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+    
+        <div class="trade-buttons-row">
+            <button class="trade-btn sell-btn">
+                <div class="trade-btn-shape sell-shape"></div>
+                <span class="action-text">SELL</span>
+                <span class="profit-percent">85%</span>
+            </button>
+            <button class="trade-btn buy-btn">
+                <div class="trade-btn-shape buy-shape"></div>
+                <span class="action-text">BUY</span>
+                <span class="profit-percent">85%</span>
+            </button>
+        </div>
+    
+        <div class="bottom-nav-placeholder">
+            <div class="browser-address">expertopton.finance</div>
+            <div class="browser-controls">
+                <i class="fas fa-angle-left"></i>
+                <i class="fas fa-angle-right disabled"></i>
+                <i class="fas fa-book-open"></i>
+                <i class="fas fa-share-square"></i>
+                <i class="fas fa-redo-alt"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div id="dashboardScreen" class="screen">
+        <div class="dashboard-content">
+            <h1 class="welcome-text">Welcome, Edgar!</h1>
+
+            <div class="card-large">
+                <div class="account-balance-label">ACCOUNT BALANCE</div>
+                <div class="account-balance-amount">$0.00</div>
+                <div class="account-balance-change">
+                    <i class="fas fa-arrow-up green-arrow"></i> Up by $0.00 since you began investing
+                </div>
+            </div>
+
+            <div class="card-grid">
+                <div class="card-small">
+                    <div class="card-value">$0.00</div>
+                    <div class="card-label">TOTAL DEPOSIT</div>
+                    <i class="fas fa-money-bill-wave card-icon"></i>
+                </div>
+                <div class="card-small">
+                    <div class="card-value">$0.00</div>
+                    <div class="card-label">TOTAL PROFIT</div>
+                    <i class="fas fa-leaf card-icon"></i>
+                </div>
+                <div class="card-small">
+                    <div class="card-value">$0.00</div>
+                    <div class="card-label">TOTAL BONUS</div>
+                    <i class="fas fa-gift card-icon"></i>
+                </div>
+                <div class="card-small">
+                    <div class="card-value">$0.00</div>
+                    <div class="card-label">WITHDRAWALS</div>
+                    <i class="fas fa-exchange-alt card-icon"></i>
+                </div>
+            </div>
+            <button class="live-chat-btn"><i class="fas fa-comment-dots"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // Simple script to switch between screens for presentation
+        document.querySelector('.menu-icon:first-child').addEventListener('click', () => {
+            const tradingScreen = document.getElementById('tradingScreen');
+            const dashboardScreen = document.getElementById('dashboardScreen');
+            
+            if (tradingScreen.classList.contains('active-screen')) {
+                tradingScreen.classList.remove('active-screen');
+                dashboardScreen.classList.add('active-screen');
+            } else {
+                dashboardScreen.classList.remove('active-screen');
+                tradingScreen.classList.add('active-screen');
+            }
+        });
+    </script>
+</body>
+</html>

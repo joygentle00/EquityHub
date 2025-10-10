@@ -11,8 +11,6 @@
     <!-- Google Translate API -->
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
-
-
         /* Popup styles */
         .popup {
             display: none;
@@ -144,57 +142,70 @@
             right: 0;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .popup-content {
-                max-width: 90%;
-            }
-        }
         /* Investment section styles */
         .investment-section {
             padding: 40px 20px;
-            background: #f9f9f9;
             text-align: center;
+
         }
         .investment-section h1 {
+            font-size: 32px;
             margin-bottom: 20px;
-            color: #333;
+            color: white;
         }
         .investment-section p {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+            color: #ccc;
         }
-        .investment-options {
+        .investment-plans {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
         }
-        .investment-card {
-            background: white;
-            border: 1px solid #ddd;
+        .investment-plan {
+            background: #1e293b;
             border-radius: 8px;
             padding: 20px;
-            width: 250px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+            width: 300px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .investment-card:hover {
-            transform: translateY(-5px);
+        .investment-plan:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
-        .investment-card h3 {
-            margin-top: 0;
-            color: #007bff;
+        .investment-plan h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
         }
-        .investment-card p {
-            color: #555;
+        .investment-plan p {
+            font-size: 16px;
+            margin: 8px 0;
         }
-        @media (max-width: 600px) {
-            .investment-card {
-                width: 100%;
+        .invest-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .invest-btn:hover {
+            background: #0056b3;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .investment-plans {
+                flex-direction: column;
+                align-items: center;
             }
         }
+        /* Chart styles */
         /* Chart styles */
     </style>
 </head>
@@ -281,7 +292,7 @@
                     <a href="#" class="register-btn">Register <i class="fa-solid fa-angle-right"></i></a>
                 </div>
                 <div class="nav-right-buttons trade-buttons" style="display: none;">
-                    <a style="background-color: rgb(4, 28, 4); text-align: white; padding: 12px; border-radius: 5px;" href="user_dashboard.html" class="trade-btn">Trade</a>
+                    <a style="background-color: rgb(4, 28, 4); text-align: white; padding: 12px; border-radius: 5px;" href="dashboard.html" class="trade-btn">Trade</a>
                 </div>
             </nav>
             <div id="google_translate_element" style="display: none;"></div>
@@ -330,37 +341,33 @@
         <main>
             <section class="investment-section">
                 <h1>Investment Opportunities</h1>
-                <p>Discover a variety of investment options tailored to your financial goals. Whether you're looking for short-term gains or long-term growth, we have something for everyone.</p>
-                <div class="investment-options">
-                    <div class="investment-card">
-                        <h3>Stocks</h3>
-                        <p>Invest in shares of leading companies and benefit from their growth.</p>
+                <p>Explore our range of investment plans designed to help you grow your wealth. Choose a plan that suits your financial goals and start investing today!</p>
+                <div class="investment-plans">
+                    <div class="investment-plan">
+                        <h2>Basic Plan</h2>
+                        <p>Minimum Investment: $100</p>
+                        <p>Return: 5% Monthly</p>
+                        <p>Duration: 6 Months</p>
+                        <button class="invest-btn">Invest Now</button>
                     </div>
-                    <div class="investment-card">
-                        <h3>Bonds</h3>
-                        <p>Secure your investment with government and corporate bonds.</p>  
+                    <div class="investment-plan">
+                        <h2>Standard Plan</h2>
+                        <p>Minimum Investment: $500</p>
+                        <p>Return: 7% Monthly</p>
+                        <p>Duration: 12 Months</p>
+                        <button class="invest-btn">Invest Now</button>
                     </div>
-                    <div class="investment-card">
-                        <h3>Mutual Funds</h3>
-                        <p>Diversify your portfolio with professionally managed mutual funds.</p>
-                    </div>
-                    <div class="investment-card">
-                        <h3>ETFs</h3>
-                        <p>Trade a basket of assets with low fees and high liquidity.</p>
-                    </div>
-                    <div class="investment-card">
-                        <h3>Real Estate</h3>
-                        <p>Invest in property markets for steady income and appreciation.</p>
-                    </div>
-                    <div class="investment-card">
-                        <h3>Cryptocurrency</h3>
-                        <p>Explore the world of digital assets and blockchain technology.</p>
+                    <div class="investment-plan">
+                        <h2>Premium Plan</h2>
+                        <p>Minimum Investment: $1000</p>
+                        <p>Return: 10% Monthly</p>
+                        <p>Duration: 24 Months</p>
+                        <button class="invest-btn">Invest Now</button>
                     </div>
                 </div>
             </section>
         </main>
-
-
+        
         <footer>
             <div class="footer-content">
                 <div class="footer-col disclaimer-col">
@@ -528,24 +535,15 @@
             const email = document.getElementById('forgot-email').value;
             sendPasswordResetEmail(auth, email)
                 .then(() => {
-                    alert('Password reset email sent!');
-                    hidePopup(forgotPasswordPopup);
+                    forgotError.textContent = 'Password reset email sent!';
+                    forgotError.style.color = 'green';
+                    forgotError.style.display = 'block';
                 })
                 .catch(error => {
                     forgotError.textContent = error.message;
+                    forgotError.style.color = 'red';
                     forgotError.style.display = 'block';
                 });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('popup')) {
-                hidePopup(e.target);
-            }
-        });
-
-        document.getElementById('menu-toggle').addEventListener('click', () => {
-            const navLinksMenu = document.getElementById('nav-links-menu');
-            navLinksMenu.classList.toggle('active');
         });
 
         // Authentication State Listener

@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
 
     <style>
-        /* Existing styles with improved spacing and comments */
         * {
             margin:  0;
             padding: 0;
@@ -29,12 +28,12 @@
             display:   flex;
             width:     100%;
             max-width: 1200px;
-            height:    95vh; /* Reduced to leave some space at the bottom */
+            height:    95vh;
             background:    #1e293b;
             border-radius: 12px;
             box-shadow:    0 0 20px rgba(0, 255, 255, 0.1);
             position:      relative;
-            margin:        10px 0; /* Added margin for better spacing */
+            margin:        10px 0;
         }
 
         .sidebar {
@@ -64,15 +63,15 @@
             padding: 18px;
             border-radius: 15px;
             color:            #000;
-            text-decoration:  none; /* Remove underline from active/hover state */
+            text-decoration:  none;
         }
 
         .sidebar nav ul li a {
             display:          flex;
             align-items:      center;
-            color:            inherit; /* Inherit text color */
-            text-decoration:  none; /* Remove default underline */
-            width:            100%; /* Ensure full width for click area */
+            color:            inherit;
+            text-decoration:  none;
+            width:            100%;
         }
 
         .sidebar nav ul li .icon {
@@ -82,14 +81,14 @@
 
         .main-content {
             flex-grow:   1;
-            padding:     30px 40px; /* Increased padding for better spacing */
+            padding:     30px 40px;
             overflow-y:  auto;
             position:    relative;
         }
 
         .welcome {
             font-size:    24px;
-            margin-bottom: 30px; /* Increased margin for better separation */
+            margin-bottom: 30px;
         }
 
         .balance-section {
@@ -135,15 +134,15 @@
         .balance-details {
             display:          flex;
             flex-wrap:        wrap;
-            gap:              30px; /* Increased gap for better separation */
-            justify-content:  space-between; /* Distribute space evenly */
-            margin-top:       20px; /* Added margin to separate from header */
+            gap:              30px;
+            justify-content:  space-between;
+            margin-top:       20px;
         }
 
         .balance-chart {
-            flex:             1 1 45%; /* Adjusted to take about half the width */
+            flex:             1 1 45%;
             min-width:        300px;
-            height:           300px; /* Increased height for better visibility */
+            height:           300px;
             background:       #111827;
             border-radius:    12px;
             box-shadow:       inset 0 0 20px rgba(0, 255, 255, 0.05);
@@ -155,7 +154,7 @@
         .chart-box {
             position:      relative;
             width:         100%;
-            height:        100%; /* Full height of parent */
+            height:        100%;
             background:    linear-gradient(to bottom, #0c1018, #111827);
             border-radius: 12px;
             overflow:      hidden;
@@ -163,8 +162,8 @@
         }
 
         .balance-info-grid {
-            flex:       1 1 50%; /* Adjusted to take slightly more space */
-            min-width:  350px; /* Increased min-width for better card spacing */
+            flex:       1 1 50%;
+            min-width:  350px;
             display:    grid;
             grid-template-columns: repeat(2, 1fr);
             gap:        20px;
@@ -207,8 +206,8 @@
 
         .chat-bubble {
             position:      fixed;
-            bottom:        40px; /* Increased to avoid overlap */
-            right:         40px; /* Increased to avoid overlap */
+            bottom:        40px;
+            right:         40px;
             background:    #00ffff;
             color:         #000;
             padding:       12px 20px;
@@ -218,7 +217,7 @@
             align-items:   center;
             cursor:        pointer;
             transition:    background-color 0.3s ease-in-out;
-            z-index:       1000; /* Ensure it stays above other content */
+            z-index:       1000;
         }
 
         .chat-bubble:hover {
@@ -263,6 +262,10 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
             .sidebar {
                 position:  fixed;
                 top:       0;
@@ -271,32 +274,31 @@
                 transform: translateX(-100%);
                 z-index:   999;
             }
-
             .sidebar.show {
                 transform: translateX(0);
             }
-
             .hamburger {
                 display: block;
             }
-
             .main-content {
                 padding: 20px;
             }
-
             .balance-details {
-                flex-direction: column; /* Stack vertically on mobile */
+                flex-direction: column;
             }
-
+            .balance-chart,
             .balance-info-grid {
-                flex: 1 1 100%; /* Full width on mobile */
-                order: 1; /* Place balance info grid above chart */
+                flex: 1 1 100%;
             }
-
-            .balance-chart {
-                flex: 1 1 100%; /* Full width on mobile */
-                order: 2; /* Place chart below balance info grid */
-                height: 50vh; /* Adjusted for mobile */
+            .chart-box {
+                height: 50vh;
+            }
+            .market-widgets-row {
+                flex-direction: column !important;
+                gap: 20px;
+            }
+            .market-widget {
+                max-width: 100% !important;
             }
         }
 
@@ -329,7 +331,7 @@
             pointer-events: none;
         }
 
-        /* Added styles for market widgets */
+        /* Market widgets styles */
         .market-widgets-row {
             display: flex;
             gap: 32px;
@@ -352,7 +354,6 @@
             margin-bottom: 20px;
             color: #fff;
         }
-        /* Responsive: stack market widgets vertically on mobile */
         @media (max-width: 900px) {
             .market-widgets-row {
                 flex-direction: column;
@@ -362,38 +363,92 @@
                 max-width: 100%;
             }
         }
-
-        /* Admin edit styles */
-        .admin-edit-btn {
-            cursor: pointer;
-            color: #00ffff;
-            font-size: 14px;
-            margin-top: 5px;
+        .payment-method {
+            background:    #111827;
+            padding:       20px;
+            border-radius: 12px;
+            box-shadow:    inset 0 0 20px rgba(0, 255, 255, 0.05);
+            margin-bottom: 30px;
+            width:         100%;
+        }
+        .payment-method h2 {
+            color:          #00ffff;
+            margin-bottom:  20px;
+            text-align:     center;
+            font-weight:    600;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 768px) {
+            .payment-method {
+                padding: 15px;
+            }
+        }
+        /* Wallet Popup Styles */
+        #deposit-popup {
             display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
         }
-        .admin-edit-btn:hover {
-            text-decoration: underline;
+        #deposit-popup .deposit-modal-content {
+            background: #1e293b;
+            padding: 32px 24px;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 24px rgba(0,255,255,0.15);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .admin-input {
-            width: 100%;
-            padding: 5px;
-            border: 1px solid #00ffff;
-            border-radius: 4px;
-            background: #111827;
+        .wallet-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #3c3c3c;
             color: #fff;
-            font-size: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: left;
+            font-weight: 600;
+            margin-bottom: 10px;
+            word-break: break-all;
         }
-        .admin-save-btn {
-            margin-top: 10px;
-            padding: 5px 10px;
-            background: #00ffff;
-            color: #000;
+        .wallet-address {
+            user-select: all;
+            background: #222;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #00ffff;
+        }
+        .copy-btn {
+            background: none;
             border: none;
-            border-radius: 4px;
+            color: #00ffff;
+            font-size: 18px;
             cursor: pointer;
+            padding: 0 4px;
+            transition: color 0.2s;
         }
-        .admin-save-btn:hover {
-            background: #00e5e5;
+        .copy-btn:hover {
+            color: #19ffe3;
+        }
+        @media (max-width: 600px) {
+            #deposit-popup .deposit-modal-content {
+                padding: 16px 5px;
+                max-width: 95vw;
+            }
+            .wallet-row {
+                font-size: 14px;
+                padding: 8px;
+            }
         }
     </style>
 </head>
@@ -404,6 +459,7 @@
         </button>
 
         <div class="sidebar" id="sidebar">
+            <!-- Sidebar Nav (unchanged) -->
             <nav>
                 <ul>
                     <li class="active">
@@ -431,7 +487,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="transactions.html">
+                        <a href="histories.html">
                             <span class="icon"><i class="fa-regular fa-file-lines"></i></span>
                             <span class="text">Transactions</span>
                         </a>
@@ -457,98 +513,109 @@
                 </ul>
             </nav>
         </div>
-
-        <main class="main-content">
-            <h1 class="welcome" id="welcome-message">Welcome, User!</h1>
-            <section class="balance-section">
+        <div class="payment-method">
+            <h2 style="text-align: center; margin-bottom: 20px;">Deposit Funds</h2>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="max-width: 400px; margin: 0 auto;">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="YOUR_HOSTED_BUTTON_ID">
+                <div style="margin-bottom: 15px;">
+                    <label for="amount" style="display: block; margin-bottom: 5px;">Select Amount:</label>
+                    <select name="amount" id="amount" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                        <option value="10.00">$10.00</option>
+                        <option value="25.00">$25.00</option>
+                        <option value="50.00">$50.00</option>
+                        <option value="100.00">$100.00</option>
+                        <option value="250.00">$250.00</option>
+                        <option value="500.00">$500.00</option>
+                        <option value="600.00">$600.00</option>
+                        <option value="800.00">$800.00</option>
+                        <option value="1000.00">$1000.00</option>
+                        <option value="2000.00">$2000.00</option>
+                        <option value="5000.00">$5000.00</option>
+                        <option value="10000.00">$10000.00</option>
+                        <option value="20000.00">$20000.00</option>
+                        <option value="50000.00">$50000.00</option>
+                        <option value="100000.00">$100000.00</option>
+                    </select>
+                </div>
+                <input type="hidden" name="currency_code" value="USD">
+                <button id="popup-wallets" type="submit" style="width: 100%; padding: 12px; background-color: #0070ba; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">
+                    Deposit Now!
+                </button>
+            </form>
+        </div>
+        <div class="main-content">
+            <div class="balance-section">
                 <div class="balance-card">
-                    <div class="balance-header">ACCOUNT BALANCE</div>
+                    <div class="balance-header">Current Balance</div>
                     <div class="balance-value" id="balance-value">$0.00</div>
-                    <div class="balance-growth"><span class="up">&#8593; Up by <span class="green">$0.00</span></span> since you began investing</div>
+                    <div class="balance-growth">
+                        <span class="up"><i class="fa-solid fa-arrow-up"></i> +2.5%</span> this month
+                    </div>
                     <div class="balance-details">
-                        <div class="balance-info-grid">
-                            <div class="info-card light-black">
-                                <div class="info-value" id="total-deposit">$0.00</div>
-                                <div class="info-label">TOTAL DEPOSIT</div>
-                                <div class="info-icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                                <div class="admin-edit-btn" id="edit-deposit">Edit</div>
-                                <input type="number" class="admin-input" id="input-deposit" style="display: none;">
-                                <button class="admin-save-btn" id="save-deposit" style="display: none;">Save</button>
-                            </div>
-                            <div class="info-card light-black">
-                                <div class="info-value" id="total-profit">$0.00</div>
-                                <div class="info-label">TOTAL PROFIT</div>
-                                <div class="info-icon"><i class="fa-solid fa-seedling"></i></div>
-                                <div class="admin-edit-btn" id="edit-profit">Edit</div>
-                                <input type="number" class="admin-input" id="input-profit" style="display: none;">
-                                <button class="admin-save-btn" id="save-profit" style="display: none;">Save</button>
-                            </div>
-                            <div class="info-card light-black">
-                                <div class="info-value" id="total-bonus">$0.00</div>
-                                <div class="info-label">TOTAL BONUS</div>
-                                <div class="info-icon"><i class="fa-solid fa-gift"></i></div>
-                                <div class="admin-edit-btn" id="edit-bonus">Edit</div>
-                                <input type="number" class="admin-input" id="input-bonus" style="display: none;">
-                                <button class="admin-save-btn" id="save-bonus" style="display: none;">Save</button>
-                            </div>
-                            <div class="info-card light-black">
-                                <div class="info-value" id="withdrawals">$0.00</div>
-                                <div class="info-label">WITHDRAWALS</div>
-                                <div class="info-icon"><i class="fa-solid fa-coins"></i></div>
-                                <div class="admin-edit-btn" id="edit-withdrawals">Edit</div>
-                                <input type="number" class="admin-input" id="input-withdrawals" style="display: none;">
-                                <button class="admin-save-btn" id="save-withdrawals" style="display: none;">Save</button>
-                            </div>
-                        </div>
                         <div class="balance-chart">
                             <div class="chart-box">
+                                <div class="current-price" id="current-price">EUR/USD: N/A</div>
+                                <div class="time-line"></div>
+                                <!-- TradingView Widget BEGIN -->
                                 <div class="tradingview-widget-container">
-                                    <div id="tradingview_forex_chart" class="tradingview-widget-container__widget"></div>
-                                    <div class="tradingview-widget-copyright">
-                                        <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
-                                            <span class="blue-text">Track all markets on TradingView</span>
-                                        </a>
-                                    </div>
+                                    <div id="tradingview_12345"></div>
                                     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
                                     <script type="text/javascript">
-                                        new TradingView.widget(
-                                        {
-                                            "autosize": true,
+                                        new TradingView.widget({
+                                            "width": "100%",
+                                            "height": "100%",
                                             "symbol": "FX:EURUSD",
-                                            "interval": "5",
+                                            "interval": "D",
                                             "timezone": "Etc/UTC",
                                             "theme": "dark",
                                             "style": "1",
                                             "locale": "en",
                                             "toolbar_bg": "#f1f3f6",
                                             "enable_publishing": false,
-                                            "allow_symbol_change": true,
-                                            "container_id": "tradingview_forex_chart",
-                                            "studies": ["MASimple@tv-basicstudies"],
-                                            "hide_top_toolbar": false,
-                                            "hide_legend": false,
+                                            "hide_top_toolbar": true,
                                             "save_image": false,
-                                            "hide_volume": false,
-                                            "support_host": "https://www.tradingview.com"
-                                        }
-                                        );
+                                            "container_id": "tradingview_12345"
+                                        });
                                     </script>
                                 </div>
-                                <div class="current-price" id="current-price">EUR/USD: Loading...</div>
-                                <div class="time-line"></div>
+                                <!-- TradingView Widget END -->
+                            </div>
+                        </div>
+                        <div class="balance-info-grid">
+                            <div class="info-card">
+                                <div class="info-icon"><i class="fa-solid fa-wallet"></i></div>
+                                <div class="info-value" id="total-deposit">$0.00</div>
+                                <div class="info-label">Total Deposit</div>
+                            </div>
+                            <div class="info-card light-black">
+                                <div class="info-icon"><i class="fa-solid fa-chart-line"></i></div>
+                                <div class="info-value" id="total-profit">$0.00</div>
+                                <div class="info-label">Total Profit</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-icon"><i class="fa-solid fa-gift"></i></div>
+                                <div class="info-value" id="total-bonus">$0.00</div>
+                                <div class="info-label">Total Bonus</div>
+                            </div>
+                            <div class="info-card light-black">
+                                <div class="info-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                                <div class="info-value" id="withdrawals">$0.00</div>
+                                <div class="info-label">Withdrawals</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            
-            <!-- Market Widgets Row -->
+            </div>
+
+            <!-- Market Widgets Row BELOW BALANCE SECTION -->
             <div class="market-widgets-row">
                 <!-- Market Overview Widget -->
                 <div class="market-widget" id="market-overview-widget">
                     <div class="market-widget-title">Market Overview</div>
                     <div class="tradingview-widget-container">
                         <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async></script>
                         <script type="application/json" id="market-overview-config">
                         {
                           "title": "Market Overview",
@@ -572,7 +639,6 @@
                           "theme": "dark"
                         }
                         </script>
-                        <script src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async></script>
                     </div>
                 </div>
                 <!-- Market News Widget -->
@@ -580,6 +646,8 @@
                     <div class="market-widget-title">Market News</div>
                     <div class="tradingview-widget-container">
                         <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-news.js" async>
+                        </script>
                         <script type="application/json" id="market-news-config">
                         {
                           "feedMode": "market",
@@ -592,113 +660,137 @@
                           "locale": "en"
                         }
                         </script>
-                        <script src="https://s3.tradingview.com/external-embedding/embed-widget-news.js" async></script>
                     </div>
                 </div>
             </div>
             <!-- End Market Widgets Row -->
-
-            <div class="chat-bubble" id="chat-bubble">
-                <span class="bubble-text">Chat</span>
-                <span class="bubble-icon"><i class="fa-regular fa-comment"></i></span>
-                <span class="bubble-status"></span>
-            </div>
-        </main>
+        </div>
     </div>
-    
+    <div class="chat-bubble" id="chat-bubble" title="Chat with Support">
+        <span class="bubble-text">Chat with Support</span>
+        <i class="fa-solid fa-comments bubble-icon"></i>
+        <span class="bubble-status"></span>
+    </div>
+    <!-- Deposit Popup Modal (wallets copiable, modal scrollable) -->
+    <div class="popup-wallets">
+        <div id="deposit-popup">
+            <div class="deposit-modal-content">
+                <button id="close-deposit-popup" style="position:absolute; top:16px; right:16px; background:none; border:none; color:#00ffff; font-size:22px; cursor:pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h2 style="color:#00ffff; text-align:center; margin-bottom:18px;">Deposit Funds</h2>
+                <p style="color:#fff; text-align:center; margin-bottom:18px;">Select your payment method:</p>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div class="wallet-row">
+                        <i class="fa-brands fa-bitcoin"></i>
+                        Bitcoin:
+                        <span class="wallet-address" id="btc-wallet">AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w</span>
+                        <button class="copy-btn" onclick="copyWallet('btc-wallet', this)" title="Copy">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="wallet-row">
+                        <i class="fa-brands fa-ethereum"></i>
+                        Ethereum:
+                        <span class="wallet-address" id="eth-wallet">AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w</span>
+                        <button class="copy-btn" onclick="copyWallet('eth-wallet', this)" title="Copy">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="wallet-row">
+                        <i class="fa-brands fa-usd-coin"></i>
+                        USDC:
+                        <span class="wallet-address" id="usdc-wallet">AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w</span>
+                        <button class="copy-btn" onclick="copyWallet('usdc-wallet', this)" title="Copy">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="wallet-row">
+                        <i class="fa-brands fa-tether"></i>
+                        USDT:
+                        <span class="wallet-address" id="usdt-wallet">AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w</span>
+                        <button class="copy-btn" onclick="copyWallet('usdt-wallet', this)" title="Copy">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="pload-payment-reciept">
+                        <label for="payment-receipt" style="color:#00ffff; margin-bottom:8px; display:block;">Upload Payment Receipt:</label>
+                        <input type="file" id="payment-receipt" name="payment-receipt" accept="image/*,application/pdf" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; background:#222; color:#fff;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Show popup when Deposit button is clicked
+            document.getElementById('popup-wallets').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('deposit-popup').style.display = 'flex';
+            });
+            // Close popup
+            document.getElementById('close-deposit-popup').addEventListener('click', function() {
+                document.getElementById('deposit-popup').style.display = 'none';
+            });
+            // Close popup when clicking outside modal
+            document.getElementById('deposit-popup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+            // Copiable wallet address
+            window.copyWallet = function(walletId, btn) {
+                const walletEl = document.getElementById(walletId);
+                const wallet = walletEl.textContent.trim();
+                navigator.clipboard.writeText(wallet).then(function() {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    setTimeout(function() {
+                        btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+                    }, 1500);
+                });
+            }
+        </script>
+    </div>
     <script type="module">
         // Import Firebase modules
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-        import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js';
 
-        // Firebase configuration
+        // Your Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
-            authDomain: "investment-40343.firebaseapp.com",
-            projectId: "investment-40343",
-            storageBucket: "investment-40343.firebasestorage.app",
+            apiKey:            "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
+            authDomain:        "investment-40343.firebaseapp.com",
+            projectId:         "investment-40343",
+            storageBucket:     "investment-40343.firebasestorage.app",
             messagingSenderId: "126093031981",
-            appId: "1:126093031981:web:fd4ae73c063044693b16a4",
-            measurementId: "G-SXL6ZGL49W"
+            appId:             "1:126093031981:web:fd4ae73c063044693b16a4",
+            measurementId:     "G-SXL6ZGL49W"
         };
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        const database = getDatabase(app);
 
-        // Check auth state and fetch user data
-        onAuthStateChanged(auth, async (user) => {
+        // Check auth state
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Update welcome message with user's displayName
-                document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'User'}!`;
-
-                // Fetch user data from Firestore
+                // User is logged in, update UI with balance
                 const userId = user.uid;
-                const userRef = doc(db, 'users', userId);
-                const userSnap = await getDoc(userRef);
-                const data = userSnap.exists() ? userSnap.data() : {
-                    balance: 0,
-                    totalDeposit: 0,
-                    totalProfit: 0,
-                    totalBonus: 0,
-                    withdrawals: 0
-                };
-
-                // Update UI with user data
-                document.getElementById('balance-value').textContent = `$${parseFloat(data.balance || 0).toFixed(2)}`;
-                document.getElementById('total-deposit').textContent = `$${parseFloat(data.totalDeposit || 0).toFixed(2)}`;
-                document.getElementById('total-profit').textContent = `$${parseFloat(data.totalProfit || 0).toFixed(2)}`;
-                document.getElementById('total-bonus').textContent = `$${parseFloat(data.totalBonus || 0).toFixed(2)}`;
-                document.getElementById('withdrawals').textContent = `$${parseFloat(data.withdrawals || 0).toFixed(2)}`;
-
-                // Check if user is admin (example: based on email or custom claim)
-                const isAdmin = user.email === 'admin@equityhub.org'; // Replace with actual admin check
-                if (isAdmin) {
-                    document.querySelectorAll('.admin-edit-btn').forEach(btn => {
-                        btn.style.display = 'block';
-                    });
-
-                    // Add edit functionality for each field
-                    const fields = ['deposit', 'profit', 'bonus', 'withdrawals'];
-                    fields.forEach(field => {
-                        const editBtn = document.getElementById(`edit-${field}`);
-                        const input = document.getElementById(`input-${field}`);
-                        const saveBtn = document.getElementById(`save-${field}`);
-                        const valueElement = document.getElementById(`total-${field}`);
-
-                        editBtn.addEventListener('click', () => {
-                            input.value = parseFloat(valueElement.textContent.replace('$', '')) || 0;
-                            valueElement.style.display = 'none';
-                            editBtn.style.display = 'none';
-                            input.style.display = 'block';
-                            saveBtn.style.display = 'block';
-                        });
-
-                        saveBtn.addEventListener('click', async () => {
-                            const newValue = parseFloat(input.value);
-                            if (isNaN(newValue) || newValue < 0) {
-                                alert('Please enter a valid positive number');
-                                return;
-                            }
-
-                            try {
-                                await setDoc(doc(db, 'users', userId), {
-                                    [field === 'deposit' ? 'totalDeposit' : field]: newValue
-                                }, { merge: true });
-                                valueElement.textContent = `$${newValue.toFixed(2)}`;
-                                valueElement.style.display = 'block';
-                                editBtn.style.display = 'block';
-                                input.style.display = 'none';
-                                saveBtn.style.display = 'none';
-                            } catch (error) {
-                                console.error(`Error updating ${field}:`, error);
-                                alert(`Failed to update ${field}. Please try again.`);
-                            }
-                        });
-                    });
-                }
+                const userRef = ref(database, 'users/' + userId);
+                onValue(userRef, (snapshot) => {
+                    const data = snapshot.val() || {
+                        balance:     0,
+                        totalDeposit: 0,
+                        totalProfit: 0,
+                        totalBonus:  0,
+                        withdrawals: 0
+                    };
+                    document.getElementById('balance-value').textContent  = `$${data.balance.toFixed(2)}`;
+                    document.getElementById('total-deposit').textContent   = `$${data.totalDeposit.toFixed(2)}`;
+                    document.getElementById('total-profit').textContent    = `$${data.totalProfit.toFixed(2)}`;
+                    document.getElementById('total-bonus').textContent     = `$${data.totalBonus.toFixed(2)}`;
+                    document.getElementById('withdrawals').textContent     = `$${data.withdrawals.toFixed(2)}`;
+                });
             } else {
                 // No user, redirect to index.html
                 window.location.href = 'index.html';
@@ -725,18 +817,12 @@
             sidebar.classList.toggle('show');
         });
 
-        // Close sidebar when clicking outside on mobile
         document.addEventListener('click', (e) => {
             if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
                 sidebar.classList.remove('show');
             }
         });
         
-        const chatBubble = document.getElementById('chat-bubble');
-        chatBubble.addEventListener('click', () => {
-            alert('Chat feature coming soon!');
-        });
-
         // Optional: Update current price periodically
         async function updateCurrentPrice() {
             try {
@@ -749,6 +835,7 @@
                     document.getElementById('current-price').textContent = `EUR/USD: ${parseFloat(price).toFixed(5)}`;
                 } else {
                     document.getElementById('current-price').textContent = 'EUR/USD: N/A';
+                    console.warn('Unexpected API response structure or invalid API key:', data);
                 }
             } catch (error) {
                 console.error('Price update failed:', error);
