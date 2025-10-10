@@ -195,7 +195,6 @@
             z-index: 1000;
         }
 
-        /* Enhanced Auth Section */
         .auth-section {
             background: #111827;
             padding: 40px;
@@ -240,7 +239,6 @@
             background: #00e5e5;
         }
 
-        /* Popup styles */
         .popup {
             display: none;
             position: fixed;
@@ -476,7 +474,6 @@
                                     <th>Total Deposit</th>
                                     <th>Total Profit</th>
                                     <th>Total Bonus</th>
-                                    <th>Withdrawals</th>
                                     <th>Balance</th>
                                 </tr>
                             </thead>
@@ -501,7 +498,6 @@
                 </section>
             </div>
 
-            <!-- Login Popup -->
             <div id="login-popup" class="popup">
                 <div class="popup-content">
                     <span class="close-btn">&times;</span>
@@ -514,7 +510,6 @@
                 </div>
             </div>
 
-            <!-- Register Popup -->
             <div id="register-popup" class="popup">
                 <div class="popup-content">
                     <span class="close-btn">&times;</span>
@@ -531,12 +526,10 @@
     </div>
 
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
         import { getFirestore, collection, getDocs, doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
             authDomain: "investment-40343.firebaseapp.com",
@@ -547,12 +540,10 @@
             measurementId: "G-SXL6ZGL49W"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Popup Elements
         const loginPopup = document.getElementById('login-popup');
         const registerPopup = document.getElementById('register-popup');
         const loginBtn = document.getElementById('login-btn');
@@ -565,7 +556,6 @@
         const loginError = document.getElementById('login-error');
         const registerError = document.getElementById('register-error');
 
-        // Show/Hide Popups
         function showPopup(popup) {
             popup.style.display = 'flex';
         }
@@ -576,7 +566,6 @@
             popup.querySelector('.error-message').style.display = 'none';
         }
 
-        // Event Listeners for Buttons
         if (loginBtn) loginBtn.addEventListener('click', () => showPopup(loginPopup));
         if (registerBtn) registerBtn.addEventListener('click', () => showPopup(registerPopup));
         switchToRegister.addEventListener('click', () => {
@@ -594,7 +583,6 @@
             });
         });
 
-        // Firebase Authentication Handlers
         document.getElementById('login-submit').addEventListener('click', () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
@@ -622,44 +610,61 @@
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(userCredential.user, { displayName: name });
-                // Assume a Cloud Function sets isAdmin: true custom claim
-                // For now, set a Firestore document to indicate admin status (temporary workaround)
+                await setDoc(doc(db, 'users', userCredential.user.uid), {
+                    displayName: name,
+                    email: email,
+                    totalDeposit: 0,
+                    totalProfit: 0,
+                    totalBonus: 0,
+                    balance: 0,
+                    withdrawals: 0
+                });
                 await setDoc(doc(db, 'admins', userCredential.user.uid), { isAdmin: true });
                 hidePopup(registerPopup);
             } catch (error) {
+                console.error('Registration error:', error);
                 registerError.textContent = error.message;
                 registerError.style.display = 'block';
             }
         });
 
-        // Check auth state and restrict to admin
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Check for admin status in Firestore (temporary workaround until custom claims are implemented)
-                const adminDoc = await getDoc(doc(db, 'admins', user.uid));
-                const isAdmin = adminDoc.exists() && adminDoc.data().isAdmin;
+                try {
+                    const adminDocRef = doc(db, 'admins', user.uid);
+                    const adminDoc = await getDoc(adminDocRef);
+                    const isAdmin = adminDoc.exists() && adminDoc.data().isAdmin === true;
 
-                if (!isAdmin) {
-                    alert('Access restricted to admins only.');
-                    signOut(auth).then(() => {
+                    if (!isAdmin) {
+                        console.log(`User ${user.uid} is not an admin. Admin document exists: ${adminDoc.exists()}`);
+                        alert('Access restricted to admins only.');
+                        await signOut(auth);
                         authSection.style.display = 'block';
                         adminContent.style.display = 'none';
                         document.getElementById('sidebar').style.display = 'none';
                         document.querySelector('.hamburger').style.display = 'none';
                         showPopup(loginPopup);
-                    });
-                    return;
+                        return;
+                    }
+
+                    authSection.style.display = 'none';
+                    adminContent.style.display = 'block';
+                    document.getElementById('sidebar').style.display = 'block';
+                    document.querySelector('.hamburger').style.display = 'block';
+                    document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'Admin'}!`;
+
+                    await loadUsers();
+                    await loadDepositRequests();
+                } catch (error) {
+                    console.error('Error checking admin status:', error.code, error.message);
+                    alert(`Error verifying admin status: ${error.message}`);
+                    await signOut(auth);
+                    authSection.style.display = 'block';
+                    adminContent.style.display = 'none';
+                    document.getElementById('sidebar').style.display = 'none';
+                    document.querySelector('.hamburger').style.display = 'none';
+                    showPopup(loginPopup);
                 }
-
-                authSection.style.display = 'none';
-                adminContent.style.display = 'block';
-                document.getElementById('sidebar').style.display = 'block';
-                document.querySelector('.hamburger').style.display = 'block';
-                document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'Admin'}!`;
-
-                // Load users and deposit requests
-                await loadUsers();
-                await loadDepositRequests();
             } else {
                 authSection.style.display = 'block';
                 adminContent.style.display = 'none';
@@ -669,158 +674,160 @@
             }
         });
 
-        // Load all users
         async function loadUsers() {
             const userTableBody = document.getElementById('user-table-body');
             userTableBody.innerHTML = '';
-            const usersSnapshot = await getDocs(collection(db, 'users'));
-            usersSnapshot.forEach(doc => {
-                const userData = doc.data();
-                const userId = doc.id;
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${userData.displayName || 'N/A'}</td>
-                    <td>${userData.email || 'N/A'}</td>
-                    <td>
-                        <span class="editable-field" data-field="totalDeposit" data-user="${userId}">
-                            $${parseFloat(userData.totalDeposit || 0).toFixed(2)}
-                        </span>
-                        <input type="number" class="admin-input" id="input-deposit-${userId}" style="display: none;" value="${parseFloat(userData.totalDeposit || 0)}">
-                        <button class="admin-save-btn" id="save-deposit-${userId}" style="display: none;">Save</button>
-                    </td>
-                    <td>
-                        <span class="editable-field" data-field="totalProfit" data-user="${userId}">
-                            $${parseFloat(userData.totalProfit || 0).toFixed(2)}
-                        </span>
-                        <input type="number" class="admin-input" id="input-profit-${userId}" style="display: none;" value="${parseFloat(userData.totalProfit || 0)}">
-                        <button class="admin-save-btn" id="save-profit-${userId}" style="display: none;">Save</button>
-                    </td>
-                    <td>
-                        <span class="editable-field" data-field="totalBonus" data-user="${userId}">
-                            $${parseFloat(userData.totalBonus || 0).toFixed(2)}
-                        </span>
-                        <input type="number" class="admin-input" id="input-bonus-${userId}" style="display: none;" value="${parseFloat(userData.totalBonus || 0)}">
-                        <button class="admin-save-btn" id="save-bonus-${userId}" style="display: none;">Save</button>
-                    </td>
-                    <td>
-                        <span class="editable-field" data-field="withdrawals" data-user="${userId}">
-                            $${parseFloat(userData.withdrawals || 0).toFixed(2)}
-                        </span>
-                        <input type="number" class="admin-input" id="input-withdrawals-${userId}" style="display: none;" value="${parseFloat(userData.withdrawals || 0)}">
-                        <button class="admin-save-btn" id="save-withdrawals-${userId}" style="display: none;">Save</button>
-                    </td>
-                    <td>$${parseFloat(userData.balance || 0).toFixed(2)}</td>
-                `;
-                userTableBody.appendChild(row);
+            try {
+                const usersSnapshot = await getDocs(collection(db, 'users'));
+                usersSnapshot.forEach(doc => {
+                    const userData = doc.data();
+                    const userId = doc.id;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${userData.displayName || 'N/A'}</td>
+                        <td>${userData.email || 'N/A'}</td>
+                        <td>
+                            <span class="editable-field" data-field="totalDeposit" data-user="${userId}">
+                                $${parseFloat(userData.totalDeposit || 0).toFixed(2)}
+                            </span>
+                            <input type="number" class="admin-input" id="input-deposit-${userId}" style="display: none;" value="${parseFloat(userData.totalDeposit || 0)}">
+                            <button class="admin-save-btn" id="save-deposit-${userId}" style="display: none;">Save</button>
+                        </td>
+                        <td>
+                            <span class="editable-field" data-field="totalProfit" data-user="${userId}">
+                                $${parseFloat(userData.totalProfit || 0).toFixed(2)}
+                            </span>
+                            <input type="number" class="admin-input" id="input-profit-${userId}" style="display: none;" value="${parseFloat(userData.totalProfit || 0)}">
+                            <button class="admin-save-btn" id="save-profit-${userId}" style="display: none;">Save</button>
+                        </td>
+                        <td>
+                            <span class="editable-field" data-field="totalBonus" data-user="${userId}">
+                                $${parseFloat(userData.totalBonus || 0).toFixed(2)}
+                            </span>
+                            <input type="number" class="admin-input" id="input-bonus-${userId}" style="display: none;" value="${parseFloat(userData.totalBonus || 0)}">
+                            <button class="admin-save-btn" id="save-bonus-${userId}" style="display: none;">Save</button>
+                        </td>
+                        <td>
+                            <span class="editable-field" data-field="balance" data-user="${userId}">
+                                $${parseFloat(userData.balance || 0).toFixed(2)}
+                            </span>
+                            <input type="number" class="admin-input" id="input-balance-${userId}" style="display: none;" value="${parseFloat(userData.balance || 0)}">
+                            <button class="admin-save-btn" id="save-balance-${userId}" style="display: none;">Save</button>
+                        </td>
+                    `;
+                    userTableBody.appendChild(row);
 
-                // Add event listeners for editable fields
-                ['totalDeposit', 'totalProfit', 'totalBonus', 'withdrawals'].forEach(field => {
-                    const fieldElement = row.querySelector(`[data-field="${field}"][data-user="${userId}"]`);
-                    const input = document.getElementById(`input-${field}-${userId}`);
-                    const saveBtn = document.getElementById(`save-${field}-${userId}`);
+                    ['totalDeposit', 'totalProfit', 'totalBonus', 'balance'].forEach(field => {
+                        const fieldElement = row.querySelector(`[data-field="${field}"][data-user="${userId}"]`);
+                        const input = document.getElementById(`input-${field}-${userId}`);
+                        const saveBtn = document.getElementById(`save-${field}-${userId}`);
 
-                    fieldElement.addEventListener('click', () => {
-                        fieldElement.style.display = 'none';
-                        input.style.display = 'block';
-                        saveBtn.style.display = 'block';
-                    });
+                        fieldElement.addEventListener('click', () => {
+                            fieldElement.style.display = 'none';
+                            input.style.display = 'block';
+                            saveBtn.style.display = 'block';
+                        });
 
-                    saveBtn.addEventListener('click', async () => {
-                        const newValue = parseFloat(input.value);
-                        if (isNaN(newValue) || newValue < 0) {
-                            alert('Please enter a valid positive number');
-                            return;
-                        }
+                        saveBtn.addEventListener('click', async () => {
+                            const newValue = parseFloat(input.value);
+                            if (isNaN(newValue) || newValue < 0) {
+                                alert('Please enter a valid positive number');
+                                return;
+                            }
 
-                        try {
-                            const userRef = doc(db, 'users', userId);
-                            await setDoc(userRef, { [field]: newValue }, { merge: true });
-                            // Recalculate balance
-                            const userSnap = await getDoc(userRef);
-                            const userData = userSnap.data();
-                            const newBalance = (userData.totalDeposit || 0) + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.withdrawals || 0);
-                            await setDoc(userRef, { balance: newBalance }, { merge: true });
+                            try {
+                                const userRef = doc(db, 'users', userId);
+                                await setDoc(userRef, { [field]: newValue }, { merge: true });
+                                const userSnap = await getDoc(userRef);
+                                const userData = userSnap.data();
+                                const newWithdrawals = (userData.totalDeposit || 0) + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.balance || 0);
+                                await setDoc(userRef, { withdrawals: newWithdrawals }, { merge: true });
 
-                            fieldElement.textContent = `$${newValue.toFixed(2)}`;
-                            row.querySelector('td:last-child').textContent = `$${newBalance.toFixed(2)}`;
-                            fieldElement.style.display = 'block';
-                            input.style.display = 'none';
-                            saveBtn.style.display = 'none';
-                        } catch (error) {
-                            console.error(`Error updating ${field}:`, error);
-                            alert(`Failed to update ${field}. Please try again.`);
-                        }
+                                fieldElement.textContent = `$${newValue.toFixed(2)}`;
+                                fieldElement.style.display = 'block';
+                                input.style.display = 'none';
+                                saveBtn.style.display = 'none';
+                            } catch (error) {
+                                console.error(`Error updating ${field}:`, error);
+                                alert(`Failed to update ${field}: ${error.message}`);
+                            }
+                        });
                     });
                 });
-            });
+            } catch (error) {
+                console.error('Error loading users:', error);
+                alert(`Failed to load users: ${error.message}`);
+            }
         }
 
-        // Load deposit requests
         async function loadDepositRequests() {
             const requestTableBody = document.getElementById('request-table-body');
             requestTableBody.innerHTML = '';
-            const requestsSnapshot = await getDocs(collection(db, 'depositRequests'));
-            requestsSnapshot.forEach(doc => {
-                const requestData = doc.data();
-                const requestId = doc.id;
-                if (requestData.status === 'pending') {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${requestData.userEmail}</td>
-                        <td>$${parseFloat(requestData.amount).toFixed(2)}</td>
-                        <td>${requestData.status}</td>
-                        <td>
-                            <button class="action-btn approve-btn" data-request="${requestId}" data-user="${requestData.userId}" data-amount="${requestData.amount}">Approve</button>
-                            <button class="action-btn reject-btn" data-request="${requestId}">Reject</button>
-                        </td>
-                    `;
-                    requestTableBody.appendChild(row);
-                }
-            });
-
-            // Add event listeners for action buttons
-            document.querySelectorAll('.approve-btn').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const requestId = btn.getAttribute('data-request');
-                    const userId = btn.getAttribute('data-user');
-                    const amount = parseFloat(btn.getAttribute('data-amount'));
-
-                    try {
-                        const userRef = doc(db, 'users', userId);
-                        const userSnap = await getDoc(userRef);
-                        const userData = userSnap.exists() ? userSnap.data() : { totalDeposit: 0, totalProfit: 0, totalBonus: 0, withdrawals: 0 };
-                        const newDeposit = (userData.totalDeposit || 0) + amount;
-                        const newBalance = newDeposit + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.withdrawals || 0);
-
-                        await setDoc(userRef, {
-                            totalDeposit: newDeposit,
-                            balance: newBalance
-                        }, { merge: true });
-
-                        await updateDoc(doc(db, 'depositRequests', requestId), { status: 'approved' });
-                        loadDepositRequests(); // Refresh table
-                    } catch (error) {
-                        console.error('Error approving deposit:', error);
-                        alert('Failed to approve deposit. Please try again.');
+            try {
+                const requestsSnapshot = await getDocs(collection(db, 'depositRequests'));
+                requestsSnapshot.forEach(doc => {
+                    const requestData = doc.data();
+                    const requestId = doc.id;
+                    if (requestData.status === 'pending') {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${requestData.userEmail}</td>
+                            <td>$${parseFloat(requestData.amount).toFixed(2)}</td>
+                            <td>${requestData.status}</td>
+                            <td>
+                                <button class="action-btn approve-btn" data-request="${requestId}" data-user="${requestData.userId}" data-amount="${requestData.amount}">Approve</button>
+                                <button class="action-btn reject-btn" data-request="${requestId}">Reject</button>
+                            </td>
+                        `;
+                        requestTableBody.appendChild(row);
                     }
                 });
-            });
 
-            document.querySelectorAll('.reject-btn').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const requestId = btn.getAttribute('data-request');
-                    try {
-                        await updateDoc(doc(db, 'depositRequests', requestId), { status: 'rejected' });
-                        loadDepositRequests(); // Refresh table
-                    } catch (error) {
-                        console.error('Error rejecting deposit:', error);
-                        alert('Failed to reject deposit. Please try again.');
-                    }
+                document.querySelectorAll('.approve-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const requestId = btn.getAttribute('data-request');
+                        const userId = btn.getAttribute('data-user');
+                        const amount = parseFloat(btn.getAttribute('data-amount'));
+
+                        try {
+                            const userRef = doc(db, 'users', userId);
+                            const userSnap = await getDoc(userRef);
+                            const userData = userSnap.exists() ? userSnap.data() : { totalDeposit: 0, totalProfit: 0, totalBonus: 0, balance: 0, withdrawals: 0 };
+                            const newDeposit = (userData.totalDeposit || 0) + amount;
+                            const newBalance = newDeposit + (userData.totalProfit || 0) + (userData.totalBonus || 0) - (userData.withdrawals || 0);
+
+                            await setDoc(userRef, {
+                                totalDeposit: newDeposit,
+                                balance: newBalance
+                            }, { merge: true });
+
+                            await updateDoc(doc(db, 'depositRequests', requestId), { status: 'approved' });
+                            loadDepositRequests();
+                        } catch (error) {
+                            console.error('Error approving deposit:', error);
+                            alert(`Failed to approve deposit: ${error.message}`);
+                        }
+                    });
                 });
-            });
+
+                document.querySelectorAll('.reject-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const requestId = btn.getAttribute('data-request');
+                        try {
+                            await updateDoc(doc(db, 'depositRequests', requestId), { status: 'rejected' });
+                            loadDepositRequests();
+                        } catch (error) {
+                            console.error('Error rejecting deposit:', error);
+                            alert(`Failed to reject deposit: ${error.message}`);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading deposit requests:', error);
+                alert(`Failed to load deposit requests: ${error.message}`);
+            }
         }
 
-        // Logout functionality
         const logoutLink = document.getElementById('logout-link');
         logoutLink.addEventListener('click', (e) => {
             e.preventDefault();
@@ -831,12 +838,11 @@
                 document.querySelector('.hamburger').style.display = 'none';
                 showPopup(loginPopup);
             }).catch((error) => {
-                console.error('Logout failed:', error.message);
-                alert('Logout failed. Please try again.');
+                console.error('Logout failed:', error);
+                alert(`Logout failed: ${error.message}`);
             });
         });
 
-        // Sidebar toggle
         const sidebar = document.getElementById('sidebar');
         const hamburger = document.querySelector('.hamburger');
 
@@ -844,7 +850,6 @@
             sidebar.classList.toggle('show');
         });
 
-        // Close sidebar when clicking outside on mobile
         document.addEventListener('click', (e) => {
             if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
                 sidebar.classList.remove('show');

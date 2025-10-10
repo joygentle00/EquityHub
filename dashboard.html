@@ -5,365 +5,140 @@
     <title>User Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-
     <style>
-        /* Existing styles with improved spacing and comments */
-        * {
-            margin:  0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body {
             background: black;
-            color:     #fff;
-            display:   flex;
+            color: #fff;
+            display: flex;
             justify-content: center;
-            align-items:    center;
+            align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
         }
-
         .container {
-            display:   flex;
-            width:     100%;
+            display: flex;
+            width: 100%;
             max-width: 1200px;
-            height:    95vh; /* Reduced to leave some space at the bottom */
-            background:    #1e293b;
+            height: 95vh;
+            background: #1e293b;
             border-radius: 12px;
-            box-shadow:    0 0 20px rgba(0, 255, 255, 0.1);
-            position:      relative;
-            margin:        10px 0; /* Added margin for better spacing */
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            position: relative;
+            margin: 10px 0;
         }
-
         .sidebar {
-            width:          250px;
-            background:     #111827;
-            padding:        20px;
-            display:        flex;
+            width: 250px;
+            background: #111827;
+            padding: 20px;
+            display: flex;
             flex-direction: column;
-            transition:     transform 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out;
         }
-
-        .sidebar nav ul {
-            list-style-type: none;
-        }
-
+        .sidebar nav ul { list-style-type: none; }
         .sidebar nav ul li {
-            padding:          15px 10px;
-            border-radius:    8px;
-            margin-bottom:    10px;
-            cursor:           pointer;
-            transition:       background-color 0.3s ease-in-out;
+            padding: 15px 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
         }
-
         .sidebar nav ul li.active a,
         .sidebar nav ul li:hover a {
             background-color: #00ffff;
             padding: 18px;
             border-radius: 15px;
-            color:            #000;
-            text-decoration:  none; /* Remove underline from active/hover state */
+            color: #000;
+            text-decoration: none;
         }
-
         .sidebar nav ul li a {
-            display:          flex;
-            align-items:      center;
-            color:            inherit; /* Inherit text color */
-            text-decoration:  none; /* Remove default underline */
-            width:            100%; /* Ensure full width for click area */
-        }
-
-        .sidebar nav ul li .icon {
-            margin-right: 10px;
-            font-size:    18px;
-        }
-
-        .main-content {
-            flex-grow:   1;
-            padding:     30px 40px; /* Increased padding for better spacing */
-            overflow-y:  auto;
-            position:    relative;
-        }
-
-        .welcome {
-            font-size:    24px;
-            margin-bottom: 30px; /* Increased margin for better separation */
-        }
-
-        .balance-section {
-            background:    #0c1018;
-            padding:       20px;
-            border-radius: 12px;
-            box-shadow:    inset 0 0 20px rgba(0, 255, 255, 0.05);
-        }
-
-        .balance-card {
-            text-align: center;
-        }
-
-        .balance-header {
-            font-size:      14px;
-            color:          #00ffff;
-            margin-bottom:  10px;
-            letter-spacing: 1px;
-            font-weight:    600;
-        }
-
-        .balance-value {
-            font-size:    36px;
-            font-weight:  bold;
-            margin-bottom: 10px;
-        }
-
-        .balance-growth {
-            font-size:    14px;
-            margin-bottom: 20px;
-        }
-
-        .balance-growth .up {
-            color:        #00ff00;
-            font-weight:  600;
-        }
-
-        .balance-growth .green {
-            color:        #00ff00;
-            font-weight:  600;
-        }
-
-        .balance-details {
-            display:          flex;
-            flex-wrap:        wrap;
-            gap:              30px; /* Increased gap for better separation */
-            justify-content:  space-between; /* Distribute space evenly */
-            margin-top:       20px; /* Added margin to separate from header */
-        }
-
-        .balance-chart {
-            flex:             1 1 45%; /* Adjusted to take about half the width */
-            min-width:        300px;
-            height:           300px; /* Increased height for better visibility */
-            background:       #111827;
-            border-radius:    12px;
-            box-shadow:       inset 0 0 20px rgba(0, 255, 255, 0.05);
-            display:          flex;
-            justify-content:  center;
-            align-items:      center;
-        }
-
-        .chart-box {
-            position:      relative;
-            width:         100%;
-            height:        100%; /* Full height of parent */
-            background:    linear-gradient(to bottom, #0c1018, #111827);
-            border-radius: 12px;
-            overflow:      hidden;
-            box-shadow:    inset 0 0 20px rgba(0, 255, 255, 0.05);
-        }
-
-        .balance-info-grid {
-            flex:       1 1 50%; /* Adjusted to take slightly more space */
-            min-width:  350px; /* Increased min-width for better card spacing */
-            display:    grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap:        20px;
-        }
-
-        .info-card {
-            background:    #111827;
-            padding:       15px;
-            border-radius: 12px;
-            text-align:    center;
-            box-shadow:    inset 0 0 20px rgba(0, 255, 255, 0.05);
-            position:      relative;
-        }
-
-        .info-card.light-black {
-            background: #1e293b;
-        }
-
-        .info-value {
-            font-size:    24px;
-            font-weight:  bold;
-            margin-bottom: 5px;
-        }
-
-        .info-label {
-            font-size:      12px;
-            color:          #00ffff;
-            margin-bottom:  10px;
-            letter-spacing: 1px;
-            font-weight:    600;
-        }
-
-        .info-icon {
-            position:  absolute;
-            top:       10px;
-            right:     10px;
-            font-size: 20px;
-            color:     #00ffff;
-        }
-
-        .chat-bubble {
-            position:      fixed;
-            bottom:        40px; /* Increased to avoid overlap */
-            right:         40px; /* Increased to avoid overlap */
-            background:    #00ffff;
-            color:         #000;
-            padding:       12px 20px;
-            border-radius: 30px;
-            box-shadow:    0 0 12px rgba(0, 255, 255, 0.3);
-            display:       flex;
-            align-items:   center;
-            cursor:        pointer;
-            transition:    background-color 0.3s ease-in-out;
-            z-index:       1000; /* Ensure it stays above other content */
-        }
-
-        .chat-bubble:hover {
-            background: #00e5e5;
-        }
-
-        .chat-bubble .bubble-text {
-            margin-right: 10px;
-            font-weight:  600;
-        }
-
-        .chat-bubble .bubble-icon {
-            font-size: 18px;
-        }
-
-        .chat-bubble .bubble-status {
-            width:      10px;
-            height:     10px;
-            background: #00ff00;
-            border-radius: 50%;
-            margin-left: 10px;
-            animation:  pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1);   opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1);   opacity: 1; }
-        }
-
-        .hamburger {
-            display:   none;
-            position:  absolute;
-            top:       20px;
-            left:      20px;
-            background: none;
-            border:    none;
-            color:     #00ffff;
-            font-size: 24px;
-            cursor:    pointer;
-            z-index:   1000;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                position:  fixed;
-                top:       0;
-                left:      0;
-                height:    100%;
-                transform: translateX(-100%);
-                z-index:   999;
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .hamburger {
-                display: block;
-            }
-
-            .main-content {
-                padding: 20px;
-            }
-
-            .balance-details {
-                flex-direction: column; /* Stack vertically on mobile */
-            }
-
-            .balance-info-grid {
-                flex: 1 1 100%; /* Full width on mobile */
-                order: 1; /* Place balance info grid above chart */
-            }
-
-            .balance-chart {
-                flex: 1 1 100%; /* Full width on mobile */
-                order: 2; /* Place chart below balance info grid */
-                height: 50vh; /* Adjusted for mobile */
-            }
-        }
-
-        .tradingview-widget-container {
-            width:  100% !important;
-            height: 100% !important;
-        }
-
-        .current-price {
-            position:      absolute;
-            top:           10px;
-            right:         10px;
-            background:    rgba(0, 0, 0, 0.7);
-            color:         #00ff88;
-            padding:       5px 10px;
-            border-radius: 4px;
-            font-size:     14px;
-            z-index:       10;
-            pointer-events: none;
-        }
-
-        .time-line {
-            position:      absolute;
-            bottom:        0;
-            left:          0;
-            width:         100%;
-            height:        20px;
-            background:    linear-gradient(to right, #333, #555);
-            z-index:       5;
-            pointer-events: none;
-        }
-
-        /* Added styles for market widgets */
-        .market-widgets-row {
             display: flex;
-            gap: 32px;
-            margin-top: 40px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
+            align-items: center;
+            color: inherit;
+            text-decoration: none;
+            width: 100%;
+        }
+        .sidebar nav ul li .icon { margin-right: 10px; font-size: 18px; }
+        .main-content {
+            flex-grow: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+        .welcome { font-size: 24px; margin-bottom: 30px; }
+        .balance-section {
+            background: #0c1018;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+        }
+        .balance-card { text-align: center; }
+        .balance-header { font-size: 14px; color: #00ffff; margin-bottom: 10px; letter-spacing: 1px; font-weight: 600; }
+        .balance-value { font-size: 36px; font-weight: bold; margin-bottom: 10px; }
+        .balance-growth { font-size: 14px; margin-bottom: 20px; }
+        .balance-growth .up, .balance-growth .green { color: #00ff00; font-weight: 600; }
+        .balance-details {
+            display: flex; flex-wrap: wrap; gap: 30px; justify-content: space-between; margin-top: 20px;
+        }
+        .balance-chart {
+            flex: 1 1 45%; min-width: 300px; height: 300px; background: #111827; border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05); display: flex; justify-content: center; align-items: center;
+        }
+        .chart-box {
+            position: relative; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, #0c1018, #111827);
+            border-radius: 12px; overflow: hidden; box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05);
+        }
+        .balance-info-grid {
+            flex: 1 1 50%; min-width: 350px; display: grid;
+            grid-template-columns: repeat(2, 1fr); gap: 20px;
+        }
+        .info-card {
+            background: #111827; padding: 15px; border-radius: 12px;
+            text-align: center; box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05); position: relative;
+        }
+        .info-card.light-black { background: #1e293b; }
+        .info-value { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+        .info-label { font-size: 12px; color: #00ffff; margin-bottom: 10px; letter-spacing: 1px; font-weight: 600; }
+        .info-icon { position: absolute; top: 10px; right: 10px; font-size: 20px; color: #00ffff; }
+        .chat-bubble {
+            position: fixed; bottom: 40px; right: 40px; background: #00ffff; color: #000;
+            padding: 12px 20px; border-radius: 30px; box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+            display: flex; align-items: center; cursor: pointer; transition: background-color 0.3s ease-in-out; z-index: 1000;
+        }
+        .chat-bubble:hover { background: #00e5e5; }
+        .chat-bubble .bubble-text { margin-right: 10px; font-weight: 600; }
+        .chat-bubble .bubble-icon { font-size: 18px; }
+        .chat-bubble .bubble-status {
+            width: 10px; height: 10px; background: #00ff00; border-radius: 50%;
+            margin-left: 10px; animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .hamburger {
+            display: none; position: absolute; top: 20px; left: 20px; background: none;
+            border: none; color: #00ffff; font-size: 24px; cursor: pointer; z-index: 1000;
+        }
+        .market-widgets-row {
+            display: flex; gap: 32px; margin-top: 40px; margin-bottom: 40px; flex-wrap: wrap;
         }
         .market-widget {
-            background: #111827;
-            border-radius: 12px;
-            box-shadow: 0 0 12px rgba(0,255,255,0.05);
-            padding: 22px 24px;
-            min-width: 340px;
-            flex: 1 1 420px;
-            max-width: 50%;
+            background: #111827; border-radius: 12px; box-shadow: 0 0 12px rgba(0,255,255,0.05);
+            padding: 22px 24px; min-width: 340px; flex: 1 1 420px; max-width: 50%;
         }
-        .market-widget-title {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #fff;
+        .market-widget-title { font-size: 22px; font-weight: 600; margin-bottom: 20px; color: #fff; }
+        .tradingview-widget-container { width: 100% !important; height: 100% !important; }
+        .current-price {
+            position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.7);
+            color: #00ff88; padding: 5px 10px; border-radius: 4px; font-size: 14px; z-index: 10; pointer-events: none;
         }
-        /* Responsive: stack market widgets vertically on mobile */
-        @media (max-width: 900px) {
-            .market-widgets-row {
-                flex-direction: column;
-                gap: 20px;
-            }
-            .market-widget {
-                max-width: 100%;
-            }
+        .time-line {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 20px;
+            background: linear-gradient(to right, #333, #555); z-index: 5; pointer-events: none;
         }
-
-        /* Admin edit styles */
         .admin-edit-btn {
             cursor: pointer;
             color: #00ffff;
@@ -371,9 +146,7 @@
             margin-top: 5px;
             display: none;
         }
-        .admin-edit-btn:hover {
-            text-decoration: underline;
-        }
+        .admin-edit-btn:hover { text-decoration: underline; }
         .admin-input {
             width: 100%;
             padding: 5px;
@@ -392,17 +165,88 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .admin-save-btn:hover {
-            background: #00e5e5;
+        .admin-save-btn:hover { background: #00e5e5; }
+
+        /* Responsive tweaks */
+        @media (max-width: 900px) {
+            .market-widgets-row { flex-direction: column; gap: 20px; }
+            .market-widget { max-width: 100%; }
+        }
+        @media (max-width: 768px) {
+            .container { flex-direction: column; height: auto; }
+            .sidebar {
+                position: fixed; top: 0; left: 0; height: 100%;
+                transform: translateX(-100%);
+                z-index: 999;
+            }
+            .sidebar.show { transform: translateX(0); }
+            .hamburger { display: block; }
+            .main-content { padding: 20px; }
+            .balance-details { flex-direction: column; }
+            .balance-info-grid {
+                flex: 1 1 100%;
+                order: 1;
+                grid-template-columns: 1fr;
+                gap: 16px;
+                min-width: unset;
+            }
+            .balance-chart {
+                flex: 1 1 100%;
+                order: 2;
+                height: 250px;
+                min-width: unset;
+            }
+            .market-widget { padding: 16px; }
+            .welcome { font-size: 20px; }
+        }
+        @media (max-width: 500px) {
+            .main-content { padding: 10px; }
+            .balance-section { padding: 10px; }
+            .market-widget-title { font-size: 18px; }
+            .market-widget { padding: 10px; }
+            .info-value { font-size: 18px; }
+            .balance-value { font-size: 24px; }
+        }
+        /* Message overlay */
+        #restricted-message {
+            position: fixed;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(12,16,24,0.98);
+            z-index: 2500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #restricted-message .message-box {
+            background: #111827;
+            border-radius: 14px;
+            box-shadow: 0 0 16px rgba(0,255,255,0.15);
+            padding: 32px 24px;
+            text-align: center;
+            max-width: 320px;
+        }
+        #restricted-message h1 {
+            color: #00ffff;
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+        #restricted-message p {
+            color: #fff;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="restricted-message" style="display:none;">
+        <div class="message-box">
+            <h1>Access Restricted</h1>
+            <p>Access restricted to admins only.</p>
+        </div>
+    </div>
+    <div class="container" id="main-container">
         <button class="hamburger" aria-label="Toggle Sidebar">
             <i class="fa-solid fa-bars"></i>
         </button>
-
         <div class="sidebar" id="sidebar">
             <nav>
                 <ul>
@@ -412,52 +256,16 @@
                             <span class="text">Home</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="investment.html">
-                            <span class="icon"><i class="fa-solid fa-boxes-stacked"></i></span>
-                            <span class="text">Packages</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="deposit.html">
-                            <span class="icon"><i class="fa-regular fa-credit-card"></i></span>
-                            <span class="text">Deposit</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="withdraw.html">
-                            <span class="icon"><i class="fa-regular fa-briefcase"></i></span>
-                            <span class="text">Withdraw</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="transactions.html">
-                            <span class="icon"><i class="fa-regular fa-file-lines"></i></span>
-                            <span class="text">Transactions</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="referrals.html">
-                            <span class="icon"><i class="fa-regular fa-user-plus"></i></span>
-                            <span class="text">Referrals</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="profile.html">
-                            <span class="icon"><i class="fa-regular fa-address-card"></i></span>
-                            <span class="text">Profile</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="logout.html" id="logout-link">
-                            <span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span>
-                            <span class="text">Logout</span>
-                        </a>
-                    </li>
+                    <li><a href="investment.html"><span class="icon"><i class="fa-solid fa-boxes-stacked"></i></span><span class="text">Packages</span></a></li>
+                    <li><a href="deposit.html"><span class="icon"><i class="fa-regular fa-credit-card"></i></span><span class="text">Deposit</span></a></li>
+                    <li><a href="withdraw.html"><span class="icon"><i class="fa-regular fa-briefcase"></i></span><span class="text">Withdraw</span></a></li>
+                    <li><a href="transactions.html"><span class="icon"><i class="fa-regular fa-file-lines"></i></span><span class="text">Transactions</span></a></li>
+                    <li><a href="referrals.html"><span class="icon"><i class="fa-regular fa-user-plus"></i></span><span class="text">Referrals</span></a></li>
+                    <li><a href="profile.html"><span class="icon"><i class="fa-regular fa-address-card"></i></span><span class="text">Profile</span></a></li>
+                    <li><a href="logout.html" id="logout-link"><span class="icon"><i class="fa-solid fa-right-from-bracket"></i></span><span class="text">Logout</span></a></li>
                 </ul>
             </nav>
         </div>
-
         <main class="main-content">
             <h1 class="welcome" id="welcome-message">Welcome, User!</h1>
             <section class="balance-section">
@@ -541,10 +349,8 @@
                     </div>
                 </div>
             </section>
-            
             <!-- Market Widgets Row -->
             <div class="market-widgets-row">
-                <!-- Market Overview Widget -->
                 <div class="market-widget" id="market-overview-widget">
                     <div class="market-widget-title">Market Overview</div>
                     <div class="tradingview-widget-container">
@@ -575,7 +381,6 @@
                         <script src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async></script>
                     </div>
                 </div>
-                <!-- Market News Widget -->
                 <div class="market-widget" id="market-news-widget">
                     <div class="market-widget-title">Market News</div>
                     <div class="tradingview-widget-container">
@@ -596,8 +401,6 @@
                     </div>
                 </div>
             </div>
-            <!-- End Market Widgets Row -->
-
             <div class="chat-bubble" id="chat-bubble">
                 <span class="bubble-text">Chat</span>
                 <span class="bubble-icon"><i class="fa-regular fa-comment"></i></span>
@@ -605,14 +408,11 @@
             </div>
         </main>
     </div>
-    
     <script type="module">
-        // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
         import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
             authDomain: "investment-40343.firebaseapp.com",
@@ -623,15 +423,22 @@
             measurementId: "G-SXL6ZGL49W"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Check auth state and fetch user data
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Update welcome message with user's displayName
+                // Replace with your actual admin check
+                const isAdmin = user.email === 'admin@equityhub.org';
+                if (!isAdmin) {
+                    document.getElementById('restricted-message').style.display = 'flex';
+                    document.getElementById('main-container').style.display = 'none';
+                    return;
+                }
+                document.getElementById('restricted-message').style.display = 'none';
+                document.getElementById('main-container').style.display = 'flex';
+
                 document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'User'}!`;
 
                 // Fetch user data from Firestore
@@ -646,61 +453,59 @@
                     withdrawals: 0
                 };
 
-                // Update UI with user data
                 document.getElementById('balance-value').textContent = `$${parseFloat(data.balance || 0).toFixed(2)}`;
                 document.getElementById('total-deposit').textContent = `$${parseFloat(data.totalDeposit || 0).toFixed(2)}`;
                 document.getElementById('total-profit').textContent = `$${parseFloat(data.totalProfit || 0).toFixed(2)}`;
                 document.getElementById('total-bonus').textContent = `$${parseFloat(data.totalBonus || 0).toFixed(2)}`;
                 document.getElementById('withdrawals').textContent = `$${parseFloat(data.withdrawals || 0).toFixed(2)}`;
 
-                // Check if user is admin (example: based on email or custom claim)
-                const isAdmin = user.email === 'admin@equityhub.org'; // Replace with actual admin check
-                if (isAdmin) {
-                    document.querySelectorAll('.admin-edit-btn').forEach(btn => {
-                        btn.style.display = 'block';
+                document.querySelectorAll('.admin-edit-btn').forEach(btn => {
+                    btn.style.display = 'block';
+                });
+
+                // Edit functionality for admin
+                const fields = [
+                    { field: 'deposit', label: 'totalDeposit' },
+                    { field: 'profit', label: 'totalProfit' },
+                    { field: 'bonus', label: 'totalBonus' },
+                    { field: 'withdrawals', label: 'withdrawals' }
+                ];
+                fields.forEach(({ field, label }) => {
+                    const editBtn = document.getElementById(`edit-${field}`);
+                    const input = document.getElementById(`input-${field}`);
+                    const saveBtn = document.getElementById(`save-${field}`);
+                    const valueElement = document.getElementById(`total-${field}`);
+
+                    editBtn.addEventListener('click', () => {
+                        input.value = parseFloat(valueElement.textContent.replace('$', '')) || 0;
+                        valueElement.style.display = 'none';
+                        editBtn.style.display = 'none';
+                        input.style.display = 'block';
+                        saveBtn.style.display = 'block';
                     });
 
-                    // Add edit functionality for each field
-                    const fields = ['deposit', 'profit', 'bonus', 'withdrawals'];
-                    fields.forEach(field => {
-                        const editBtn = document.getElementById(`edit-${field}`);
-                        const input = document.getElementById(`input-${field}`);
-                        const saveBtn = document.getElementById(`save-${field}`);
-                        const valueElement = document.getElementById(`total-${field}`);
-
-                        editBtn.addEventListener('click', () => {
-                            input.value = parseFloat(valueElement.textContent.replace('$', '')) || 0;
-                            valueElement.style.display = 'none';
-                            editBtn.style.display = 'none';
-                            input.style.display = 'block';
-                            saveBtn.style.display = 'block';
-                        });
-
-                        saveBtn.addEventListener('click', async () => {
-                            const newValue = parseFloat(input.value);
-                            if (isNaN(newValue) || newValue < 0) {
-                                alert('Please enter a valid positive number');
-                                return;
-                            }
-
-                            try {
-                                await setDoc(doc(db, 'users', userId), {
-                                    [field === 'deposit' ? 'totalDeposit' : field]: newValue
-                                }, { merge: true });
-                                valueElement.textContent = `$${newValue.toFixed(2)}`;
-                                valueElement.style.display = 'block';
-                                editBtn.style.display = 'block';
-                                input.style.display = 'none';
-                                saveBtn.style.display = 'none';
-                            } catch (error) {
-                                console.error(`Error updating ${field}:`, error);
-                                alert(`Failed to update ${field}. Please try again.`);
-                            }
-                        });
+                    saveBtn.addEventListener('click', async () => {
+                        const newValue = parseFloat(input.value);
+                        if (isNaN(newValue) || newValue < 0) {
+                            alert('Please enter a valid positive number');
+                            return;
+                        }
+                        try {
+                            await setDoc(doc(db, 'users', userId), {
+                                [label]: newValue
+                            }, { merge: true });
+                            valueElement.textContent = `$${newValue.toFixed(2)}`;
+                            valueElement.style.display = 'block';
+                            editBtn.style.display = 'block';
+                            input.style.display = 'none';
+                            saveBtn.style.display = 'none';
+                        } catch (error) {
+                            console.error(`Error updating ${field}:`, error);
+                            alert(`Failed to update ${field}. Please try again.`);
+                        }
                     });
-                }
+                });
             } else {
-                // No user, redirect to index.html
                 window.location.href = 'index.html';
             }
         });
@@ -720,18 +525,15 @@
         // Sidebar toggle
         const sidebar = document.getElementById('sidebar');
         const hamburger = document.querySelector('.hamburger');
-
         hamburger.addEventListener('click', () => {
             sidebar.classList.toggle('show');
         });
-
-        // Close sidebar when clicking outside on mobile
         document.addEventListener('click', (e) => {
             if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
                 sidebar.classList.remove('show');
             }
         });
-        
+
         const chatBubble = document.getElementById('chat-bubble');
         chatBubble.addEventListener('click', () => {
             alert('Chat feature coming soon!');
@@ -755,7 +557,6 @@
                 document.getElementById('current-price').textContent = 'EUR/USD: Error';
             }
         }
-
         setInterval(updateCurrentPrice, 10000);
         updateCurrentPrice();
     </script>
