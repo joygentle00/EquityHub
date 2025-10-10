@@ -139,35 +139,6 @@
             position: absolute; bottom: 0; left: 0; width: 100%; height: 20px;
             background: linear-gradient(to right, #333, #555); z-index: 5; pointer-events: none;
         }
-        .admin-edit-btn {
-            cursor: pointer;
-            color: #00ffff;
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-        .admin-edit-btn:hover { text-decoration: underline; }
-        .admin-input {
-            width: 100%;
-            padding: 5px;
-            border: 1px solid #00ffff;
-            border-radius: 4px;
-            background: #111827;
-            color: #fff;
-            font-size: 16px;
-        }
-        .admin-save-btn {
-            margin-top: 10px;
-            padding: 5px 10px;
-            background: #00ffff;
-            color: #000;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .admin-save-btn:hover { background: #00e5e5; }
-
-        /* Responsive tweaks */
         @media (max-width: 900px) {
             .market-widgets-row { flex-direction: column; gap: 20px; }
             .market-widget { max-width: 100%; }
@@ -207,42 +178,9 @@
             .info-value { font-size: 18px; }
             .balance-value { font-size: 24px; }
         }
-        /* Message overlay */
-        #restricted-message {
-            position: fixed;
-            left: 0; top: 0; width: 100vw; height: 100vh;
-            background: rgba(12,16,24,0.98);
-            z-index: 2500;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #restricted-message .message-box {
-            background: #111827;
-            border-radius: 14px;
-            box-shadow: 0 0 16px rgba(0,255,255,0.15);
-            padding: 32px 24px;
-            text-align: center;
-            max-width: 320px;
-        }
-        #restricted-message h1 {
-            color: #00ffff;
-            font-size: 22px;
-            margin-bottom: 18px;
-        }
-        #restricted-message p {
-            color: #fff;
-            font-size: 16px;
-        }
     </style>
 </head>
 <body>
-    <div id="restricted-message" style="display:none;">
-        <div class="message-box">
-            <h1>Access Restricted</h1>
-            <p>Access restricted to admins only.</p>
-        </div>
-    </div>
     <div class="container" id="main-container">
         <button class="hamburger" aria-label="Toggle Sidebar">
             <i class="fa-solid fa-bars"></i>
@@ -279,33 +217,21 @@
                                 <div class="info-value" id="total-deposit">$0.00</div>
                                 <div class="info-label">TOTAL DEPOSIT</div>
                                 <div class="info-icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                                <div class="admin-edit-btn" id="edit-deposit">Edit</div>
-                                <input type="number" class="admin-input" id="input-deposit" style="display: none;">
-                                <button class="admin-save-btn" id="save-deposit" style="display: none;">Save</button>
                             </div>
                             <div class="info-card light-black">
                                 <div class="info-value" id="total-profit">$0.00</div>
                                 <div class="info-label">TOTAL PROFIT</div>
                                 <div class="info-icon"><i class="fa-solid fa-seedling"></i></div>
-                                <div class="admin-edit-btn" id="edit-profit">Edit</div>
-                                <input type="number" class="admin-input" id="input-profit" style="display: none;">
-                                <button class="admin-save-btn" id="save-profit" style="display: none;">Save</button>
                             </div>
                             <div class="info-card light-black">
                                 <div class="info-value" id="total-bonus">$0.00</div>
                                 <div class="info-label">TOTAL BONUS</div>
                                 <div class="info-icon"><i class="fa-solid fa-gift"></i></div>
-                                <div class="admin-edit-btn" id="edit-bonus">Edit</div>
-                                <input type="number" class="admin-input" id="input-bonus" style="display: none;">
-                                <button class="admin-save-btn" id="save-bonus" style="display: none;">Save</button>
                             </div>
                             <div class="info-card light-black">
                                 <div class="info-value" id="withdrawals">$0.00</div>
                                 <div class="info-label">WITHDRAWALS</div>
                                 <div class="info-icon"><i class="fa-solid fa-coins"></i></div>
-                                <div class="admin-edit-btn" id="edit-withdrawals">Edit</div>
-                                <input type="number" class="admin-input" id="input-withdrawals" style="display: none;">
-                                <button class="admin-save-btn" id="save-withdrawals" style="display: none;">Save</button>
                             </div>
                         </div>
                         <div class="balance-chart">
@@ -349,7 +275,6 @@
                     </div>
                 </div>
             </section>
-            <!-- Market Widgets Row -->
             <div class="market-widgets-row">
                 <div class="market-widget" id="market-overview-widget">
                     <div class="market-widget-title">Market Overview</div>
@@ -411,7 +336,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
         import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
-        import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyDnEbph9IMZuJ3REbfTsocV-g7APCrE-1w",
@@ -429,82 +354,50 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Replace with your actual admin check
-                const isAdmin = user.email === 'admin@equityhub.org';
-                if (!isAdmin) {
-                    document.getElementById('restricted-message').style.display = 'flex';
-                    document.getElementById('main-container').style.display = 'none';
-                    return;
-                }
-                document.getElementById('restricted-message').style.display = 'none';
+                // Show the dashboard for all authenticated users
                 document.getElementById('main-container').style.display = 'flex';
-
                 document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'User'}!`;
 
                 // Fetch user data from Firestore
                 const userId = user.uid;
                 const userRef = doc(db, 'users', userId);
-                const userSnap = await getDoc(userRef);
-                const data = userSnap.exists() ? userSnap.data() : {
-                    balance: 0,
-                    totalDeposit: 0,
-                    totalProfit: 0,
-                    totalBonus: 0,
-                    withdrawals: 0
-                };
+                try {
+                    const userSnap = await getDoc(userRef);
+                    const data = userSnap.exists() ? userSnap.data() : {
+                        balance: 0,
+                        totalDeposit: 0,
+                        totalProfit: 0,
+                        totalBonus: 0,
+                        withdrawals: 0
+                    };
 
-                document.getElementById('balance-value').textContent = `$${parseFloat(data.balance || 0).toFixed(2)}`;
-                document.getElementById('total-deposit').textContent = `$${parseFloat(data.totalDeposit || 0).toFixed(2)}`;
-                document.getElementById('total-profit').textContent = `$${parseFloat(data.totalProfit || 0).toFixed(2)}`;
-                document.getElementById('total-bonus').textContent = `$${parseFloat(data.totalBonus || 0).toFixed(2)}`;
-                document.getElementById('withdrawals').textContent = `$${parseFloat(data.withdrawals || 0).toFixed(2)}`;
+                    document.getElementById('balance-value').textContent = `$${parseFloat(data.balance || 0).toFixed(2)}`;
+                    document.getElementById('total-deposit').textContent = `$${parseFloat(data.totalDeposit || 0).toFixed(2)}`;
+                    document.getElementById('total-profit').textContent = `$${parseFloat(data.totalProfit || 0).toFixed(2)}`;
+                    document.getElementById('total-bonus').textContent = `$${parseFloat(data.totalBonus || 0).toFixed(2)}`;
+                    document.getElementById('withdrawals').textContent = `$${parseFloat(data.withdrawals || 0).toFixed(2)}`;
 
-                document.querySelectorAll('.admin-edit-btn').forEach(btn => {
-                    btn.style.display = 'block';
-                });
-
-                // Edit functionality for admin
-                const fields = [
-                    { field: 'deposit', label: 'totalDeposit' },
-                    { field: 'profit', label: 'totalProfit' },
-                    { field: 'bonus', label: 'totalBonus' },
-                    { field: 'withdrawals', label: 'withdrawals' }
-                ];
-                fields.forEach(({ field, label }) => {
-                    const editBtn = document.getElementById(`edit-${field}`);
-                    const input = document.getElementById(`input-${field}`);
-                    const saveBtn = document.getElementById(`save-${field}`);
-                    const valueElement = document.getElementById(`total-${field}`);
-
-                    editBtn.addEventListener('click', () => {
-                        input.value = parseFloat(valueElement.textContent.replace('$', '')) || 0;
-                        valueElement.style.display = 'none';
-                        editBtn.style.display = 'none';
-                        input.style.display = 'block';
-                        saveBtn.style.display = 'block';
-                    });
-
-                    saveBtn.addEventListener('click', async () => {
-                        const newValue = parseFloat(input.value);
-                        if (isNaN(newValue) || newValue < 0) {
-                            alert('Please enter a valid positive number');
-                            return;
-                        }
-                        try {
-                            await setDoc(doc(db, 'users', userId), {
-                                [label]: newValue
-                            }, { merge: true });
-                            valueElement.textContent = `$${newValue.toFixed(2)}`;
-                            valueElement.style.display = 'block';
-                            editBtn.style.display = 'block';
-                            input.style.display = 'none';
-                            saveBtn.style.display = 'none';
-                        } catch (error) {
-                            console.error(`Error updating ${field}:`, error);
-                            alert(`Failed to update ${field}. Please try again.`);
-                        }
-                    });
-                });
+                    // Check if user is admin and add Admin Dashboard link
+                    const adminDocRef = doc(db, 'admins', user.uid);
+                    const adminDoc = await getDoc(adminDocRef);
+                    const isAdmin = adminDoc.exists() && adminDoc.data().isAdmin === true;
+                    if (isAdmin) {
+                        console.log(`User ${user.uid} is an admin.`);
+                        const adminDashboardLink = document.createElement('li');
+                        adminDashboardLink.innerHTML = `
+                            <a href="admin.html">
+                                <span class="icon"><i class="fa-solid fa-user-shield"></i></span>
+                                <span class="text">Admin Dashboard</span>
+                            </a>
+                        `;
+                        document.querySelector('.sidebar nav ul').prepend(adminDashboardLink);
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error.code, error.message);
+                    alert(`Error loading dashboard: ${error.message}`);
+                    await signOut(auth);
+                    window.location.href = 'index.html';
+                }
             } else {
                 window.location.href = 'index.html';
             }
@@ -539,7 +432,7 @@
             alert('Chat feature coming soon!');
         });
 
-        // Optional: Update current price periodically
+        // Update current price periodically
         async function updateCurrentPrice() {
             try {
                 const response = await fetch(
