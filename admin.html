@@ -566,8 +566,8 @@
             popup.querySelector('.error-message').style.display = 'none';
         }
 
-        if (loginBtn) loginBtn.addEventListener('click', () => showPopup(loginPopup));
-        if (registerBtn) registerBtn.addEventListener('click', () => showPopup(registerPopup));
+        loginBtn.addEventListener('click', () => showPopup(loginPopup));
+        registerBtn.addEventListener('click', () => showPopup(registerPopup));
         switchToRegister.addEventListener('click', () => {
             hidePopup(loginPopup);
             showPopup(registerPopup);
@@ -619,7 +619,7 @@
                     balance: 0,
                     withdrawals: 0
                 });
-                await setDoc(doc(db, 'admins', userCredential.user.uid), { isAdmin: true });
+                await setDoc(doc(db, 'admins', userCredential.user.uid), { isAdmin: true }, { merge: true });
                 hidePopup(registerPopup);
             } catch (error) {
                 console.error('Registration error:', error);
@@ -630,41 +630,14 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                try {
-                    const adminDocRef = doc(db, 'admins', user.uid);
-                    const adminDoc = await getDoc(adminDocRef);
-                    const isAdmin = adminDoc.exists() && adminDoc.data().isAdmin === true;
+                authSection.style.display = 'none';
+                adminContent.style.display = 'block';
+                document.getElementById('sidebar').style.display = 'block';
+                document.querySelector('.hamburger').style.display = 'block';
+                document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'Admin'}!`;
 
-                    if (!isAdmin) {
-                        console.log(`User ${user.uid} is not an admin. Admin document exists: ${adminDoc.exists()}`);
-                        alert('Access restricted to admins only.');
-                        await signOut(auth);
-                        authSection.style.display = 'block';
-                        adminContent.style.display = 'none';
-                        document.getElementById('sidebar').style.display = 'none';
-                        document.querySelector('.hamburger').style.display = 'none';
-                        showPopup(loginPopup);
-                        return;
-                    }
-
-                    authSection.style.display = 'none';
-                    adminContent.style.display = 'block';
-                    document.getElementById('sidebar').style.display = 'block';
-                    document.querySelector('.hamburger').style.display = 'block';
-                    document.getElementById('welcome-message').textContent = `Welcome, ${user.displayName || 'Admin'}!`;
-
-                    await loadUsers();
-                    await loadDepositRequests();
-                } catch (error) {
-                    console.error('Error checking admin status:', error.code, error.message);
-                    alert(`Error verifying admin status: ${error.message}`);
-                    await signOut(auth);
-                    authSection.style.display = 'block';
-                    adminContent.style.display = 'none';
-                    document.getElementById('sidebar').style.display = 'none';
-                    document.querySelector('.hamburger').style.display = 'none';
-                    showPopup(loginPopup);
-                }
+                await loadUsers();
+                await loadDepositRequests();
             } else {
                 authSection.style.display = 'block';
                 adminContent.style.display = 'none';
