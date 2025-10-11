@@ -147,12 +147,16 @@ nav {
         display: block;
         cursor: pointer;
         padding: 5px;
+        z-index: 101; /* Ensure hamburger is above nav-links */
+        background: none;
+        border: none;
     }
     .hamburger-lines {
         width: 25px;
         height: 3px;
         background-color: #fff;
         margin: 4px 0;
+        display: block;
     }
 
     .nav-right-buttons {
@@ -180,6 +184,9 @@ nav {
         padding: 20px 5%;
         z-index: 99;
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        transition: max-height 0.3s ease;
+        max-height: 0;
+        overflow: hidden;
     }
     
     .nav-links a {
@@ -192,12 +199,15 @@ nav {
     
     .nav-links.active {
         display: flex;
+        max-height: 500px; /* Show menu when active */
+        overflow: visible;
     }
 
     .language-selector-desktop {
         display: none;
     }
 }
+
 /*///////////////////// Hero Section /////////////////////////////////////*/
 /*///////////////////// Hero Section /////////////////////////////////////*/
 .hero-section {
@@ -210,8 +220,8 @@ nav {
 }
 .hero-title{
     margin-top: 14px;
-    color: rgb(93, 93, 226);
-    font-size: 3rem;
+    color: rgba(14, 14, 147, 0.817);
+    font-size: 2rem;
     font-family: 'Arial Black', sans-serif;
 }
 

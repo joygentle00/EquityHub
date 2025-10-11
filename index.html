@@ -7,8 +7,15 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Favicon to prevent 404 error -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <!-- Google Translate API -->
+    <script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+    </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <style>
         /* Popup styles */
@@ -166,19 +173,19 @@
                         </div>
                         <ul class="dropdown-menu" id="language-menu-mobile">
                             <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English"> English
                             </li>
                             <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
-                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish"> Spanish
                             </li>
-                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Flag_of_France_%281958%E2%80%931976%29.svg/640px-Flag_of_France_%281958%E2%80%931976%29.svg.png" alt="French">
+                            <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French"> French
                             </li>
                             <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
-                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German"> German
                             </li>
                             <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese"> Chinese
                             </li>
                         </ul>
                     </div>
@@ -204,19 +211,19 @@
                         </div>
                         <ul class="dropdown-menu" id="language-menu-desktop">
                             <li class="dropdown-option" data-value="en" data-flag="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png" alt="English"> English
                             </li>
                             <li class="dropdown-option" data-value="es" data-flag="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg">
-                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg" alt="Spanish"> Spanish
                             </li>
                             <li class="dropdown-option" data-value="fr" data-flag="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg">
-                                <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg" alt="French"> French
                             </li>
                             <li class="dropdown-option" data-value="de" data-flag="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg">
-                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="German"> German
                             </li>
                             <li class="dropdown-option" data-value="zh-CN" data-flag="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg" alt="Chinese"> Chinese
                             </li>
                         </ul>
                     </div>
@@ -501,115 +508,7 @@
                     <option value="YE">Yemen</option>
                     <option value="ZM">Zambia</option>
                     <option value="ZW">Zimbabwe</option>
-                    <option value="NG">Nigeria</option>
-                    <option value="GH">Ghana</option>
-                    <option value="KE">Kenya</option>
-                    <option value="ZA">South Africa</option>
-                    <option value="IN">India</option>
-                    <option value="BR">Brazil</option>
-                    <option value="MX">Mexico</option>
-                    <option value="JP">Japan</option>
-                    <option value="CN">China</option>
-                    <option value="TR">Turkey</option>
-                    <option value="RU">Russia</option>
-                    <option value="FR">France</option>
-                    <option value="DE">Germany</option>
-                    <option value="ES">Spain</option>
-                    <option value="IT">Italy</option>
-                    <option value="GB">United Kingdom</option>
-                    <option value="US">United States</option>
-                    <option value="CA">Canada</option>
-                    <option value="AU">Australia</option>
-                    <option value="NZ">New Zealand</option>
-                    <option value="SG">Singapore</option>
-                    <option value="AE">United Arab Emirates</option>
-                    <option value="SA">Saudi Arabia</option>
-                    <option value="EG">Egypt</option>
-                    <option value="PK">Pakistan</option>
-                    <option value="BD">Bangladesh</option>
-                    <option value="ID">Indonesia</option>
-                    <option value="PH">Philippines</option>
-                    <option value="TH">Thailand</option>
-                    <option value="VN">Vietnam</option>
-                    <option value="AR">Argentina</option>
-                    <option value="CL">Chile</option>
-                    <option value="CO">Colombia</option>
-                    <option value="PE">Peru</option>
-                    <option value="VE">Venezuela</option>
-                    <option value="PL">Poland</option>
-                    <option value="UA">Ukraine</option>
-                    <option value="CZ">Czech Republic</option>
-                    <option value="RO">Romania</option>
-                    <option value="HU">Hungary</option>
-                    <option value="SE">Sweden</option>
-                    <option value="NO">Norway</option>
-                    <option value="FI">Finland</option>
-                    <option value="DK">Denmark</option>
-                    <option value="IE">Ireland</option>
-                    <option value="PT">Portugal</option>
-                    <option value="GR">Greece</option>
-                    <option value="IL">Israel</option>
-                    <option value="KR">South Korea</option>
-                    <option value="TW">Taiwan</option>
-                    <option value="HK">Hong Kong</option>
-                    <option value="CH">Switzerland</option>
-                    <option value="AT">Austria</option>
-                    <option value="BE">Belgium</option>
-                    <option value="NL">Netherlands</option>
-                    <option value="LU">Luxembourg</option>
-                    <option value="IS">Iceland</option>
-                    <option value="MT">Malta</option>
-                    <option value="CY">Cyprus</option>
-                    <option value="SI">Slovenia</option>
-                    <option value="HR">Croatia</option>
-                    <option value="SK">Slovakia</option>
-                    <option value="BG">Bulgaria</option>
-                    <option value="RS">Serbia</option>
-                    <option value="AL">Albania</option>
-                    <option value="ME">Montenegro</option>
                     <option value="MK">North Macedonia</option>
-                    <option value="BA">Bosnia and Herzegovina</option>
-                    <option value="LT">Lithuania</option>
-                    <option value="LV">Latvia</option>
-                    <option value="EE">Estonia</option>
-                    <option value="AZ">Azerbaijan</option>
-                    <option value="GE">Georgia</option>
-                    <option value="AM">Armenia</option>
-                    <option value="KZ">Kazakhstan</option>
-                    <option value="UZ">Uzbekistan</option>
-                    <option value="TJ">Tajikistan</option>
-                    <option value="KG">Kyrgyzstan</option>
-                    <option value="TM">Turkmenistan</option>
-                    <option value="IR">Iran</option>
-                    <option value="IQ">Iraq</option>
-                    <option value="SY">Syria</option>
-                    <option value="JO">Jordan</option>
-                    <option value="LB">Lebanon</option> 
-                    <option value="KW">Kuwait</option>
-                    <option value="BH">Bahrain</option>
-                    <option value="OM">Oman</option>
-                    <option value="QA">Qatar</option>
-                    <option value="YE">Yemen</option>
-                    <option value="DZ">Algeria</option>
-                    <option value="MA">Morocco</option>
-                    <option value="TN">Tunisia</option>
-                    <option value="LY">Libya</option>
-                    <option value="SD">Sudan</option>
-                    <option value="ET">Ethiopia</option>
-                    <option value="UG">Uganda</option>
-                    <option value="TZ">Tanzania</option>
-                    <option value="ZM">Zambia</option>
-                    <option value="ZW">Zimbabwe</option>
-                    <option value="MW">Malawi</option>
-                    <option value="MZ">Mozambique</option>
-                    <option value="AO">Angola</option>
-                    <option value="CM">Cameroon</option>
-                    <option value="CI">Côte d'Ivoire</option>
-                    <option value="SN">Senegal</option>
-                    <option value="GH">Ghana</option>
-                    <option value="NG">Nigeria</option>
-
-                    <!-- Add more countries as needed -->
                 </select>
                 <input type="tel" id="register-phone" placeholder="Phone Number" required>
                 <input type="text" id="register-referral" placeholder="Referral Code (Optional)">
@@ -639,34 +538,33 @@
         <section class="hero-section">
             <main>
                 <div class="sides-containers">
-                    <img src="hero.png" alt=hero-image class="hero-image">
+                    <img src="hero.png" alt="hero-image" class="hero-image">
                 </div>
                 <div class="sides-containers">
                     <h1 class="hero-title">Investing Is</h1>
                     <h2 class="even-better">Even Better Now</h2>
-                    <p>Providing you with the opportunity to investin more than 100 assets for continuous income</p>
+                    <p>Providing you with the opportunity to invest in more than 100 assets for continuous income</p>
                     <div class="asset-icons">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Bitcoin_Logo.png/640px-Bitcoin_Logo.png" alt="Bitcoin">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Ethereum_Logo.png/640px-Ethereum_Logo.png" alt="Ethereum">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Binance-coin-bnb-logo.png/640px-Binance-coin-bnb-logo.png" alt="Binance Coin">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/USDC_Logo.png/640px-USDC_Logo.png" alt="USDC">
                         <span>+100 assets</span>
-
                     </div>
                     <a href="#" class="login-btn">Start Trade Now</a>
                 </div>
             </main>
         </section>
 
-        <!-- for all devces-->
-         <div class="android-download">
+        <!-- for all devices -->
+        <div class="android-download">
             <div class="download-app">
-                    <a href="https://play.google.com/store/apps/details?id=your.app.id" target="_blank" aria-label="Download Fastme on Google Play">
-                        <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" />
-                    </a>
-                    </div>
-         </div>
-         <section class="for-all-device">
+                <a href="https://play.google.com/store/apps/details?id=your.app.id" target="_blank" aria-label="Download Fastme on Google Play">
+                    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" />
+                </a>
+            </div>
+        </div>
+        <section class="for-all-device">
             <div class="details">
                 <div class="detail-item">
                     <i class="fa-solid fa-mobile-screen-button"></i>
@@ -689,7 +587,7 @@
                     <p>Trade from anywhere in the world</p>
                 </div>
             </div>
-         </section>
+        </section>
         
         <section class="how-it-works-section">
             <h2 class="section-title">How It Works</h2>
@@ -1065,7 +963,10 @@
 
         // Google Translate Initialization
         function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
         }
 
         // Language Selector Logic
@@ -1118,6 +1019,16 @@
 
         // Initialize with default language (English)
         changeLanguage('en', 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg/640px-Flag_of_the_United_Kingdom_%283-5%29.svg.png', 'English');
+
+        /// han
+
+        // Hamburger menu toggle for mobile navigation
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinksMenu = document.getElementById('nav-links-menu');
+        menuToggle.addEventListener('click', () => {
+            navLinksMenu.classList.toggle('active');
+        });
+
     </script>
 </body>
 </html>
