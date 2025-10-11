@@ -220,7 +220,7 @@ nav {
 }
 .hero-title{
     margin-top: 14px;
-    color: rgba(14, 14, 147, 0.817);
+    color: rgba(83, 83, 223, 0.817);
     font-size: 2rem;
     font-family: 'Arial Black', sans-serif;
 }
@@ -413,15 +413,18 @@ img {
 }
 
 .mockup-call {
-    background-color: #4CAF50;
+    color: white;
+    background-color: #0d0d0d;
+    border: solid rgba(255, 255, 255, 0.735);
 }
 
 .mockup-call:hover {
-    background-color: #45a049;
+    background-color: #17045c;
 }
 
 .mockup-put {
-    background-color: #F44336;
+    background-color: white;
+    color: #0d0d0d;
 }
 
 .mockup-put:hover {

@@ -725,6 +725,7 @@
                                     fieldElement.style.display = 'block';
                                     input.style.display = 'none';
                                     saveBtn.style.display = 'none';
+                                    await loadUsers(); // Refresh to ensure consistency
                                 } catch (error) {
                                     console.error(`Error updating ${field}:`, error);
                                     alert(`Failed to update ${field}: ${error.message}`);
@@ -753,13 +754,7 @@
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${requestData.userEmail}</td>
-                            <td>
-                                <span class="editable-field" data-field="amount" data-request="${requestId}">
-                                    $${parseFloat(requestData.amount || 0).toFixed(2)}
-                                </span>
-                                <input type="number" class="admin-input" id="input-amount-${requestId}" style="display: none;" value="${parseFloat(requestData.amount || 0)}">
-                                <button class="admin-save-btn" id="save-amount-${requestId}" style="display: none;">Save</button>
-                            </td>
+                            <td>$${parseFloat(requestData.amount || 0).toFixed(2)}</td>
                             <td>${requestData.status}</td>
                             <td>
                                 <button class="action-btn approve-btn" data-request="${requestId}" data-user="${requestData.userId}" data-amount="${requestData.amount}">Approve</button>
@@ -767,38 +762,6 @@
                             </td>
                         `;
                         requestTableBody.appendChild(row);
-
-                        const fieldElement = row.querySelector(`[data-field="amount"][data-request="${requestId}"]`);
-                        const input = document.getElementById(`input-amount-${requestId}`);
-                        const saveBtn = document.getElementById(`save-amount-${requestId}`);
-
-                        if (fieldElement && input && saveBtn) {
-                            fieldElement.addEventListener('click', () => {
-                                fieldElement.style.display = 'none';
-                                input.style.display = 'block';
-                                saveBtn.style.display = 'block';
-                            });
-
-                            saveBtn.addEventListener('click', async () => {
-                                const newAmount = parseFloat(input.value);
-                                if (isNaN(newAmount) || newAmount < 0) {
-                                    alert('Please enter a valid positive number');
-                                    return;
-                                }
-
-                                try {
-                                    await updateDoc(doc(db, 'depositRequests', requestId), { amount: newAmount });
-                                    fieldElement.textContent = `$${newAmount.toFixed(2)}`;
-                                    fieldElement.style.display = 'block';
-                                    input.style.display = 'none';
-                                    saveBtn.style.display = 'none';
-                                    loadDepositRequests(); // Refresh to update the table
-                                } catch (error) {
-                                    console.error('Error updating amount:', error);
-                                    alert(`Failed to update amount: ${error.message}`);
-                                }
-                            });
-                        }
                     }
                 });
 
